@@ -50,7 +50,7 @@ app.use('/reviews',reviewRoutes);
 
 app.use('/user',userRoutes);
 
-// app.use('/notifications',notificationRoutes);
+app.use('/notifications',notificationRoutes);
 
 // app.use('/cart',cartRoutes);
 
