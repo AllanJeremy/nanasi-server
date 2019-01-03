@@ -32,6 +32,23 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
+// Prevent CORS
+app.use((req,res,next)=>{
+    //TODO: Limit this to Nanasi
+    res.header('Access-Control-Allow-Origin','*');
+
+    res.header('Access-Control-Allow-Headers','Origin, X-RequestedWith, Content-Type, Accept, Authorization');
+
+    // Setup accepted API verbs
+    if(req.method === 'OPTIONS'){
+        res.header('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE');
+        return res.status(200).json({});
+    }
+
+    // Hand over functionality to next middleware if we are not returning anything
+    next();
+});
+
 // API routes
 /* 
     Api endpoints can have various levels of access
