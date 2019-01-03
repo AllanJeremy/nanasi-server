@@ -1,0 +1,21 @@
+{
+  "name": "nanasi-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "nanasi",
+    "ecommerce"
+  ],
+  "author": "Allan N. Jeremy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.4.1",
+    "morgan": "^1.9.1",
+    "socket.io": "^2.2.0"
+  }
+}
