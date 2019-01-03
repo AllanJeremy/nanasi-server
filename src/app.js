@@ -1,6 +1,9 @@
+// Modules
 const express = require('express');
 const morgan = require('morgan');
+const bodyParser = require('body-parser')
 
+// Routes
 const authRoutes = require('./api/routes/auth');
 
 const productRoutes = require('./api/routes/products');
@@ -24,8 +27,10 @@ const cartRoutes = require('./api/routes/cart');
 // Express app
 const app = express();
 
-// Default logging route
+// Default middleware
 app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 // API routes
 /* 
