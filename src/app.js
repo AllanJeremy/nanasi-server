@@ -11,7 +11,7 @@ const orderRoutes = require('./api/routes/orders');
 
 const reviewRoutes = require('./api/routes/reviews');
 
-// const userRoutes = require('./api/routes/users');
+const userRoutes = require('./api/routes/users');
 
 // const notificationRoutes = require('./api/routes/notifications');
 
@@ -28,6 +28,15 @@ const app = express();
 app.use(morgan('dev'));
 
 // API routes
+/* 
+    Api endpoints can have various levels of access
+    //* Globally accessible
+    //* Logged in user accessible
+    //* Merchant accessible
+    //* Buyer accessible
+    //* Admin accessible
+*/
+
 app.use('/auth',authRoutes);
 
 app.use('/products',productRoutes);
@@ -38,7 +47,7 @@ app.use('/orders',orderRoutes);
 
 app.use('/reviews',reviewRoutes);
 
-// app.use('/user',userRoutes);
+app.use('/user',userRoutes);
 
 // app.use('/notifications',notificationRoutes);
 
