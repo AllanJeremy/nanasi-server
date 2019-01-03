@@ -5,6 +5,7 @@ const router = express.Router();
 Added here to avoid request param overlap with review/:attribute
 */
 // Create review reply ~ reply to a review
+//* Logged in user accessible
 router.post('/replies',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     res.json({
@@ -13,6 +14,7 @@ router.post('/replies',(req,res,next)=>{//TODO: Add db code
 });
 
 // View multiple review replies
+//* Globally accessible
 router.get('/replies',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     res.json({
@@ -21,6 +23,7 @@ router.get('/replies',(req,res,next)=>{//TODO: Add db code
 });
 
 // View single reply
+//* Globally accessible
 router.get('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -32,6 +35,7 @@ router.get('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Update reply
+//* Logged in user accessible
 router.patch('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -43,6 +47,7 @@ router.patch('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Delete reply
+//* Logged in user accessible
 router.delete('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -55,6 +60,7 @@ router.delete('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
 
 /* REVIEW ENDPOINTS */
 // Create review
+//* Logged in user accessible
 router.post('/',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     res.json({
@@ -62,15 +68,20 @@ router.post('/',(req,res,next)=>{//TODO: Add db code
     });
 });
 
-// View multiple reviews
-router.get('/',(req,res,next)=>{//TODO: Add db code
+// View multiple reviews (Product reviews)
+//* Globally accessible
+router.get('/product/:productId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
+
+    const productId = req.params.productId;
     res.json({
-        message: `Viewing multiple reviews`
+        id: productId,
+        message: `Viewing reviews for product with the id of ${productId}`
     });
 });
 
 // View single review
+//* Globally accessible
 router.get('/:reviewId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -82,6 +93,7 @@ router.get('/:reviewId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Update review
+//* Logged in user accessible
 router.patch('/:reviewId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -93,6 +105,7 @@ router.patch('/:reviewId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Delete review
+//* Logged in user accessible
 router.delete('/:reviewId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
