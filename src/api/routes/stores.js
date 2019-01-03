@@ -3,6 +3,7 @@ const router = express.Router();
 
 /* STORE ENDPOINTS */
 // Create store
+//* Merchant accessible
 router.post('/',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     res.json({
@@ -11,6 +12,7 @@ router.post('/',(req,res,next)=>{//TODO: Add db code
 });
 
 // View multiple stores
+//* Globally accessible
 router.get('/',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     res.json({
@@ -19,6 +21,7 @@ router.get('/',(req,res,next)=>{//TODO: Add db code
 });
 
 // View single store
+//* Globally accessible
 router.get('/:storeId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -30,6 +33,7 @@ router.get('/:storeId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Update store
+//* Merchant accessible
 router.patch('/:storeId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -41,6 +45,7 @@ router.patch('/:storeId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Delete store
+//* Merchant accessible
 router.delete('/:storeId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
