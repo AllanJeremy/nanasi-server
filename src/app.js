@@ -28,6 +28,11 @@ const cartRoutes = require('./api/routes/cart');
 // Connect to the database
 mongoose.connect('mongodb+srv://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD + '@nanasi-v6ykk.mongodb.net/test?retryWrites=true');
 
+// Check for errors and log database connection status
+const db = mongoose.connection;
+db.on('error',console.error.bind(console,'connection error:'));
+db.once('open',()=>console.log('Database successfully connected'))
+
 // Create an express app
 const app = express();
 
