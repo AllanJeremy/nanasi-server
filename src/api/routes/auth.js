@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// Auth endpoints
+/* AUTH ENDPOINTS */
 // Login
 router.post('/login',(req,res,next)=>{ // TODO: Add auth & db code
     res.status(200);
