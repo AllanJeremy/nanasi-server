@@ -13,9 +13,9 @@ const reviewRoutes = require('./api/routes/reviews');
 
 const userRoutes = require('./api/routes/users');
 
-// const notificationRoutes = require('./api/routes/notifications');
+const notificationRoutes = require('./api/routes/notifications');
 
-// const cartRoutes = require('./api/routes/cart');
+const cartRoutes = require('./api/routes/cart');
 
 // const billingRoutes = require('./api/routes/billing');
 
@@ -52,7 +52,7 @@ app.use('/user',userRoutes);
 
 app.use('/notifications',notificationRoutes);
 
-// app.use('/cart',cartRoutes);
+app.use('/cart',cartRoutes);
 
 // app.use('/billing',billingRoutes);
 
