@@ -5,6 +5,7 @@ const router = express.Router();
 Added here to avoid request param overlap with product/:attribute
 */
 // Create product variant
+//* Merchant accessible
 router.post('/variants/:productId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     
@@ -16,6 +17,7 @@ router.post('/variants/:productId',(req,res,next)=>{//TODO: Add db code
 });
 
 // View multiple product variants belonging to a certain product
+//* Globally accessible
 router.get('/variants/:productId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -27,6 +29,7 @@ router.get('/variants/:productId',(req,res,next)=>{//TODO: Add db code
 });
 
 // View single product variant
+//* Globally accessible
 router.get('/single-variant/:variantId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     
@@ -38,6 +41,7 @@ router.get('/single-variant/:variantId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Update product variant
+//* Merchant accessible
 router.patch('/variants/:variantId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -49,6 +53,7 @@ router.patch('/variants/:variantId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Delete product variant
+//* Merchant accessible
 router.delete('/variants/:variantId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -61,6 +66,7 @@ router.delete('/variants/:variantId',(req,res,next)=>{//TODO: Add db code
 
 /* PRODUCTS */
 // Create products
+//* Merchant accessible
 router.post('/',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     res.json({
@@ -69,6 +75,7 @@ router.post('/',(req,res,next)=>{//TODO: Add db code
 });
 
 // View multiple products
+//* Globally accessible
 router.get('/',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     res.json({
@@ -77,6 +84,7 @@ router.get('/',(req,res,next)=>{//TODO: Add db code
 });
 
 // View single product
+//* Globally accessible
 router.get('/:productId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -88,6 +96,7 @@ router.get('/:productId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Update product
+//* Merchant accessible
 router.patch('/:productId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
@@ -99,6 +108,7 @@ router.patch('/:productId',(req,res,next)=>{//TODO: Add db code
 });
 
 // Delete products
+//* Merchant accessible
 router.delete('/:productId',(req,res,next)=>{//TODO: Add db code
     res.status(200);
 
