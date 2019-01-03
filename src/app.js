@@ -1,7 +1,8 @@
 // Modules
 const express = require('express');
 const morgan = require('morgan');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 // Routes
 const authRoutes = require('./api/routes/auth');
@@ -24,7 +25,13 @@ const cartRoutes = require('./api/routes/cart');
 
 // const paymentRoutes = require('./api/routes/payments');
 
-// Express app
+// Connect to the database
+mongoose.connect('mongodb+srv://blue-dwarf:'+process.env.MONGO_ATLAS_PASSWORD+'@nanasi-v6ykk.mongodb.net/test?retryWrites=true',
+{
+    useMongoClient: true
+});
+
+// Create an express app
 const app = express();
 
 // Default middleware
