@@ -26,29 +26,28 @@ const cartRoutes = require('./api/routes/cart');
 // const paymentRoutes = require('./api/routes/payments');
 
 // Connect to the database
-mongoose.connect('mongodb+srv://blue-dwarf:'+process.env.MONGO_ATLAS_PASSWORD+'@nanasi-v6ykk.mongodb.net/test?retryWrites=true',
-{
-    useMongoClient: true
-});
+mongoose.connect('mongodb+srv://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD + '@nanasi-v6ykk.mongodb.net/test?retryWrites=true');
 
 // Create an express app
 const app = express();
 
 // Default middleware
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(bodyParser.json());
 
 // Prevent CORS
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
     //TODO: Limit this to Nanasi
-    res.header('Access-Control-Allow-Origin','*');
+    res.header('Access-Control-Allow-Origin', '*');
 
-    res.header('Access-Control-Allow-Headers','Origin, X-RequestedWith, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-RequestedWith, Content-Type, Accept, Authorization');
 
     // Setup accepted API verbs
-    if(req.method === 'OPTIONS'){
-        res.header('Access-Control-Allow-Methods','GET, POST, PATCH, DELETE');
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
         return res.status(200).json({});
     }
 
@@ -67,28 +66,28 @@ app.use((req,res,next)=>{
     //* Admin accessible
 */
 
-app.use('/auth',authRoutes);
+app.use('/auth', authRoutes);
 
-app.use('/products',productRoutes);
+app.use('/products', productRoutes);
 
-app.use('/stores',storeRoutes);
+app.use('/stores', storeRoutes);
 
-app.use('/orders',orderRoutes);
+app.use('/orders', orderRoutes);
 
-app.use('/reviews',reviewRoutes);
+app.use('/reviews', reviewRoutes);
 
-app.use('/user',userRoutes);
+app.use('/user', userRoutes);
 
-app.use('/notifications',notificationRoutes);
+app.use('/notifications', notificationRoutes);
 
-app.use('/cart',cartRoutes);
+app.use('/cart', cartRoutes);
 
 // app.use('/billing',billingRoutes);
 
 // app.use('/payments',paymentRoutes);
 
 // Error handling
-app.use((req,res,next)=>{// 404
+app.use((req, res, next) => { // 404
     const error = new Error("Endpoint not found. Invalid request");
     error.status = 404;
 
@@ -96,7 +95,7 @@ app.use((req,res,next)=>{// 404
 });
 
 // Misc errors
-app.use((error,req,res,next)=>{
+app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.json({
         message: error.message
