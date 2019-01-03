@@ -28,7 +28,7 @@ const app = express();
 app.use(morgan('dev'));
 
 // API routes
-// app.use('/auth',authRoutes);
+app.use('/auth',authRoutes);
 
 app.use('/products',productRoutes);
 
