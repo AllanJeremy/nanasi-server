@@ -2,11 +2,33 @@ const express = require('express');
 const router = express.Router();
 
 /* AUTH ENDPOINTS */
+// Send OTP (one time password)
+router.post('/otp',(req,res,next)=>{
+    res.status(200);
+
+    const otpData = {
+        type:req.body.type,
+        phone:req.body.phone 
+    };
+
+    res.json({
+        otpData: otpData,
+        message: "Sending OTP"
+    });
+});
+
 // Login
 //* Non-Logged in user accessible
 router.post('/login',(req,res,next)=>{ // TODO: Add auth & db code
     res.status(200);
+
+    // Expected data
+    const loginData = {
+        phone: req.body.phone,
+        otp: req.body.otp
+    };
     res.json({
+        loginData: loginData,
         message: `Logging in`
     });
 });
