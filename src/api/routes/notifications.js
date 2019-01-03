@@ -5,7 +5,7 @@ const router = express.Router();
 // Create notification
 //* Globally accessible
 router.post('/',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
+    res.status(201);
     res.json({
         message:"Creating notification"
     });

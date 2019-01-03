@@ -62,7 +62,7 @@ router.delete('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
 // Create review
 //* Logged in user accessible
 router.post('/',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
+    res.status(201);
     res.json({
         message:"Creating review"
     });

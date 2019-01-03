@@ -7,7 +7,7 @@ Added here to avoid request param overlap with product/:attribute
 // Create product variant
 //* Merchant accessible
 router.post('/variants/:productId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
+    res.status(201);
     
     const productId = req.params.productId;
     res.json({
@@ -68,7 +68,7 @@ router.delete('/variants/:variantId',(req,res,next)=>{//TODO: Add db code
 // Create products
 //* Merchant accessible
 router.post('/',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
+    res.status(201);
     res.json({
         message:"Creating products"
     });

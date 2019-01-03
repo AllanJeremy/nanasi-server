@@ -22,8 +22,8 @@ router.post('/logout',(req,res,next)=>{ // TODO: Add auth & db code
 
 // Register/signup
 //* Non-Logged in user accessible
-router.post('/login',(req,res,next)=>{ // TODO: Add auth & db code
-    res.status(200);
+router.post('/register',(req,res,next)=>{ // TODO: Add auth & db code
+    res.status(201);
     res.json({
         message: `Registering new user`
     });
