@@ -10,11 +10,11 @@ router.post('/',(req,res,next)=>{//TODO: Add db code
     });
 });
 
-// View multiple store
+// View multiple stores
 router.get('/',(req,res,next)=>{//TODO: Add db code
     res.status(200);
     res.json({
-        message: `Viewing multiple store`
+        message: `Viewing multiple stores`
     });
 });
 
