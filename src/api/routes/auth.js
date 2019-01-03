@@ -3,6 +3,7 @@ const router = express.Router();
 
 /* AUTH ENDPOINTS */
 // Login
+//* Non-Logged in user accessible
 router.post('/login',(req,res,next)=>{ // TODO: Add auth & db code
     res.status(200);
     res.json({
@@ -11,6 +12,7 @@ router.post('/login',(req,res,next)=>{ // TODO: Add auth & db code
 });
 
 // Logout
+//* Logged in user accessible
 router.post('/logout',(req,res,next)=>{ // TODO: Add auth & db code
     res.status(200);
     res.json({
@@ -19,6 +21,7 @@ router.post('/logout',(req,res,next)=>{ // TODO: Add auth & db code
 });
 
 // Register/signup
+//* Non-Logged in user accessible
 router.post('/login',(req,res,next)=>{ // TODO: Add auth & db code
     res.status(200);
     res.json({
@@ -26,7 +29,8 @@ router.post('/login',(req,res,next)=>{ // TODO: Add auth & db code
     });
 });
 
-// Get currently logged in user object
+// Get currently logged in user object ~ Returns empty object if none is found
+//* Globally accessible
 router.post('/user',(req,res,next)=>{ // TODO: Add auth & db code
     res.status(200);
     res.json({

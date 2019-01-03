@@ -32,6 +32,7 @@ app.use(morgan('dev'));
     Api endpoints can have various levels of access
     //* Globally accessible
     //* Logged in user accessible
+    //* Non-Logged in user accessible
     //* Merchant accessible
     //* Buyer accessible
     //* Admin accessible
