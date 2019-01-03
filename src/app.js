@@ -1,15 +1,15 @@
 const express = require('express');
 const morgan = require('morgan');
 
-// const authRoutes = require('./api/routes/auth');
+const authRoutes = require('./api/routes/auth');
 
 const productRoutes = require('./api/routes/products');
 
-// const storeRoutes = require('./api/routes/stores');
+const storeRoutes = require('./api/routes/stores');
 
-// const orderRoutes = require('./api/routes/orders');
+const orderRoutes = require('./api/routes/orders');
 
-// const reviewRoutes = require('./api/routes/reviews');
+const reviewRoutes = require('./api/routes/reviews');
 
 // const userRoutes = require('./api/routes/users');
 
@@ -32,11 +32,11 @@ app.use('/auth',authRoutes);
 
 app.use('/products',productRoutes);
 
-// app.use('/stores',storeRoutes);
+app.use('/stores',storeRoutes);
 
-// app.use('/orders',orderRoutes);
+app.use('/orders',orderRoutes);
 
-// app.use('/reviews',reviewRoutes);
+app.use('/reviews',reviewRoutes);
 
 // app.use('/user',userRoutes);
 
