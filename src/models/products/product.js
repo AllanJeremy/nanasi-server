@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 // Schema
 const productSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     store: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Store'
