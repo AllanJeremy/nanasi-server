@@ -20,7 +20,7 @@ const notificationSchema = new mongoose.Schema({
 
     type: { // What type of notification is this
         type: String,
-        default: NotificationTypes.Generic
+        default: NotificationTypes.GENERIC
     },
 
     isRead: {

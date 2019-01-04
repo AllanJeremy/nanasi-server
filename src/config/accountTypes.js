@@ -1,7 +1,7 @@
 const AccountTypes = {
-    Buyer: 'buyer',
-    Merchant: 'merchant',
-    Admin: 'admin'
+    BUYER: 'buyer',
+    MERCHANT: 'merchant',
+    ADMIN: 'admin'
 };
 
 // Export
