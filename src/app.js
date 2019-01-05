@@ -5,33 +5,35 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 // Routes
-const authRoutes = require('./api/routes/auth');
+const authRoutes = require('./routes/auth');
 
-const productRoutes = require('./api/routes/products');
+const productRoutes = require('./routes/products');
 
-const storeRoutes = require('./api/routes/stores');
+const storeRoutes = require('./routes/stores');
 
-const orderRoutes = require('./api/routes/orders');
+const orderRoutes = require('./routes/orders');
 
-const reviewRoutes = require('./api/routes/reviews');
+const reviewRoutes = require('./routes/reviews');
 
-const userRoutes = require('./api/routes/users');
+const userRoutes = require('./routes/users');
 
-const notificationRoutes = require('./api/routes/notifications');
+const notificationRoutes = require('./routes/notifications');
 
-const cartRoutes = require('./api/routes/cart');
+const cartRoutes = require('./routes/cart');
 
-// const billingRoutes = require('./api/routes/billing');
+// const billingRoutes = require('./routes/billing');
 
-// const paymentRoutes = require('./api/routes/payments');
+// const paymentRoutes = require('./routes/payments');
 
 // Connect to the database
-mongoose.connect('mongodb+srv://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD + '@nanasi-v6ykk.mongodb.net/test?retryWrites=true');
+mongoose.connect('mongodb+srv://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD + '@nanasi-v6ykk.mongodb.net/test?retryWrites=true', {
+    useNewUrlParser: true
+});
 
 // Check for errors and log database connection status
 const db = mongoose.connection;
-db.on('error',console.error.bind(console,'connection error:'));
-db.once('open',()=>console.log('Database successfully connected'))
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => console.log('Database successfully connected'))
 
 // Create an express app
 const app = express();
@@ -81,7 +83,7 @@ app.use('/orders', orderRoutes);
 
 app.use('/reviews', reviewRoutes);
 
-app.use('/user', userRoutes);
+app.use('/users', userRoutes);
 
 app.use('/notifications', notificationRoutes);
 
