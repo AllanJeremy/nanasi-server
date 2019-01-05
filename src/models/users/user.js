@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
         }
     },
 
-    otpIsConfirmed: {
+    registrationConfirmed: {
         type: Boolean,
         default: false
     },
