@@ -15,10 +15,10 @@ const userSchema = new mongoose.Schema({
     },
     email: String,
     accountType: {
-        type:String,
+        type: String,
         required: true
     },
-    
+
     isLoggedIn: {
         type: Boolean,
         default: false
@@ -32,15 +32,29 @@ const userSchema = new mongoose.Schema({
     },
 
     failedAttempts: Number,
-    isLocked: {// Can we login to this account
-        type: Boolean, 
+    isLocked: { // Can we login to this account
+        type: Boolean,
+        default: false
+    },
+    otp: {
+        password: String,
+        type: String,
+        expiry: {
+            type: Date,
+            default: Date.now() //TODO: Set actual expiry
+        }
+    },
+
+    otpIsConfirmed: {
+        type: Boolean,
         default: false
     },
     isActive: { // Can this account be used to perform any actions
         type: Boolean,
-        default: true
-    }
+        default: false
+    },
+
 });
 
 // Exports
-module.exports = mongoose.model('User',userSchema);
+module.exports = mongoose.model('User', userSchema);
