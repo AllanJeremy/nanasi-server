@@ -5,11 +5,6 @@ const User = require('../../models/users/user');
 module.exports.register = (res, userData) => {
     const user = new User(userData);
 
-    console.debug(`
-    --------------------------------------------
-    ${userData}
-    --------------------------------------------
-    `);
     user.save().then(createdUser => {
         console.log(createdUser);
         return res.status(201).json(api.getResponse(true, 'Successfully created user', createdUser));

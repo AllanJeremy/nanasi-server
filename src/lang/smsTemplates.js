@@ -1,4 +1,7 @@
 // Send otp
-module.exports.sendOtp = (otp)=>{
-    return `Your Nanasi OTP is ${otp}`;
+module.exports.sendOtp = (otp, lang) => {
+    const message = `Your Nanasi OTP is ${otp}`;
+
+    //TODO: Possibly add translation
+    return message;
 };
