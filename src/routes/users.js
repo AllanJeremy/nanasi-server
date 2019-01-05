@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const User = require('../models/users/user');
+const user = require('../modules/users/users');
+
 /* USER ENDPOINTS */
 
 // Get multiple users 
 //* Admin accessible
 router.get('/', (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
+    user.getUsers(res);
 });
 
 // Get single user
