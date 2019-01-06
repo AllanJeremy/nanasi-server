@@ -29,20 +29,32 @@ module.exports.register = (res, userData) => {
         } else { // No user with that phone exists - proceed to create user
             //TODO: Check if it was a bot using Google Captcha
 
-            const newUser = new User(userData);
+            // Try sending a OTP
+            otp.sendOtp(userData.phone, otpConfig.OtpTypes.REGISTER, (otpResponse) => {
+                console.log(`OTP response:`);
+                console.log(otpResponse);
 
-            // Add user to the database
-            newUser.save().then(createdUser => {
-                // Send OTP to the user & save it to the database
-                let otpStatus = otp.sendOtp(res, createdUser.id, otpConfig.OtpTypes.REGISTER);
-                console.log(otpStatus);
-                // if (otpStatus.ok) {
-                //     return res.status(201).json(api.getResponse(true, feedbackMessages.itemCreatedSuccessfully('user'), createdUser));
-                // } else {
-                //     return res.status(500).json(otpStatus);
-                // }
+                if (!otpResponse.messageSent) {
+                    console.log(`Failed to send OTP`);
+                    return;
+                }
 
+                const newUser = new User(userData);
+
+                // Add user to the database
+                newUser.save().then(createdUser => {
+                    const otpData = otpResponse.otp;
+
+
+                    // Add OTP data to the database
+                    otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
+                        console.log(response);
+                        return res.status(201).json(api.getResponse(true, feedbackMessages.itemCreatedSuccessfully('user'), createdUser));
+
+                    });
+                });
             });
+
         }
     }).catch(err => {
         res.status(500).json(api.getError(err));

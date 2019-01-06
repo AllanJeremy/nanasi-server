@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true,
         unique: true
     },
     email: String,
@@ -30,7 +29,7 @@ const userSchema = new mongoose.Schema({
 
     createdOn: {
         type: Date,
-        default: moment()
+        default: moment().unix()
     },
 
     failedAttempts: Number,

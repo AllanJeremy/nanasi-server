@@ -27,53 +27,62 @@ function generateOtp() {
 
 // Generates and returns otp expiration time
 function _generateOtpExpirationTime() {
-    const expiry = moment().add(otpConfig.OTP_EXPIRY_TIME, 'seconds');
+    const expiry = moment().add(otpConfig.OTP_EXPIRY_TIME, 'seconds').unix();
 
     return expiry;
 }
 
 // Send otp ~ Returns ok = true & 
-module.exports.sendOtp = (userId, type) => {
+module.exports.sendOtp = (phone, otpType, callback) => {
     const otp = generateOtp();
-    let returnVal;
 
-    const updateData = {
-        otp: {
-            password: otp,
-            type: type,
-            expiry: _generateOtpExpirationTime()
-        }
-    };
+    //TODO: Find a way of tracking last otp sent time by the current user
+    //TODO: Consider using JWT
 
+    // Send SMS
+    const otpMessage = smsTemplates.sendOtp(otp, otpType);
+    messaging.sendSms([phone], otpMessage, (smsResponse) => {
+        const otpData = {
+            phone: phone,
+            messageSent: (smsResponse.SMSMessageData.Recipients[0].statusCode == messaging.messageStatusCode.SENT),
+            smsResponse: smsResponse,
+            otp: {
+                password: otp,
+                otpType: otpType,
+                expiry: _generateOtpExpirationTime()
+            }
+        };
+        console.log(`Sending ${otpType} otp to ${phone}`);
+        return callback(otpData);
+    });
+
+};
+
+// Add user otp to database
+module.exports.addUserOtpToDb = (userId, otpData, callback) => {
     const updateOptions = {
         new: true,
         runValidators: true,
         set: 'phone'
     };
 
-    console.log(`User id provided: ${userId}`);
-
-    // Get the user with the id of userId
-    User.findByIdAndUpdate(userId, updateData, updateOptions, (err, userFound) => {
+    // 
+    User.findById(userId, (err, userFound, callback) => {
         // If there was any error fetching the message, return it
-        if (err) { // Handle errors
-
+        if (err) {
             const message = `An error occured while trying to save the user otp ${err.message}`;
-            console.error(message);
-
             return api.getError(message, err);
-        } else {
-            console.log(`Sending ${type} otp to ${userFound.phone}`);
-            // Send SMS if there were no errors
-            const otpMessage = smsTemplates.sendOtp(otp);
-            messaging.sendSms([userFound.phone], otpMessage);
-
-            const isOk = err ? false : true;
-            const message = isOk ? `Successfully saved user otp` : `Failed to save user otp`;
-            return api.getResponse(isOk, message);
         }
+
+        userFound.otp = otpData;
+        userFound.save();
+        const message = `Successfully saved user otp`;
+
+        return api.getResponse(true, message);
     }).catch(err => {
         return api.getError(err.message, err);
+    }).then(response => {
+        callback(response);
     });
 };
 
