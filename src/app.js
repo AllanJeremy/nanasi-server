@@ -26,7 +26,7 @@ const cartRoutes = require('./routes/cart');
 // const paymentRoutes = require('./routes/payments');
 
 // Connect to the database
-mongoose.connect('mongodb+srv://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD + '@nanasi-v6ykk.mongodb.net/test?retryWrites=true', {
+mongoose.connect('mongodb+srv://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD + '@nanasi-v6ykk.mongodb.net/nanasi?retryWrites=true', {
     useNewUrlParser: true
 });
 
