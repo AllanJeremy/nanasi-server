@@ -31,9 +31,6 @@ module.exports.register = (res, userData) => {
 
             // Try sending a OTP
             otp.sendOtp(userData.phone, otpConfig.OtpTypes.REGISTER, (otpResponse) => {
-                console.log(`OTP response:`);
-                console.log(otpResponse);
-
                 if (!otpResponse.messageSent) {
                     console.log(`Failed to send OTP`);
                     return;
@@ -48,9 +45,7 @@ module.exports.register = (res, userData) => {
 
                     // Add OTP data to the database
                     otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
-                        console.log(response);
                         return res.status(201).json(api.getResponse(true, feedbackMessages.itemCreatedSuccessfully('user'), createdUser));
-
                     });
                 });
             });
