@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const api = require('../lib/api');
 const otp = require('../modules/auth/otp');
 const auth = require('../modules/auth/auth');
 
@@ -47,9 +48,12 @@ router.post('/logout', (req, res, next) => { // TODO: Add auth & db code
 //* Non-Logged in user accessible
 router.post('/register', (req, res, next) => { // TODO: Add auth & db code
     const userData = req.body.data;
-    console.log(`Data from post request:
-    `);
-    console.log(userData);
+
+    // If userData is not provided ~ show error message
+    if (!userData) {
+        return res.status(500).json(api.getError('User data not provided, failed to create user'));
+    }
+
     return auth.register(res, userData);
 });
 
