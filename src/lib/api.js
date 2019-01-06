@@ -6,6 +6,8 @@ module.exports.getResponse = (isOk, message, data) => {
     return response;
 };
 
-module.exports.getError = (message) => {
-    return getResponse(false, message);
+module.exports.getError = (message, error) => {
+    let response = this.getResponse(false, message);
+    response.error = error;
+    return response;
 };

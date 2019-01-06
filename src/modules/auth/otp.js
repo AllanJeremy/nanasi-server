@@ -1,3 +1,6 @@
+// Packages
+const moment = require('moment');
+
 // Config
 const otpConfig = require('../../config/otp');
 
@@ -5,6 +8,7 @@ const otpConfig = require('../../config/otp');
 const User = require('../../models/users/user');
 
 //Libraries - Can be used in multiple applications
+const api = require('../../lib/api');
 const utility = require('../../lib/utility');
 const messaging = require('../../lib/messaging');
 
@@ -21,17 +25,23 @@ function generateOtp() {
     return otp;
 }
 
-// Send otp
-module.exports.sendOtp = (res, userId, type) => {
+// Generates and returns otp expiration time
+function _generateOtpExpirationTime() {
+    const expiry = moment().add(otpConfig.OTP_EXPIRY_TIME, 'seconds');
+
+    return expiry;
+}
+
+// Send otp ~ Returns ok = true & 
+module.exports.sendOtp = (userId, type) => {
     const otp = generateOtp();
-    const message = smsTemplates.sendOtp(otp);
-    let phone;
     let returnVal;
 
     const updateData = {
         otp: {
             password: otp,
-            type: type
+            type: type,
+            expiry: _generateOtpExpirationTime()
         }
     };
 
@@ -41,27 +51,33 @@ module.exports.sendOtp = (res, userId, type) => {
         set: 'phone'
     };
 
+    console.log(`User id provided: ${userId}`);
+
     // Get the user with the id of userId
-    User.findByIdAndUpdate(userId, updateData, updateOptions, (error, user) => {
+    User.findByIdAndUpdate(userId, updateData, updateOptions, (err, userFound) => {
         // If there was any error fetching the message, return it
-        if (error) {
+        if (err) { // Handle errors
 
-            //TODO: Handle errors
-            console.error(`An error occured while trying to retrieve the user 
-            ${error.message}`);
+            const message = `An error occured while trying to save the user otp ${err.message}`;
+            console.error(message);
 
-            return res.status(404).json(api);
-
+            return api.getError(message, err);
         } else {
-            res.status(500);
-            phone = user.phone;
-            console.log('User: ');
-            console.log(user);
-
+            console.log(`Sending ${type} otp to ${userFound.phone}`);
             // Send SMS if there were no errors
-            messaging.sendSms([phone], message);
+            const otpMessage = smsTemplates.sendOtp(otp);
+            messaging.sendSms([userFound.phone], otpMessage);
+
+            const isOk = err ? false : true;
+            const message = isOk ? `Successfully saved user otp` : `Failed to save user otp`;
+            return api.getResponse(isOk, message);
         }
+    }).catch(err => {
+        return api.getError(err.message, err);
     });
 };
 
 //TODO: Verify otp ~ Returns true if OTP was valid & false if otp was invalid
+module.exports.verifyOtp = (userId, otp, otpType) => {
+    //TODO: Add implementation
+};

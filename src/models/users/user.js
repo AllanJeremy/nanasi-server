@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -29,7 +30,7 @@ const userSchema = new mongoose.Schema({
 
     createdOn: {
         type: Date,
-        default: Date.now()
+        default: moment()
     },
 
     failedAttempts: Number,
@@ -39,11 +40,8 @@ const userSchema = new mongoose.Schema({
     },
     otp: {
         password: String,
-        type: String,
-        expiry: {
-            type: Date,
-            default: Date.now() //TODO: Set actual expiry
-        }
+        otpType: String,
+        expiry: Date
     },
 
     registrationConfirmed: {
