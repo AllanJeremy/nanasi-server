@@ -19,17 +19,24 @@ router.post('/otp', (req, res, next) => {
     res.json(response);
 });
 
+// Verify OTP (one time password)
+router.post('/verifyOtp/:userId', (req, res, next) => {
+    const userId = req.params.userId;
+    otp.verifyOtp(userId, req.body.otp, req.body.type, (otpVerifyResponse) => {
+        res.status(200).json(otpVerifyResponse);
+    });
+
+});
+
 // Login
 //* Non-Logged in user accessible
 router.post('/login', (req, res, next) => { // TODO: Add auth & db code
-    res.status(200);
-
     // Expected data
     const loginData = {
         phone: req.body.phone,
         otp: req.body.otp
     };
-    res.json({
+    res.status(200).json({
         loginData: loginData,
         message: `Logging in`
     });
