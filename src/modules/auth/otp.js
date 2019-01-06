@@ -14,6 +14,7 @@ const messaging = require('../../lib/messaging');
 
 // Message templates
 const smsTemplates = require('../../lang/smsTemplates');
+const feedbackMessages = require('../../lang/feedbackMessages');
 
 // Generates and returns an otp
 function generateOtp() {
@@ -74,6 +75,7 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
             return api.getError(message, err);
         }
 
+        // Add the otp data to the user
         userFound.otp = otpData;
         userFound.save();
         const message = `Successfully saved user otp`;
@@ -82,11 +84,41 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
     }).catch(err => {
         return api.getError(err.message, err);
     }).then(response => {
-        callback(response);
+        return callback(response);
     });
 };
 
-//TODO: Verify otp ~ Returns true if OTP was valid & false if otp was invalid
-module.exports.verifyOtp = (userId, otp, otpType) => {
-    //TODO: Add implementation
+// Verify otp ~ Returns true if OTP was valid & false if otp was invalid
+module.exports.verifyOtp = (userId, otpToVerify, otpType, callback) => {
+    User.findOne({
+        _id: userId,
+        "otp.password": otpToVerify,
+        "otp.otpType": otpType
+    }, (err, userFound) => {
+        if (err) {
+            const message = `An internal error occured while trying to save the user otp ${err.message}`;
+            return callback(
+                api.getError(message, err)
+            );
+        }
+        // Returns true if the otp was found & has not expired
+        if (userFound) {
+            const otpHasExpired = moment(userFound.otp.expiry).isAfter(Date.now());
+            const message = otpHasExpired ? feedbackMessages.otpExpired() : feedbackMessages.otpVerified();
+
+            //TODO: Delete the OTP from the user once it has been verified
+            return callback(
+                api.getResponse((!otpHasExpired), message)
+            );
+        } else {
+            return callback(
+                api.getResponse(false, feedbackMessages.otpFailedToVerify())
+            );
+        }
+
+    }).catch(err => {
+        return callback(
+            api.getError(err.message, err)
+        );
+    });
 };
