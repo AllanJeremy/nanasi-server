@@ -15,6 +15,7 @@ const Messaging = require('../../lib/messaging');
 // Message templates
 const SmsTemplates = require('../../lang/smsTemplates');
 const FeedbackMessages = require('../../lang/feedbackMessages');
+const AuthMessages = require('../../lang/authMessages');
 
 // Generates and returns an otp
 function generateOtp() {
@@ -104,7 +105,7 @@ module.exports.verifyOtp = (userId, otpToVerify, otpType, callback) => {
         // Returns true if the otp was found & has not expired
         if (userFound) {
             const otpHasExpired = Moment(userFound.otp.expiry).isAfter(Date.now());
-            const message = otpHasExpired ? FeedbackMessages.otpExpired() : FeedbackMessages.otpVerified();
+            const message = otpHasExpired ? AuthMessages.otpExpired() : AuthMessages.otpVerified();
 
             //TODO: Delete the OTP from the user once it has been verified
             return callback(
@@ -112,7 +113,7 @@ module.exports.verifyOtp = (userId, otpToVerify, otpType, callback) => {
             );
         } else {
             return callback(
-                Api.getResponse(false, FeedbackMessages.otpFailedToVerify())
+                Api.getResponse(false, AuthMessages.otpFailedToVerify())
             );
         }
 
