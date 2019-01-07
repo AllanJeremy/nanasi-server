@@ -62,7 +62,7 @@ module.exports.register = (res, userData) => {
 
 };
 
-// TODO: Login
+// Login
 module.exports.login = (phone, otpInput, callback) => {
     // Verify the OTP then login
     return Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.LOGIN, response => {
@@ -77,7 +77,9 @@ module.exports.login = (phone, otpInput, callback) => {
             firstName: userData.firstName,
             lastName: userData.lastName,
             phone: userData.phone,
-        }, process.env.JWT_SECRET, (err, token) => {
+        }, process.env.JWT_SECRET, {
+            expiresIn: '1h' //TODO: Move into config
+        }, (err, token) => {
 
             // If there was an error creating the JWT
             if (err) {
