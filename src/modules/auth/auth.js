@@ -62,9 +62,9 @@ module.exports.register = (res, userData) => {
 };
 
 // TODO: Login
-module.exports.login = (userId, otpInput) => {
+module.exports.login = (phone, otpInput) => {
 
-    const verifyOtp = Otp.verifyOtp(userId, otpInput, OtpConfig.OtpTypes.LOGIN);
+    const verifyOtp = Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.LOGIN);
 
     // If the OTP was valid ~ Login
     if (verifyOtp.ok) {
