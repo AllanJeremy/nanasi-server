@@ -8,7 +8,15 @@ const user = require('../modules/users/users');
 // Get multiple users 
 //* Admin accessible
 router.get('/', (req, res, next) => { //TODO: Add db code
-    user.getUsers(res);
+    user.getUsers((response) => {
+        if (response.ok) {
+            return res.status(200).json(response);
+        } else {
+            return res.status(404).json(response);
+        }
+
+        return renderToString;
+    });
 });
 
 // Get single user
