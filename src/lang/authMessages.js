@@ -14,7 +14,13 @@ module.exports.loginSucceeded = () => {
     return message;
 };
 
+//Confirm registration succeeded
+module.exports.confirmRegistration = () => {
+    const message = `Successfully confirmed registration`;
 
+    //TODO: Possibly translate
+    return message;
+};
 /* 
     OTP
 */
