@@ -62,6 +62,46 @@ module.exports.register = (res, userData) => {
 
 };
 
+// Confirm registered user
+module.exports.confirmRegistration = (phone, otpInput, callback) => {
+    // Confirm the OTP
+    Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.REGISTER, response => {
+        // If the OTP was invalid ~ Reject Login
+        if (!response.ok) {
+            return callback(Api.getResponse(false, AuthMessages.loginFailed()));
+        }
+
+        // Update the records in the database
+        User.findOne({
+            phone: phone,
+            registrationConfirmed: false //Only update the records if the user has not been found
+        }, (err, userFound) => {
+            if (err) {
+                return callback(Api.getError(err.message, err));
+            }
+
+            // If no users were found
+            if (!userFound) {
+                return callback(
+                    Api.getError(FeedbackMessages.itemNotFound('User to update'))
+                );
+            }
+            userFound.otp = undefined; // Remove the OTP ~  We are done with it for now
+            userFound.registrationConfirmed = true; // Confirm registration
+            userFound.isActive = true; //Activate account
+
+            userFound.save();
+
+            return callback(
+                Api.getResponse(true, AuthMessages.confirmRegistration(), {
+                    user: userFound
+                })
+            );
+        }).catch(err => callback(Api.getError(err.message, err)));
+    });
+
+};
+
 // Login
 module.exports.login = (phone, otpInput, callback) => {
     // Verify the OTP then login
