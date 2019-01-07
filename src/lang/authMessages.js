@@ -6,6 +6,15 @@ module.exports.loginFailed = () => {
     return message;
 };
 
+// When a login attempt succeeds
+module.exports.loginSucceeded = () => {
+    const message = `Login succeeded`;
+
+    //TODO: Possibly translate
+    return message;
+};
+
+
 /* 
     OTP
 */
