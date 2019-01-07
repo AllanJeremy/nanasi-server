@@ -16,6 +16,7 @@ const AuthMessages = require('../../lang/authMessages');
 
 // Modules
 const Otp = require('../../modules/auth/otp');
+const user = require('../../modules/users/users');
 
 
 // Register new user
@@ -62,18 +63,19 @@ module.exports.register = (res, userData) => {
 };
 
 // TODO: Login
-module.exports.login = (phone, otpInput) => {
+module.exports.login = (phone, otpInput, callback) => {
+    // Verify the OTP then login
+    return Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.LOGIN, response => {
+        // If the OTP was invalid ~ Reject Login
+        if (!response.ok) {
+            return callback(Api.getResponse(false, AuthMessages.loginFailed()));
+        }
+        // Otp verified
+        response.data.token = `JWT`;
 
-    const verifyOtp = Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.LOGIN);
-
-    // If the OTP was valid ~ Login
-    if (verifyOtp.ok) {
-
-
-        //TODO: Add login logic
-    } else {
-        return Api.getResponse(false, AuthMessages.loginFailed);
-    }
+        //TODO: Create JWT
+        return callback(response);
+    });
 };
 
 // TODO: Logout

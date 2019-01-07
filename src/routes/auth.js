@@ -32,13 +32,8 @@ router.post('/verifyOtp/:userId', (req, res, next) => {
 //* Non-Logged in user accessible
 router.post('/login', (req, res, next) => { // TODO: Add auth & db code
     // Expected data
-    const loginData = {
-        phone: req.body.phone,
-        otp: req.body.otp
-    };
-    res.status(200).json({
-        loginData: loginData,
-        message: `Logging in`
+    auth.login(req.body.phone, req.body.otp, (response) => {
+        return res.status(200).json(response);
     });
 });
 
