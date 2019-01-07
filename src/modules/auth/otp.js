@@ -1,34 +1,34 @@
 // Packages
-const moment = require('moment');
+const Moment = require('moment');
 
 // Config
-const otpConfig = require('../../config/otp');
+const OtpConfig = require('../../config/otp');
 
 // Models
 const User = require('../../models/users/user');
 
 //Libraries - Can be used in multiple applications
-const api = require('../../lib/api');
-const utility = require('../../lib/utility');
-const messaging = require('../../lib/messaging');
+const Api = require('../../lib/api');
+const Utility = require('../../lib/utility');
+const Messaging = require('../../lib/messaging');
 
 // Message templates
-const smsTemplates = require('../../lang/smsTemplates');
-const feedbackMessages = require('../../lang/feedbackMessages');
+const SmsTemplates = require('../../lang/smsTemplates');
+const FeedbackMessages = require('../../lang/feedbackMessages');
 
 // Generates and returns an otp
 function generateOtp() {
-    const minVal = (Math.pow(10, (otpConfig.OTP_LENGTH - 1)));
-    const maxVal = (Math.pow(10, otpConfig.OTP_LENGTH)) - 1; // 999 in the case of OTP_LENGTH = 3
+    const minVal = (Math.pow(10, (OtpConfig.OTP_LENGTH - 1)));
+    const maxVal = (Math.pow(10, OtpConfig.OTP_LENGTH)) - 1; // 999 in the case of OTP_LENGTH = 3
 
     //Otp of length
-    let otp = utility.getRandomInt(minVal, maxVal).toString();
+    let otp = Utility.getRandomInt(minVal, maxVal).toString();
     return otp;
 }
 
 // Generates and returns otp expiration time
 function _generateOtpExpirationTime() {
-    const expiry = moment().add(otpConfig.OTP_EXPIRY_TIME, 'seconds').unix();
+    const expiry = Moment().add(OtpConfig.OTP_EXPIRY_TIME, 'seconds').unix();
 
     return expiry;
 }
@@ -41,11 +41,11 @@ module.exports.sendOtp = (phone, otpType, callback) => {
     //TODO: Consider using JWT
 
     // Send SMS
-    const otpMessage = smsTemplates.sendOtp(otp, otpType);
-    messaging.sendSms([phone], otpMessage, (smsResponse) => {
+    const otpMessage = SmsTemplates.sendOtp(otp, otpType);
+    Messaging.sendSms([phone], otpMessage, (smsResponse) => {
         const otpData = {
             phone: phone,
-            messageSent: (smsResponse.SMSMessageData.Recipients[0].statusCode == messaging.messageStatusCode.SENT),
+            messageSent: (smsResponse.SMSMessageData.Recipients[0].statusCode == Messaging.messageStatusCode.SENT),
             smsResponse: smsResponse,
             otp: {
                 password: otp,
@@ -72,7 +72,7 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
         // If there was any error fetching the message, return it
         if (err) {
             const message = `An error occured while trying to save the user otp ${err.message}`;
-            return api.getError(message, err);
+            return Api.getError(message, err);
         }
 
         // Add the otp data to the user
@@ -80,9 +80,9 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
         userFound.save();
         const message = `Successfully saved user otp`;
 
-        return api.getResponse(true, message);
+        return Api.getResponse(true, message);
     }).catch(err => {
-        return api.getError(err.message, err);
+        return Api.getError(err.message, err);
     }).then(response => {
         return callback(response);
     });
@@ -98,27 +98,27 @@ module.exports.verifyOtp = (userId, otpToVerify, otpType, callback) => {
         if (err) {
             const message = `An internal error occured while trying to save the user otp ${err.message}`;
             return callback(
-                api.getError(message, err)
+                Api.getError(message, err)
             );
         }
         // Returns true if the otp was found & has not expired
         if (userFound) {
-            const otpHasExpired = moment(userFound.otp.expiry).isAfter(Date.now());
-            const message = otpHasExpired ? feedbackMessages.otpExpired() : feedbackMessages.otpVerified();
+            const otpHasExpired = Moment(userFound.otp.expiry).isAfter(Date.now());
+            const message = otpHasExpired ? FeedbackMessages.otpExpired() : FeedbackMessages.otpVerified();
 
             //TODO: Delete the OTP from the user once it has been verified
             return callback(
-                api.getResponse((!otpHasExpired), message)
+                Api.getResponse((!otpHasExpired), message)
             );
         } else {
             return callback(
-                api.getResponse(false, feedbackMessages.otpFailedToVerify())
+                Api.getResponse(false, FeedbackMessages.otpFailedToVerify())
             );
         }
 
     }).catch(err => {
         return callback(
-            api.getError(err.message, err)
+            Api.getError(err.message, err)
         );
     });
 };

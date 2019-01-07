@@ -1,5 +1,5 @@
 const AfricasTalking = require('../config/africasTalking');
-const sms = AfricasTalking.SMS;
+const Sms = AfricasTalking.SMS;
 
 const SENDER_ID = 'Nanasi.co';
 module.exports.messageStatusCode = {
@@ -25,7 +25,7 @@ module.exports.sendSms = (recipients, message, callback) => {
         //TODO: Add sender id once we have it
     };
 
-    const sendMessage = sms.send(options);
+    const sendMessage = Sms.send(options);
 
     sendMessage.then(response => {
         console.log(response);
