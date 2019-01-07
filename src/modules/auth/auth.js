@@ -1,3 +1,6 @@
+// Modules
+const jwt = require('jsonwebtoken');
+
 // Config
 const OtpConfig = require('../../config/otp');
 
@@ -65,6 +68,8 @@ module.exports.login = (userId, otpInput) => {
 
     // If the OTP was valid ~ Login
     if (verifyOtp.ok) {
+
+
         //TODO: Add login logic
     } else {
         return Api.getResponse(false, AuthMessages.loginFailed);
