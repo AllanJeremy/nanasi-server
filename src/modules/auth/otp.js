@@ -91,35 +91,37 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
 
 // Verify otp ~ Returns true if OTP was valid & false if otp was invalid
 module.exports.verifyOtp = (phone, otpToVerify, otpType, callback) => {
-    User.findOne({
-        phone: phone,
-        "otp.password": otpToVerify,
-        "otp.otpType": otpType
-    }, (err, userFound) => {
-        if (err) {
-            const message = `An internal error occured while trying to save the user otp ${err.message}`;
-            return callback(
-                Api.getError(message, err)
-            );
-        }
-        // Returns true if the otp was found & has not expired
-        if (userFound) {
-            const otpHasExpired = Moment(userFound.otp.expiry).isAfter(Date.now());
-            const message = otpHasExpired ? AuthMessages.otpExpired() : AuthMessages.otpVerified();
+    const dataToCollect = '_id firstName lastName phone isActive'; //TODO: Move into config as "publicly" accessible user data
 
-            //TODO: Delete the OTP from the user once it has been verified
-            return callback(
-                Api.getResponse((!otpHasExpired), message)
-            );
-        } else {
-            return callback(
-                Api.getResponse(false, AuthMessages.otpFailedToVerify())
-            );
-        }
+    return User.findOne({
+            phone: phone,
+            "otp.password": otpToVerify,
+            "otp.otpType": otpType
+        })
+        .select(dataToCollect)
+        .exec((err, userFound) => {
+            if (err) {
+                const message = `An internal error occured while trying to save the user otp ${err.message}`;
+                return callback(
+                    Api.getError(message, err)
+                );
+            }
+            // Returns true if the otp was found & has not expired
+            if (userFound) {
+                const otpHasExpired = Moment(userFound.otp.expiry).isAfter(Date.now());
+                const message = otpHasExpired ? AuthMessages.otpExpired() : AuthMessages.otpVerified();
 
-    }).catch(err => {
-        return callback(
-            Api.getError(err.message, err)
-        );
-    });
+                //TODO: Delete the OTP from the user once it has been verified
+                return callback(
+                    Api.getResponse((!otpHasExpired), message, {
+                        user: userFound
+                    })
+                );
+            } else {
+                return callback(
+                    Api.getResponse(false, AuthMessages.otpFailedToVerify())
+                );
+            }
+
+        });
 };
