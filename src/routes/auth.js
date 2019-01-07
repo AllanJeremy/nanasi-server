@@ -64,9 +64,9 @@ router.post('/confirmRegistration', (req, res, next) => {
     Auth.confirmRegistration(req.body.phone, req.body.otp, (response) => {
         // Set the response status
         if (response.ok) {
-            res.status(200).json(response);
+            return res.status(200).json(response);
         } else {
-            res.status(500).json(response);
+            return res.status(500).json(response);
         }
     });
 });

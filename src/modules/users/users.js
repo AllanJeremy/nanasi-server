@@ -4,16 +4,20 @@ const Api = require('../../lib/api');
 const FeedbackMessages = require('../../lang/feedbackMessages');
 
 // Get all users
-module.exports.getUsers = () => {
-    return User.find((err, usersFound) => {
+module.exports.getUsers = (callback) => {
+    User.find((err, usersFound) => {
         if (err) {
-            return Api.getError(FeedbackMessages.operationFailed('get users'));
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed('get users'))
+            );
         }
 
-        return Api.getResponse(true, FeedbackMessages.itemsFoundWithCount(usersFound, 'Users'), {
-            count: usersFound.length,
-            users: usersFound
-        });
+        return callback(
+            Api.getResponse(true, FeedbackMessages.itemsFoundWithCount(usersFound, 'Users'), {
+                count: usersFound.length,
+                users: usersFound
+            })
+        );
     });
 };
 
