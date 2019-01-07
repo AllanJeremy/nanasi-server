@@ -1,17 +1,18 @@
 // Config
-const otpConfig = require('../../config/otp');
+const OtpConfig = require('../../config/otp');
 
 // Libraries
-const api = require('../../lib/api');
+const Api = require('../../lib/api');
 
 // Models
 const User = require('../../models/users/user');
 
 //Lang files
-const feedbackMessages = require('../../lang/feedbackMessages');
+const FeedbackMessages = require('../../lang/feedbackMessages');
+const AuthMessages = require('../../lang/authMessages');
 
 // Modules
-const otp = require('../../modules/auth/otp');
+const Otp = require('../../modules/auth/otp');
 
 
 // Register new user
@@ -22,15 +23,15 @@ module.exports.register = (res, userData) => {
     }).exec().then(user => {
         // If we found a user by that phone
         if (user.length > 0) {
-            const message = feedbackMessages.itemWithAttributeExists('User', 'phone number');
+            const message = FeedbackMessages.itemWithAttributeExists('User', 'phone number');
 
-            res.status(409).json(api.getResponse(false, message));
+            res.status(409).json(Api.getResponse(false, message));
 
         } else { // No user with that phone exists - proceed to create user
             //TODO: Check if it was a bot using Google Captcha
 
             // Try sending a OTP
-            otp.sendOtp(userData.phone, otpConfig.OtpTypes.REGISTER, (otpResponse) => {
+            Otp.sendOtp(userData.phone, OtpConfig.OtpTypes.REGISTER, (otpResponse) => {
                 if (!otpResponse.messageSent) {
                     console.log(`Failed to send OTP`);
                     return;
@@ -44,20 +45,31 @@ module.exports.register = (res, userData) => {
 
 
                     // Add OTP data to the database
-                    otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
-                        return res.status(201).json(api.getResponse(true, feedbackMessages.itemCreatedSuccessfully('user'), createdUser));
+                    Otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
+                        return res.status(201).json(Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('user'), createdUser));
                     });
                 });
             });
 
         }
     }).catch(err => {
-        res.status(500).json(api.getError(err));
+        res.status(500).json(Api.getError(err));
     });
 
 };
 
 // TODO: Login
+module.exports.login = (userId, otpInput) => {
+
+    const verifyOtp = Otp.verifyOtp(userId, otpInput, OtpConfig.OtpTypes.LOGIN);
+
+    // If the OTP was valid ~ Login
+    if (verifyOtp.ok) {
+        //TODO: Add login logic
+    } else {
+        return Api.getResponse(false, AuthMessages.loginFailed);
+    }
+};
 
 // TODO: Logout
 
