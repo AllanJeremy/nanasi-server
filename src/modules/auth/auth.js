@@ -71,10 +71,34 @@ module.exports.login = (phone, otpInput, callback) => {
             return callback(Api.getResponse(false, AuthMessages.loginFailed()));
         }
         // Otp verified
-        response.data.token = `JWT`;
+        const userData = response.data.user;
+        jwt.sign({
+            id: userData._id,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            phone: userData.phone,
+        }, process.env.JWT_SECRET, (err, token) => {
 
-        //TODO: Create JWT
-        return callback(response);
+            // If there was an error creating the JWT
+            if (err) {
+                // Set error message
+                response.ok = false;
+                response.message = FeedbackMessages.failedToSignJWT();
+                response.error = err.message;
+
+                // Remove the data that had been set
+                response.data = undefined;
+
+            } else {
+
+                //Successfully created JWT - Return token generated
+                response.message = AuthMessages.loginSucceeded();
+                response.data.token = token;
+            }
+
+            // Call the callback with the JSON response we generated
+            return callback(response);
+        });
     });
 };
 

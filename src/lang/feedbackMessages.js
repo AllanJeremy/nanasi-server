@@ -48,3 +48,11 @@ module.exports.itemCreatedSuccessfully = (itemName) => {
     //TODO: Probably translate
     return message;
 };
+
+// Failed to sign JWT
+module.exports.failedToSignJWT = () => {
+    const message = `Failed to sign JWT`;
+
+    //TODO: Probably translate
+    return message;
+};

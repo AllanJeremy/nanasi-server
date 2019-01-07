@@ -43,8 +43,6 @@ const userSchema = new mongoose.Schema({
         expiry: Date
     },
 
-    token: String, //Stores the JWT
-
     registrationConfirmed: {
         type: Boolean,
         default: false
