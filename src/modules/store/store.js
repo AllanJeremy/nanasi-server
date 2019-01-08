@@ -15,7 +15,9 @@ function _getStoresByFilter(filter, callback) {
     filter = filter || {};
     return Store.find(filter, (err, storesFound) => {
         if (err) {
-            return callback(Api.getError(FeedbackMessages.operationFailed('get stores')));
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed('get stores'), err)
+            );
         }
 
         const storeCount = storesFound.length;
@@ -37,7 +39,7 @@ function _getSingleStoreByFilter(filter, callback) {
     return Store.findOne(filter, (err, storeFound) => {
         if (err) {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get stores'))
+                Api.getError(FeedbackMessages.operationFailed('get store'), err)
             );
         }
 
@@ -56,7 +58,7 @@ function _getSingleStoreByFilter(filter, callback) {
 /* 
     EXPORTS
 */
-//TODO: Create store
+// Create store
 module.exports.createStore = (storeData, callback) => {
     const newStore = new Store(storeData);
 
@@ -91,21 +93,57 @@ module.exports.getStoreById = (storeId, callback) => {
     }, callback);
 };
 
-//TODO: Update store
+// Update store
 module.exports.updateStore = (storeId, callback) => {
-
-    Store.findOne({
+    return Store.findOneAndUpdate({
         _id: storeId
-    }, (err, storeFound) => {
+    }).then((err, storeFound) => {
+        if (err) {
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed(`update store`), err)
+            );
+        }
 
+        // Check if store was found
+        if (storeFound) {
+            // No errors ~ Deleted the store
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`store (${storeFound.name})`), {
+                    id: storeId,
+                    storeName: storeDeleted.name
+                })
+            );
+        } else {
+            return callback(
+                Api.getError(FeedbackMessages.itemNotFound(`Store`))
+            );
+        }
     });
 };
 
-//TODO: Delete store
+// Delete store
 module.exports.deleteStore = (storeId, callback) => {
-    Store.findOne({
+    return Store.findOneAndDelete({
         _id: storeId
-    }, (err, storeFound) => {
+    }).then((err, storeDeleted) => {
+        if (err) {
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed(`delete store`), err)
+            );
+        }
 
+        if (storeDeleted) {
+            // No errors ~ Deleted the store
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('store'), {
+                    id: storeId,
+                    storeName: storeDeleted.name
+                })
+            );
+        } else {
+            return callback(
+                Api.getError(FeedbackMessages.itemNotFound(`Store`))
+            );
+        }
     });
 };

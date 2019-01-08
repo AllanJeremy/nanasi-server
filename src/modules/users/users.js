@@ -11,7 +11,9 @@ function _getUsersByFilter(filter, callback) {
     filter = filter || {};
     return User.find(filter, (err, usersFound) => {
         if (err) {
-            return callback(Api.getError(FeedbackMessages.operationFailed('get users')));
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed('get users'), err)
+            );
         }
 
         const userCount = usersFound.length;
@@ -33,7 +35,7 @@ function _getSingleUserByFilter(filter, callback) {
     return User.findOne(filter, (err, userFound) => {
         if (err) {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get user'))
+                Api.getError(FeedbackMessages.operationFailed('get user'), err)
             );
         }
         console.log(userFound);
