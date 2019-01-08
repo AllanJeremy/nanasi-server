@@ -66,7 +66,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
     Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.REGISTER, response => {
         // If the OTP was invalid ~ Reject Login
         if (!response.ok) {
-            return callback(Api.getResponse(false, AuthMessages.loginFailed()));
+            return callback(Api.getResponse(false, AuthMessages.loginFailed(),null,401));
         }
 
         // Update the records in the database
@@ -81,7 +81,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
             // If no users were found
             if (!userFound) {
                 return callback(
-                    Api.getError(FeedbackMessages.itemNotFound('User to update'))
+                    Api.getError(FeedbackMessages.itemNotFound('User to update'),null,404)
                 );
             }
             userFound.otp = undefined; // Remove the OTP ~  We are done with it for now
