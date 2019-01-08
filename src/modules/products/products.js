@@ -73,3 +73,50 @@ module.exports.createProduct = (productData, callback) => {
         );
     });
 };
+
+// Update product
+module.exports.updateProduct = (productId, updateData, callback) => {
+    return Product.findByIdAndUpdate(productId, updateData).then((productFound) => {
+        // Check if product was found
+        if (productFound) {
+            // No errors ~ Updated the product
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`product (${productFound.name})`), {
+                    id: productId,
+                    productName: productFound.name
+                })
+            );
+        } else {
+            return callback(
+                Api.getError(FeedbackMessages.itemNotFound(`Product`), null, 404)
+            );
+        }
+    }).catch(err => {
+        return callback(
+            Api.getError(FeedbackMessages.operationFailed(`update product`), err)
+        );
+    });
+};
+
+// Delete product
+module.exports.deleteProduct = (productId, callback) => {
+    return Product.findByIdAndDelete(productId).then((productDeleted) => {
+        if (productDeleted) {
+            // No errors ~ Deleted the product
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('product'), {
+                    id: productId,
+                    productName: productDeleted.name
+                })
+            );
+        } else {
+            return callback(
+                Api.getError(FeedbackMessages.itemNotFound(`Product`), null, 404)
+            );
+        }
+    }).catch(err => {
+        return callback(
+            Api.getError(FeedbackMessages.operationFailed(`delete product`), err)
+        );
+    });
+};
