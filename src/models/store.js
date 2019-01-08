@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const storeSchema = new mongoose.Schema({
-    user: {
+    merchantId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
@@ -19,4 +19,4 @@ const storeSchema = new mongoose.Schema({
 });
 
 // Exports
-module.exports = mongoose.model('Store',storeSchema);
+module.exports = mongoose.model('Store', storeSchema);
