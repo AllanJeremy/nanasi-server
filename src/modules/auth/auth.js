@@ -20,7 +20,7 @@ const user = require('../../modules/users/users');
 
 
 // Register new user
-module.exports.register = (res, userData) => {
+module.exports.register = (userData, callback) => {
     // Check if the user exists or not
     User.find({
         phone: userData.phone
@@ -29,7 +29,7 @@ module.exports.register = (res, userData) => {
         if (user.length > 0) {
             const message = FeedbackMessages.itemWithAttributeExists('User', 'phone number');
 
-            res.status(409).json(Api.getResponse(false, message));
+            return callback(Api.getResponse(false, message, null, 409));
 
         } else { // No user with that phone exists - proceed to create user
             //TODO: Check if it was a bot using Google Captcha
@@ -47,19 +47,17 @@ module.exports.register = (res, userData) => {
                 newUser.save().then(createdUser => {
                     const otpData = otpResponse.otp;
 
-
                     // Add OTP data to the database
                     Otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
-                        return res.status(201).json(Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('user'), createdUser));
+                        return callback(Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('user'), createdUser, 201));
                     });
                 });
             });
 
         }
     }).catch(err => {
-        res.status(500).json(Api.getError(err));
+        callback(Api.getError(err.message, err, 500));
     });
-
 };
 
 // Confirm registered user
