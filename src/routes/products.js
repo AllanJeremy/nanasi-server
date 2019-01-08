@@ -1,14 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
+const product = require('../modules/products/products');
+
 /* PRODUCT VARIANTS 
 Added here to avoid request param overlap with product/:attribute
 */
 // Create product variant
 //* Merchant accessible
-router.post('/variants/:productId',(req,res,next)=>{//TODO: Add db code
+router.post('/variants/:productId', (req, res, next) => { //TODO: Add db code
     res.status(201);
-    
+
     const productId = req.params.productId;
     res.json({
         id: productId,
@@ -18,7 +20,7 @@ router.post('/variants/:productId',(req,res,next)=>{//TODO: Add db code
 
 // View multiple product variants belonging to a certain product
 //* Globally accessible
-router.get('/variants/:productId',(req,res,next)=>{//TODO: Add db code
+router.get('/variants/:productId', (req, res, next) => { //TODO: Add db code
     res.status(200);
 
     const productId = req.params.productId;
@@ -30,9 +32,9 @@ router.get('/variants/:productId',(req,res,next)=>{//TODO: Add db code
 
 // View single product variant
 //* Globally accessible
-router.get('/single-variant/:variantId',(req,res,next)=>{//TODO: Add db code
+router.get('/single-variant/:variantId', (req, res, next) => { //TODO: Add db code
     res.status(200);
-    
+
     const variantId = req.params.variantId;
     res.json({
         id: variantId,
@@ -42,7 +44,7 @@ router.get('/single-variant/:variantId',(req,res,next)=>{//TODO: Add db code
 
 // Update product variant
 //* Merchant accessible
-router.patch('/variants/:variantId',(req,res,next)=>{//TODO: Add db code
+router.patch('/variants/:variantId', (req, res, next) => { //TODO: Add db code
     res.status(200);
 
     const variantId = req.params.variantId;
@@ -54,7 +56,7 @@ router.patch('/variants/:variantId',(req,res,next)=>{//TODO: Add db code
 
 // Delete product variant
 //* Merchant accessible
-router.delete('/variants/:variantId',(req,res,next)=>{//TODO: Add db code
+router.delete('/variants/:variantId', (req, res, next) => { //TODO: Add db code
     res.status(200);
 
     const variantId = req.params.variantId;
@@ -62,60 +64,54 @@ router.delete('/variants/:variantId',(req,res,next)=>{//TODO: Add db code
         id: variantId,
         message: `Delete product variant with id of ${variantId}`
     });
-})
+});
 
 /* PRODUCTS */
 // Create products
 //* Merchant accessible
-router.post('/',(req,res,next)=>{//TODO: Add db code
-    res.status(201);
-    res.json({
-        message:"Creating products"
+router.post('/', (req, res, next) => { //TODO: Add db code
+    product.createProduct(req.body.data, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // View multiple products
 //* Globally accessible
-router.get('/',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-    res.json({
-        message: `Viewing multiple products`
+router.get('/', (req, res, next) => { //TODO: Add db code
+    product.getProducts(req.body.filters, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// View merchant products
+//* Globally accessible
+router.get('/merchant/:merchantId', (req, res, next) => { //TODO: Add db code
+    product.getMerchantProducts(req.params.merchantId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // View single product
 //* Globally accessible
-router.get('/:productId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const productId = req.params.productId;
-    res.json({
-        id: productId,
-        message: `Viewing single product with id of ${productId}`
+router.get('/:productId', (req, res, next) => { //TODO: Add db code
+    product.getProductById(req.params.productId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Update product
 //* Merchant accessible
-router.patch('/:productId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const productId = req.params.productId;
-    res.json({
-        id: productId,
-        message: `Updating product with id of ${productId}`
+router.patch('/:productId', (req, res, next) => { //TODO: Add db code
+    product.updateProduct(req.params.productId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Delete products
 //* Merchant accessible
-router.delete('/:productId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const productId = req.params.productId;
-    res.json({
-        id: productId,
-        message: `Deleting product with id of ${productId}`
+router.delete('/:productId', (req, res, next) => { //TODO: Add db code
+    product.deleteProduct(req.params.productId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 

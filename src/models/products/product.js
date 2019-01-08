@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Schema
 const productSchema = new mongoose.Schema({
-    store: {
+    storeId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Store'
     },
@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
     },
     description: String,
 
-    regularPrice: {
+    regularPrice: { //TODO: Account for currency (Consider adding currency to store)
         type: Number,
         required: true
     },
@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
 
     quantity: {
         type: Number,
-        required: true
+        default: 1
     },
 
     images: [{
