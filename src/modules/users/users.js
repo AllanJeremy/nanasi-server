@@ -36,7 +36,7 @@ function _getSingleUserByFilter(filter, callback) {
         console.log(userFound);
         const isOk = userFound ? true : false;
         const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(userFound, 'User') : FeedbackMessages.itemNotFound('User');
+        const message = isOk ? FeedbackMessages.itemsFound('User') : FeedbackMessages.itemNotFound('User');
 
         return callback(
             Api.getResponse(isOk, message, {
