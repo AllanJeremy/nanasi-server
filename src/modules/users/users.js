@@ -8,6 +8,7 @@ const FeedbackMessages = require('../../lang/feedbackMessages');
 */
 // Get multiple users by filter
 function _getUsersByFilter(filter, callback) {
+    filter = filter || {};
     return User.find(filter, (err, usersFound) => {
         if (err) {
             return callback(Api.getError(FeedbackMessages.operationFailed('get users')));
@@ -31,7 +32,9 @@ function _getUsersByFilter(filter, callback) {
 function _getSingleUserByFilter(filter, callback) {
     return User.findOne(filter, (err, userFound) => {
         if (err) {
-            return Api.getError(FeedbackMessages.operationFailed('get user'));
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed('get user'))
+            );
         }
         console.log(userFound);
         const isOk = userFound ? true : false;
@@ -51,7 +54,6 @@ function _getSingleUserByFilter(filter, callback) {
 */
 // Get all users
 module.exports.getUsers = (filter, callback) => {
-    filter = filter || {};
     return _getUsersByFilter(filter, callback);
 };
 
