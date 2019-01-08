@@ -107,7 +107,7 @@ module.exports.updateStore = (storeId, updateData, callback) => {
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Store`))
+                Api.getError(FeedbackMessages.itemNotFound(`Store`), null, 404)
             );
         }
     }).catch(err => {
@@ -119,9 +119,7 @@ module.exports.updateStore = (storeId, updateData, callback) => {
 
 // Delete store
 module.exports.deleteStore = (storeId, callback) => {
-    return Store.findOneAndDelete({
-        _id: storeId
-    }).then((storeDeleted) => {
+    return Store.findByIdAndDelete(storeId).then((storeDeleted) => {
         if (storeDeleted) {
             // No errors ~ Deleted the store
             return callback(
@@ -132,7 +130,7 @@ module.exports.deleteStore = (storeId, callback) => {
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Store`))
+                Api.getError(FeedbackMessages.itemNotFound(`Store`), null, 404)
             );
         }
     }).catch(err => {
