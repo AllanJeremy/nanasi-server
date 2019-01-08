@@ -19,7 +19,7 @@ function _getUsersByFilter(filter, callback) {
         const userCount = usersFound.length;
         const isOk = (userCount > 0);
         const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(usersFound, 'Users') : FeedbackMessages.itemNotFound('User');
+        const message = isOk ? FeedbackMessages.itemsFoundWithCount(usersFound, 'Users') : FeedbackMessages.itemNotFound('Users');
 
         return callback(
             Api.getResponse(isOk, message, {
