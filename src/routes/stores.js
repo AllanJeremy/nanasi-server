@@ -1,58 +1,54 @@
 const express = require('express');
 const router = express.Router();
 
+const store = require('../modules/store/store');
+
 /* STORE ENDPOINTS */
 // Create store
 //* Merchant accessible
-router.post('/',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-    res.json({
-        message:"Creating store"
+router.post('/', (req, res, next) => { //TODO: Add db code
+    store.createStore(req.body.data, response => {
+        return res.status(response.statusCode).json(response); //TODO: refactor this
     });
 });
 
 // View multiple stores
 //* Globally accessible
-router.get('/',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-    res.json({
-        message: `Viewing multiple stores`
+router.get('/', (req, res, next) => { //TODO: Add db code
+    store.getStores(req.body.filters, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// Get merchant store
+//* Globally accessible
+router.get('/merchant/:merchantId', (req, res, next) => {
+    store.getMerchantStores(req.params.merchantId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // View single store
 //* Globally accessible
-router.get('/:storeId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const storeId = req.params.storeId;
-    res.json({
-        id: storeId,
-        message: `Viewing single store with id of ${storeId}`
+router.get('/:storeId', (req, res, next) => { //TODO: Add db code
+    store.getStoreById(req.params.storeId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Update store
 //* Merchant accessible
-router.patch('/:storeId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const storeId = req.params.storeId;
-    res.json({
-        id: storeId,
-        message: `Updating store with id of ${storeId}`
+router.patch('/:storeId', (req, res, next) => { //TODO: Add db code
+    store.updateStore(req.params.storeId, response => {
+        return res.status(response.statusCode.json(response));
     });
 });
 
 // Delete store
 //* Merchant accessible
-router.delete('/:storeId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const storeId = req.params.storeId;
-    res.json({
-        id: storeId,
-        message: `Deleting store with id of ${storeId}`
+router.delete('/:storeId', (req, res, next) => { //TODO: Add db code
+    store.deleteStore(req.params.storeId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
