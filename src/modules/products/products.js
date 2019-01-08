@@ -1,5 +1,5 @@
 // Models
-const Product = require('../../models/product');
+const Product = require('../../models/products/product');
 
 // Lang files
 const FeedbackMessages = require('../../lang/feedbackMessages');
@@ -23,7 +23,7 @@ function _getProductsByFilter(filter, callback) {
         const productCount = productsFound.length;
         const isOk = (productCount > 0);
         const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(productsFound, 'Products') : FeedbackMessages.itemNotFound('Product');
+        const message = isOk ? FeedbackMessages.itemsFoundWithCount(productsFound, 'Products') : FeedbackMessages.itemNotFound('Products');
 
         return callback(
             Api.getResponse(isOk, message, {
@@ -73,6 +73,26 @@ module.exports.createProduct = (productData, callback) => {
         );
     });
 };
+
+// Get all products
+module.exports.getProducts = (filter, callback) => {
+    return _getProductsByFilter(filter, callback);
+};
+
+// Get products by storeId
+module.exports.getMerchantProducts = (storeId, callback) => {
+    return _getProductsByFilter({
+        storeId: storeId
+    }, callback);
+};
+
+// Get product by productId
+module.exports.getProductById = (productId, callback) => {
+    return _getSingleProductByFilter({
+        _id: productId
+    }, callback);
+};
+
 
 // Update product
 module.exports.updateProduct = (productId, updateData, callback) => {
