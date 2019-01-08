@@ -34,7 +34,7 @@ function _getSingleStoreByFilter(filter, callback) {
 
         const isOk = storeFound ? true : false;
         const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(storeFound, 'Store') : FeedbackMessages.itemNotFound('Store');
+        const message = isOk ? FeedbackMessages.itemsFound('Store') : FeedbackMessages.itemNotFound('Store');
 
         return callback(
             Api.getResponse(isOk, message, {
