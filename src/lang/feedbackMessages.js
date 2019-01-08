@@ -22,7 +22,7 @@ module.exports.itemWithAttributeExists = (itemName, attributeName) => {
 
     //TODO: Possibly add translation
     return message;
-}
+};
 /* 
     SUCCESS MESSAGES
 */

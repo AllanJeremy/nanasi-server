@@ -56,7 +56,9 @@ router.post('/register', (req, res, next) => { // TODO: Add auth & db code
         return res.status(500).json(api.getError('User data not provided, failed to create user'));
     }
 
-    return Auth.register(res, userData);
+    Auth.register(userData, (response) => {
+        return res.status(response.status).json(response);
+    });
 });
 
 // Confirm registration
