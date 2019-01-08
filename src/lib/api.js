@@ -1,7 +1,7 @@
 module.exports.getResponse = (isOk, message, data, statusCode) => {
     let response = {};
     response.ok = isOk;
-    response.status = statusCode || 200;
+    response.statusCode = statusCode || 200;
     response.message = message;
     response.data = data || undefined;
     return response;

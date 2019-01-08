@@ -57,19 +57,14 @@ router.post('/register', (req, res, next) => { // TODO: Add auth & db code
     }
 
     Auth.register(userData, (response) => {
-        return res.status(response.status).json(response);
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Confirm registration
 router.post('/confirmRegistration', (req, res, next) => {
     Auth.confirmRegistration(req.body.phone, req.body.otp, (response) => {
-        // Set the response status
-        if (response.ok) {
-            return res.status(200).json(response);
-        } else {
-            return res.status(500).json(response);
-        }
+        return res.status(response.statusCode).json(response);
     });
 });
 
