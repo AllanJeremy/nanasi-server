@@ -49,6 +49,22 @@ module.exports.itemCreatedSuccessfully = (itemName) => {
     return message;
 };
 
+// Item updated successfully
+module.exports.itemUpdatedSuccessfully = (itemName) => {
+    const message = `Successfully updated ${itemName}`;
+
+    //TODO: Probably translate
+    return message;
+};
+
+// Item deleted successfully
+module.exports.itemDeletedSuccessfully = (itemName) => {
+    const message = `Successfully deleted ${itemName}`;
+
+    //TODO: Probably translate
+    return message;
+};
+
 // Failed to sign JWT
 module.exports.failedToSignJWT = () => {
     const message = `Failed to sign JWT`;
