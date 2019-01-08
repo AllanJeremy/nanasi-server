@@ -23,7 +23,7 @@ function _getStoresByFilter(filter, callback) {
         const storeCount = storesFound.length;
         const isOk = (storeCount > 0);
         const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(storesFound, 'Stores') : FeedbackMessages.itemNotFound('Store');
+        const message = isOk ? FeedbackMessages.itemsFoundWithCount(storesFound, 'Stores') : FeedbackMessages.itemNotFound('Stores');
 
         return callback(
             Api.getResponse(isOk, message, {
