@@ -8,7 +8,7 @@ const FeedbackMessages = require('../../lang/feedbackMessages');
 const Api = require('../../lib/api');
 
 /* 
-    HELPERS
+    PRODUCT HELPERS
 */
 // Get multiple products by filter
 function _getProductsByFilter(filter, callback) {
@@ -56,7 +56,7 @@ function _getSingleProductByFilter(filter, callback) {
 }
 
 /* 
-    EXPORTS
+    PRODUCT EXPORTS
 */
 // Create product
 module.exports.createProduct = (productData, callback) => {
@@ -80,7 +80,7 @@ module.exports.getProducts = (filter, callback) => {
 };
 
 // Get products by storeId
-module.exports.getMerchantProducts = (storeId, callback) => {
+module.exports.getStoreProducts = (storeId, callback) => {
     return _getProductsByFilter({
         storeId: storeId
     }, callback);
@@ -140,3 +140,20 @@ module.exports.deleteProduct = (productId, callback) => {
         );
     });
 };
+
+/* 
+    PRODUCT VARIANT HELPERS
+*/
+
+/* 
+    PRODUCT VARIANT EXPORTS
+*/
+// Create product variant
+
+// Get product variants
+
+// Get single product variant
+
+// Update product variant
+
+// Delete product variants
