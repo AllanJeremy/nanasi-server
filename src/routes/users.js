@@ -8,27 +8,17 @@ const user = require('../modules/users/users');
 // Get multiple users 
 //* Admin accessible
 router.get('/', (req, res, next) => { //TODO: Add db code
-    user.getUsers((response) => {
-        if (response.ok) {
-            return res.status(200).json(response);
-        } else {
-            return res.status(404).json(response);
-        }
-
-        return renderToString;
+    user.getUsers(req.body.filters, (response) => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Get single user
 //* Globally accessible
 router.get('/:userId', (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const userId = req.param.userId;
-    res.json({
-        id: userId,
-        message: `Viewing user with the id of ${userId}`
-    });
+    user.getUserById(req.params.userId, (response) => {
+        return res.status(response.statusCode).json(response);
+    })
 });
 
 // Activate user
