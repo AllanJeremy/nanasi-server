@@ -94,23 +94,15 @@ module.exports.getStoreById = (storeId, callback) => {
 };
 
 // Update store
-module.exports.updateStore = (storeId, callback) => {
-    return Store.findOneAndUpdate({
-        _id: storeId
-    }).then((err, storeFound) => {
-        if (err) {
-            return callback(
-                Api.getError(FeedbackMessages.operationFailed(`update store`), err)
-            );
-        }
-
+module.exports.updateStore = (storeId, updateData, callback) => {
+    return Store.findByIdAndUpdate(storeId, updateData).then((storeFound) => {
         // Check if store was found
         if (storeFound) {
-            // No errors ~ Deleted the store
+            // No errors ~ Updated the store
             return callback(
                 Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`store (${storeFound.name})`), {
                     id: storeId,
-                    storeName: storeDeleted.name
+                    storeName: storeFound.name
                 })
             );
         } else {
@@ -118,6 +110,10 @@ module.exports.updateStore = (storeId, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Store`))
             );
         }
+    }).catch(err => {
+        return callback(
+            Api.getError(FeedbackMessages.operationFailed(`update store`), err)
+        );
     });
 };
 
@@ -125,13 +121,7 @@ module.exports.updateStore = (storeId, callback) => {
 module.exports.deleteStore = (storeId, callback) => {
     return Store.findOneAndDelete({
         _id: storeId
-    }).then((err, storeDeleted) => {
-        if (err) {
-            return callback(
-                Api.getError(FeedbackMessages.operationFailed(`delete store`), err)
-            );
-        }
-
+    }).then((storeDeleted) => {
         if (storeDeleted) {
             // No errors ~ Deleted the store
             return callback(
@@ -145,5 +135,9 @@ module.exports.deleteStore = (storeId, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Store`))
             );
         }
+    }).catch(err => {
+        return callback(
+            Api.getError(FeedbackMessages.operationFailed(`delete store`), err)
+        );
     });
 };

@@ -39,8 +39,8 @@ router.get('/:storeId', (req, res, next) => { //TODO: Add db code
 // Update store
 //* Merchant accessible
 router.patch('/:storeId', (req, res, next) => { //TODO: Add db code
-    store.updateStore(req.params.storeId, response => {
-        return res.status(response.statusCode.json(response));
+    store.updateStore(req.params.storeId, req.body.data, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
