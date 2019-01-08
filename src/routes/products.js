@@ -85,8 +85,8 @@ router.get('/', (req, res, next) => { //TODO: Add db code
 
 // View merchant products
 //* Globally accessible
-router.get('/merchant/:merchantId', (req, res, next) => { //TODO: Add db code
-    product.getMerchantProducts(req.params.merchantId, response => {
+router.get('/store/:storeId', (req, res, next) => { //TODO: Add db code
+    product.getStoreProducts(req.params.storeId, response => {
         return res.status(response.statusCode).json(response);
     });
 });
