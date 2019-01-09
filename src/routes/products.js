@@ -9,60 +9,45 @@ Added here to avoid request param overlap with product/:attribute
 // Create product variant
 //* Merchant accessible
 router.post('/variants/:productId', (req, res, next) => { //TODO: Add db code
-    res.status(201);
-
-    const productId = req.params.productId;
-    res.json({
-        id: productId,
-        message: `Creating product variant for product with id of ${productId}`
+    req.body.data.productId = req.params.productId;
+    product.createProductVariant(req.body.data, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // View multiple product variants belonging to a certain product
 //* Globally accessible
 router.get('/variants/:productId', (req, res, next) => { //TODO: Add db code
-    res.status(200);
+    const filter = {
+        productId: req.params.productId
+    };
 
-    const productId = req.params.productId;
-    res.json({
-        id: productId,
-        message: `Viewing multiple product variants for the product with id of ${productId}`
+    product.getProductVariants(filter, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // View single product variant
 //* Globally accessible
 router.get('/single-variant/:variantId', (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const variantId = req.params.variantId;
-    res.json({
-        id: variantId,
-        message: `Viewing single product variant with id of ${variantId}`
+    product.getProductVariantById(req.params.variantId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Update product variant
 //* Merchant accessible
 router.patch('/variants/:variantId', (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const variantId = req.params.variantId;
-    res.json({
-        id: variantId,
-        message: `Update product variant with the id of ${variantId}`
+    product.updateProductVariant(req.params.variantId, req.body.data, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Delete product variant
 //* Merchant accessible
 router.delete('/variants/:variantId', (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const variantId = req.params.variantId;
-    res.json({
-        id: variantId,
-        message: `Delete product variant with id of ${variantId}`
+    product.deleteProductVariant(req.body.variantId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 

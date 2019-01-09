@@ -1,5 +1,6 @@
 // Models
 const Product = require('../../models/products/product');
+const ProductVariant = require('../../models/products/variant');
 
 // Lang files
 const FeedbackMessages = require('../../lang/feedbackMessages');
@@ -64,12 +65,11 @@ module.exports.createProduct = (productData, callback) => {
 
     return newProduct.save().then(createdProduct => {
         return callback(
-            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Product'), createdProduct)
+            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Product'), createdProduct, 201)
         );
     }).catch(err => {
-        const message = FeedbackMessages.operationFailed(`create product`);
         return callback(
-            Api.getError(message, err)
+            Api.getError(FeedbackMessages.operationFailed(`create product`), err)
         );
     });
 };
@@ -144,16 +144,145 @@ module.exports.deleteProduct = (productId, callback) => {
 /* 
     PRODUCT VARIANT HELPERS
 */
+// Get multiple productVariants by filter
+function _getProductVariantsByFilter(filter, callback) {
+    filter = filter || {};
+    return ProductVariant.find(filter, (err, productVariantsFound) => {
+        if (err) {
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed('get product variants'), err)
+            );
+        }
+
+        const productVariantCount = productVariantsFound.length;
+        const isOk = (productVariantCount > 0);
+        const statusCode = isOk ? 200 : 404;
+        const message = isOk ? FeedbackMessages.itemsFoundWithCount(productVariantsFound, 'Product variants') : FeedbackMessages.itemNotFound('Product variants');
+
+        return callback(
+            Api.getResponse(isOk, message, {
+                count: productVariantCount,
+                productVariants: productVariantsFound
+            }, statusCode)
+        );
+    });
+}
+
+// Get productVariant by filter
+function _getSingleProductVariantByFilter(filter, callback) {
+    return ProductVariant.findOne(filter, (err, productVariantFound) => {
+        if (err) {
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed('get product variant'), err)
+            );
+        }
+
+        const isOk = productVariantFound ? true : false;
+        const statusCode = isOk ? 200 : 404;
+        const message = isOk ? FeedbackMessages.itemsFound('Product variant') : FeedbackMessages.itemNotFound('Product variant');
+
+        return callback(
+            Api.getResponse(isOk, message, {
+                productVariant: productVariantFound
+            }, statusCode)
+        );
+    });
+}
 
 /* 
     PRODUCT VARIANT EXPORTS
 */
 // Create product variant
+module.exports.createProductVariant = (productVariantData, callback) => {
+    const newProductVariant = new Product(productVariantData);
+
+    return newProductVariant.save().then(createdProductVariant => {
+        // Save the variant to the product
+        Product.findByIdAndUpdate(productVariantData.productId, {
+            $push: {
+                variants: createdProductVariant
+            }
+        }, (err, productFound) => {
+            // If there was an error
+            if (err) {
+                return callback(
+                    Api.getError(FeedbackMessages.operationFailed(`retrieve product to add variant to`), err, 500)
+                );
+            }
+
+            // If the product was found
+            if (productFound) {
+                return callback(
+                    Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Product variant'), createdProductVariant, 201)
+                );
+            } else { // Product not found
+                return callback(
+                    Api.getResponse(false, FeedbackMessages.itemNotFound('Product'), null, 404)
+                );
+            }
+        });
+    }).catch(err => {
+        return callback(
+            Api.getError(FeedbackMessages.operationFailed(`create product variant`), err)
+        );
+    });
+};
 
 // Get product variants
+module.exports.getProductVariants = (filter, callback) => {
+    return _getProductVariantsByFilter(filter, callback);
+};
 
 // Get single product variant
+module.exports.getProductVariantById = (variantId, callback) => {
+    return _getSingleProductVariantByFilter({
+        _id: variantId
+    }, callback);
+};
 
-// Update product variant
+// Update productVariant variant
+module.exports.updateProductVariant = (productVariantId, updateData, callback) => {
+    return ProductVariant.findByIdAndUpdate(productVariantId, updateData).then((productVariantFound) => {
+        // Check if productVariant was found
+        if (productVariantFound) {
+            // No errors ~ Updated the productVariant
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`product variant (${productVariantFound.name})`), {
+                    id: productVariantId,
+                    productVariantName: productVariantFound.name
+                })
+            );
+        } else {
+            return callback(
+                Api.getError(FeedbackMessages.itemNotFound(`Product variant`), null, 404)
+            );
+        }
+    }).catch(err => {
+        return callback(
+            Api.getError(FeedbackMessages.operationFailed(`update product variant`), err)
+        );
+    });
+};
 
-// Delete product variants
+// Delete productVariant variants
+module.exports.deleteProductVariant = (productVariantId, callback) => {
+    return ProductVariant.findByIdAndDelete(productVariantId).then((productVariantDeleted) => {
+        if (productVariantDeleted) {
+            // No errors ~ Deleted the productVariant
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('productVariant'), {
+                    id: productVariantId,
+                    productVariantName: productVariantDeleted.name
+                })
+            );
+        } else {
+            return callback(
+                Api.getError(FeedbackMessages.itemNotFound(`Product variant`), null, 404)
+            );
+        }
+    }).catch(err => {
+        return callback(
+            Api.getError(FeedbackMessages.operationFailed(`delete product variant`), err)
+        );
+    });
+};

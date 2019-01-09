@@ -2,14 +2,17 @@ const mongoose = require('mongoose');
 
 const variantSchema = new mongoose.Schema({
     name: String,
-    quantity: Number,
+    quantity: {
+        type: Number,
+        default: 1
+    },
     regularPrice: Number,
     salePrice: Number,
     productId: {
-        type:  mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
     }
 });
 
 // Exports
-module.exports = mongoose.model('Variant',variantSchema);
+module.exports = mongoose.model('Variant', variantSchema);
