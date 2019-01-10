@@ -14,46 +14,52 @@ const Api = require('../../lib/api');
 // Get multiple products by filter
 function _getProductsByFilter(filter, callback) {
     filter = filter || {};
-    return Product.find(filter, (err, productsFound) => {
-        if (err) {
+    return Product.find(filter)
+        .populate('store', '_id name')
+        .populate('images')
+        .populate('variants')
+        .then((productsFound) => {
+            const productCount = productsFound.length;
+            const isOk = (productCount > 0);
+            const statusCode = isOk ? 200 : 404;
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(productsFound, 'Products') : FeedbackMessages.itemNotFound('Products');
+
+            return callback(
+                Api.getResponse(isOk, message, {
+                    count: productCount,
+                    products: productsFound
+                }, statusCode)
+            );
+        })
+        .catch(err => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed('get products'), err)
             );
-        }
-
-        const productCount = productsFound.length;
-        const isOk = (productCount > 0);
-        const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(productsFound, 'Products') : FeedbackMessages.itemNotFound('Products');
-
-        return callback(
-            Api.getResponse(isOk, message, {
-                count: productCount,
-                products: productsFound
-            }, statusCode)
-        );
-    });
+        });
 }
 
 // Get product by filter
 function _getSingleProductByFilter(filter, callback) {
-    return Product.findOne(filter, (err, productFound) => {
-        if (err) {
+    return Product.findOne(filter)
+        .populate('store', '_id name')
+        .populate('images')
+        .populate('variants')
+        .then((productFound) => {
+            const isOk = productFound ? true : false;
+            const statusCode = isOk ? 200 : 404;
+            const message = isOk ? FeedbackMessages.itemsFound('Product') : FeedbackMessages.itemNotFound('Product');
+
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get product'), err)
+                Api.getResponse(isOk, message, {
+                    product: productFound
+                }, statusCode)
             );
-        }
-
-        const isOk = productFound ? true : false;
-        const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFound('Product') : FeedbackMessages.itemNotFound('Product');
-
-        return callback(
-            Api.getResponse(isOk, message, {
-                product: productFound
-            }, statusCode)
-        );
-    });
+        })
+        .catch(err => {
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed('get products'), err)
+            );
+        });
 }
 
 /* 

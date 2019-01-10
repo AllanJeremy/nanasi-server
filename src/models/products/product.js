@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
+require('../../models/image');
+require('../../models/variant');
+require('../../models/category');
 // Schema
 const productSchema = new mongoose.Schema({
-    storeId: {
+    store: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Store'
     },
