@@ -5,10 +5,6 @@ const imageSchema = new mongoose.Schema({
     imageUrl: String,
     thumbnailUrl: String,
     altText: String,
-    variantId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Variant'
-    }
 });
 
 
