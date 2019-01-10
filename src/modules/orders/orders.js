@@ -6,46 +6,66 @@ const Order = require('../../models/orders/orders');
 // Get multiple orders by filter
 function _getOrdersByFilter(filter, callback) {
     filter = filter || {};
-    return Order.find(filter, (err, ordersFound) => {
-        if (err) {
+    //TODO: Check if the orders belongs to the user that requested it: Possibly pass userId as part of filter
+
+    return Order.find(filter)
+        .populate({
+            path: 'product',
+            populate: {
+                path: 'store',
+                select: 'name _id'
+            }
+        })
+        .then((err, ordersFound) => {
+            if (err) {
+                return callback(
+                    Api.getError(FeedbackMessages.operationFailed('get orders'), err)
+                );
+            }
+
+            const orderCount = ordersFound.length;
+            const isOk = (orderCount > 0);
+            const statusCode = isOk ? 200 : 404;
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(ordersFound, 'Orders') : FeedbackMessages.itemNotFound('Orders');
+
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get orders'), err)
+                Api.getResponse(isOk, message, {
+                    count: orderCount,
+                    orders: ordersFound
+                }, statusCode)
             );
-        }
-
-        const orderCount = ordersFound.length;
-        const isOk = (orderCount > 0);
-        const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(ordersFound, 'Orders') : FeedbackMessages.itemNotFound('Orders');
-
-        return callback(
-            Api.getResponse(isOk, message, {
-                count: orderCount,
-                orders: ordersFound
-            }, statusCode)
-        );
-    });
+        });
 }
 
 // Get order by filter
 function _getSingleOrderByFilter(filter, callback) {
-    return Order.findOne(filter, (err, orderFound) => {
-        if (err) {
+    //TODO: Check if the order belongs to the user that requested it
+
+    return Order.findOne(filter)
+        .populate({
+            path: 'product',
+            populate: {
+                path: 'store',
+                select: '_id name'
+            }
+        })
+        .then((err, orderFound) => {
+            if (err) {
+                return callback(
+                    Api.getError(FeedbackMessages.operationFailed('get order'), err)
+                );
+            }
+
+            const isOk = orderFound ? true : false;
+            const statusCode = isOk ? 200 : 404;
+            const message = isOk ? FeedbackMessages.itemsFound('Order') : FeedbackMessages.itemNotFound('Order');
+
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get order'), err)
+                Api.getResponse(isOk, message, {
+                    order: orderFound
+                }, statusCode)
             );
-        }
-
-        const isOk = orderFound ? true : false;
-        const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFound('Order') : FeedbackMessages.itemNotFound('Order');
-
-        return callback(
-            Api.getResponse(isOk, message, {
-                order: orderFound
-            }, statusCode)
-        );
-    });
+        });
 }
 
 // Update order
@@ -97,6 +117,11 @@ module.exports.getBuyerOrders = (buyerId, callback) => {
 };
 
 //TODO: View store orders ~ Get relationships
+module.exports.getStoreOrders = (storeId, callback) => {
+    return _getOrdersByFilter({
+        "product.store._id": storeId
+    }, callback);
+};
 
 // View single order 
 module.exports.getOrderById = (orderId, callback) => {
@@ -105,10 +130,23 @@ module.exports.getOrderById = (orderId, callback) => {
     }, callback);
 };
 
+// Update order
+module.exports.updateOrder = (orderId, updateData, callback) => {
+    return _updateOrder(orderId, updateData, callback);
+};
+
 // Fulfil order
 module.exports.fulfilOrder = (orderId, callback) => {
     return _updateOrder(orderId, {
         isFulfilled: true
+    }, callback);
+};
+
+// Decline order
+module.exports.declineOrder = (orderId, reason, callback) => {
+    return _updateOrder(orderId, {
+        isAccepted: false,
+        "isAccepted.reason": reason
     }, callback);
 };
 

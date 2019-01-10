@@ -19,6 +19,12 @@ const orderSchema = new mongoose.Schema({
         default: 1
     },
 
+    isAccepted: {
+        type: Boolean,
+        default: true,
+        reason: String // Reason we declined the order if any
+    },
+
     isFulfilled: {
         type: Boolean,
         default: false
