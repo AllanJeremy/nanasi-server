@@ -1,52 +1,50 @@
  const Cart = require('../../models/cart');
 
- // Get multiple products by filter
- function _getProductsByFilter(filter, callback) {
+ // Get multiple cart by filter
+ function _getCartsByFilter(filter, callback) {
      filter = filter || {};
-     return Product.find(filter)
-         .populate('store', '_id name')
-         .populate('images')
-         .populate('variants')
-         .then((productsFound) => {
-             const productCount = productsFound.length;
-             const isOk = (productCount > 0);
+     return Cart.find(filter)
+         .populate('product', 'name')
+         .populate('user', '_id name')
+         .then((cartFound) => {
+             const cartCount = cartFound.length;
+             const isOk = (cartCount > 0);
              const statusCode = isOk ? 200 : 404;
-             const message = isOk ? FeedbackMessages.itemsFoundWithCount(productsFound, 'Products') : FeedbackMessages.itemNotFound('Products');
+             const message = isOk ? FeedbackMessages.itemsFoundWithCount(cartFound, 'Carts') : FeedbackMessages.itemNotFound('Carts');
 
              return callback(
                  Api.getResponse(isOk, message, {
-                     count: productCount,
-                     products: productsFound
+                     count: cartCount,
+                     cart: cartFound
                  }, statusCode)
              );
          })
          .catch(err => {
              return callback(
-                 Api.getError(FeedbackMessages.operationFailed('get products'), err)
+                 Api.getError(FeedbackMessages.operationFailed('get cart'), err)
              );
          });
  }
 
  // Get product by filter
- function _getSingleProductByFilter(filter, callback) {
-     return Product.findOne(filter)
-         .populate('store', '_id name')
-         .populate('images')
-         .populate('variants')
-         .then((productFound) => {
-             const isOk = productFound ? true : false;
+ function _getSingleCartItemByFilter(filter, callback) {
+     return Cart.findOne(filter)
+         .populate('product', 'name')
+         .populate('user')
+         .then((cartItemFound) => {
+             const isOk = cartItemFound ? true : false;
              const statusCode = isOk ? 200 : 404;
-             const message = isOk ? FeedbackMessages.itemsFound('Product') : FeedbackMessages.itemNotFound('Product');
+             const message = isOk ? FeedbackMessages.itemsFound('Cart item') : FeedbackMessages.itemNotFound('Cart');
 
              return callback(
                  Api.getResponse(isOk, message, {
-                     product: productFound
+                     product: cartItemFound
                  }, statusCode)
              );
          })
          .catch(err => {
              return callback(
-                 Api.getError(FeedbackMessages.operationFailed('get products'), err)
+                 Api.getError(FeedbackMessages.operationFailed('get cart item'), err)
              );
          });
  }
