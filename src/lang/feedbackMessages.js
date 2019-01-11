@@ -27,7 +27,7 @@ module.exports.itemWithAttributeExists = (itemName, attributeName) => {
     SUCCESS MESSAGES
 */
 module.exports.itemsFound = (itemName) => {
-    const message = `Found ${item}`;
+    const message = `Found ${itemName}`;
 
     //TODO: Probably translate
     return message;
