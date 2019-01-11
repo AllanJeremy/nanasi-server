@@ -1,4 +1,4 @@
-const Order = require('../../models/orders/orders');
+const Order = require('../../models/orders/order');
 
 /* 
     ORDER HELPERS

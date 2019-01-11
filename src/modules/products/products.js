@@ -200,7 +200,7 @@ function _getSingleProductVariantByFilter(filter, callback) {
 */
 // Create product variant
 module.exports.createProductVariant = (productVariantData, callback) => {
-    const newProductVariant = new Product(productVariantData);
+    const newProductVariant = new ProductVariant(productVariantData);
 
     return newProductVariant.save().then(createdProductVariant => {
         // Save the variant to the product

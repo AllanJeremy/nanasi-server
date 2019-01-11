@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 require('../../models/image');
-require('../../models/variant');
-require('../../models/category');
+require('../../models/products/variant');
+require('../../models/products/category');
 // Schema
 const productSchema = new mongoose.Schema({
     store: {
