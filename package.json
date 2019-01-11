@@ -4,8 +4,11 @@
   "description": "",
   "main": "src/server.js",
   "scripts": {
-    "start": "nodemon src/server.js",
+    "start": "node src/server.js",
     "debug": "nodemon --inspect src/server.js"
+  },
+  "engines": {
+    "node": "10.x"
   },
   "keywords": [
     "nanasi",
