@@ -65,8 +65,13 @@ module.exports.getUserNotifications = (userId, callback) => {
 
 };
 
-// Mark all specific notification as read
+// Mark a specific notification as read
 module.exports.markNotificationAsRead = (userId, callback) => {
+
+};
+
+// Mark a specific notification as unread
+module.exports.markNotificationAsUnread = (userId, callback) => {
 
 };
 

@@ -7,52 +7,47 @@ const notification = require('../modules/notifications/notifications');
 // Create notification
 //* Globally accessible
 router.post('/', (req, res, next) => { //TODO: Add db code
-    res.status(201);
-    res.json({
-        message: "Creating notification"
+
+    //TODO: Set the user id to the current user id, passed via middleware
+    // req.body.data.user = req.userData._id;
+    notification.createNotification(req.body.data, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // View user notifications for the currently logged in user
 //* Logged in user accessible
 router.get('/', (req, res, next) => { //TODO: Add db code
-    res.status(200);
-    res.json({
-        message: `Viewing multiple notifications`
+    //TODO: Set the user id to the current user id, passed via middleware
+    notification.getUserNotifications(req.userData._id, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Mark all current user notifications as read
 //* Logged in user accessible
 router.patch('/mark-all-read', (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    res.json({
-        message: `Marking notification with id of ${notificationId} as unread`
+    //TODO: Set the user id to the current user id, passed via middleware
+    notification.markUserNotificationsAsRead(req.userData._id, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Mark notification that has the if of `notificationId` as read
 //* Logged in user accessible
 router.patch('/mark-read/:notificationId', (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const notificationId = req.params.notificationId;
-    res.json({
-        id: notificationId,
-        message: `Marking notification with id of ${notificationId} as read`
+    //TODO: Set the user id to the current user id, passed via middleware
+    notification.markNotificationAsRead(req.userData._id, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Mark notification as unread
 //* Logged in user accessible
 router.patch('/mark-unread/:notificationId', (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const notificationId = req.params.notificationId;
-    res.json({
-        id: notificationId,
-        message: `Marking notification with id of ${notificationId} as unread`
+    //TODO: Set the user id to the current user id, passed via middleware
+    notification.markNotificationAsUnread(req.userData._id, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
