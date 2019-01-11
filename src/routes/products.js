@@ -46,7 +46,7 @@ router.patch('/variants/:variantId', (req, res, next) => { //TODO: Add db code
 // Delete product variant
 //* Merchant accessible
 router.delete('/variants/:variantId', (req, res, next) => { //TODO: Add db code
-    product.deleteProductVariant(req.body.variantId, response => {
+    product.deleteProductVariant(req.params.variantId, response => {
         return res.status(response.statusCode).json(response);
     });
 });

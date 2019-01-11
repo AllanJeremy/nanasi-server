@@ -153,46 +153,48 @@ module.exports.deleteProduct = (productId, callback) => {
 // Get multiple productVariants by filter
 function _getProductVariantsByFilter(filter, callback) {
     filter = filter || {};
-    return ProductVariant.find(filter, (err, productVariantsFound) => {
-        if (err) {
+    return ProductVariant.find(filter)
+        .populate('images')
+        .then((productVariantsFound) => {
+            const productVariantCount = productVariantsFound.length;
+            const isOk = (productVariantCount > 0);
+            const statusCode = isOk ? 200 : 404;
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(productVariantsFound, 'Product variants') : FeedbackMessages.itemNotFound('Product variants');
+
+            return callback(
+                Api.getResponse(isOk, message, {
+                    count: productVariantCount,
+                    productVariants: productVariantsFound
+                }, statusCode)
+            );
+        })
+        .catch(err => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed('get product variants'), err)
             );
-        }
-
-        const productVariantCount = productVariantsFound.length;
-        const isOk = (productVariantCount > 0);
-        const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(productVariantsFound, 'Product variants') : FeedbackMessages.itemNotFound('Product variants');
-
-        return callback(
-            Api.getResponse(isOk, message, {
-                count: productVariantCount,
-                productVariants: productVariantsFound
-            }, statusCode)
-        );
-    });
+        });
 }
 
 // Get productVariant by filter
 function _getSingleProductVariantByFilter(filter, callback) {
-    return ProductVariant.findOne(filter, (err, productVariantFound) => {
-        if (err) {
+    return ProductVariant.findOne(filter)
+        .populate('images')
+        .then((productVariantFound) => {
+            const isOk = productVariantFound ? true : false;
+            const statusCode = isOk ? 200 : 404;
+            const message = isOk ? FeedbackMessages.itemsFound('Product variant') : FeedbackMessages.itemNotFound('Product variant');
+
+            return callback(
+                Api.getResponse(isOk, message, {
+                    productVariant: productVariantFound
+                }, statusCode)
+            );
+        })
+        .catch(err => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed('get product variant'), err)
             );
-        }
-
-        const isOk = productVariantFound ? true : false;
-        const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFound('Product variant') : FeedbackMessages.itemNotFound('Product variant');
-
-        return callback(
-            Api.getResponse(isOk, message, {
-                productVariant: productVariantFound
-            }, statusCode)
-        );
-    });
+        });
 }
 
 /* 
