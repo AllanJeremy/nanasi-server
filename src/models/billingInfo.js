@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const PaymentMethods = require('../config/paymentMethods');
 
 const billingInfoSchema = new mongoose.Schema({
     user: {
@@ -8,9 +9,12 @@ const billingInfoSchema = new mongoose.Schema({
     address: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Address'
+    },
+    paymentMethod: {
+        type: String,
+        default: PaymentMethods.MPESA
     }
-    //TODO: Add payment method or extra billing info
 });
 
 // Exports
-module.exports = mongoose.model('BillingInfo',billingInfoSchema);
+module.exports = mongoose.model('BillingInfo', billingInfoSchema);
