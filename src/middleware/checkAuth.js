@@ -1,4 +1,4 @@
-const jwt = require('jwt');
+const jwt = require('jsonwebtoken');
 
 const AccountTypes = require('../config/accountTypes');
 const User = require('../models/users/user');
