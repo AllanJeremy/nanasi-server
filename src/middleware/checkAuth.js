@@ -9,11 +9,12 @@ const AuthMessages = require('../lang/authMessages');
 
 function _getLoggedIn(req) {
     try {
-        const token = (req.headers.authorization.split(' '))[0];
-        const decoded = jwt.verify(token, process.env.JWT_KEY);
+        const token = (req.headers.authorization.split(' '))[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         return decoded;
     } catch (err) {
+        console.error(`Something went wrong: ${err}`);
         return false;
     }
 }
@@ -38,14 +39,16 @@ module.exports.userLoggedIn = (req, res, next) => {
 module.exports.buyerLoggedIn = (req, res, next) => {
     const userData = _getLoggedIn(req);
     if (userData) {
-        User.find({
-                _id: userData._id,
+        User.findOne({
+                _id: userData.id,
                 accountType: AccountTypes.BUYER
             })
             .then(userFound => {
                 if (userFound) {
                     req.userData = userData;
                     next();
+                } else {
+                    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), undefined, 401));
                 }
             }).catch(err => {
                 const response = Api.getError(err.message, err);
@@ -61,14 +64,16 @@ module.exports.merchantLoggedIn = (req, res, next) => {
     const userData = _getLoggedIn(req);
     if (userData) {
         // Check to see if there is a merchant that has that id
-        User.find({
-                _id: userData._id,
+        User.findOne({
+                _id: userData.id,
                 accountType: AccountTypes.MERCHANT
             })
             .then(userFound => {
                 if (userFound) {
                     req.userData = userData;
                     next();
+                } else {
+                    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), undefined, 401));
                 }
             }).catch(err => {
                 const response = Api.getError(err.message, err);
@@ -84,14 +89,16 @@ module.exports.adminLoggedIn = (req, res, next) => {
     const userData = _getLoggedIn(req);
     if (userData) {
         // Find admins by that id
-        User.find({
-                _id: userData._id,
+        User.findOne({
+                _id: userData.id,
                 accountType: AccountTypes.ADMIN
             })
             .then(userFound => {
                 if (userFound) {
                     req.userData = userData;
                     next();
+                } else {
+                    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), undefined, 401));
                 }
             }).catch(err => {
                 const response = Api.getError(err.message, err);

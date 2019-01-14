@@ -38,7 +38,6 @@ function _getSingleUserByFilter(filter, callback) {
                 Api.getError(FeedbackMessages.operationFailed('get user'), err)
             );
         }
-        console.log(userFound);
         const isOk = userFound ? true : false;
         const statusCode = isOk ? 200 : 404;
         const message = isOk ? FeedbackMessages.itemsFound('User') : FeedbackMessages.itemNotFound('User');
