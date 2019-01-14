@@ -9,10 +9,9 @@ Added here to avoid request param overlap with product/:attribute
 */
 // Create product variant
 //* Merchant accessible
-router.post('/variants/:productId', CheckAuth.merchantLoggedIn, (req, res, next) => { //TODO: Add db code
+router.post('/variants', CheckAuth.merchantLoggedIn, (req, res, next) => { //TODO: Add db code
     //TODO: Check if the product we are trying to add the filter to belongs to the currently logged in merchant
-    req.body.data.productId = req.params.productId;
-    product.createProductVariant(req.body.data, response => {
+    product.createProductVariant(req.body.data, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
