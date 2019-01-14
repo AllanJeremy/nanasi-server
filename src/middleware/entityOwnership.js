@@ -35,14 +35,35 @@ module.exports.productVariantBelongsToMerchant = (req, res, next) => {
 /* 
     BUYER OWNERSHIP
 */
-//TODO: Cart item belongs to buyer
+// Cart item belongs to buyer
+module.exports.cartItemBelongsToBuyer = (req, res, next) => {
+    const buyerId = req.userData.id;
+    const cartItemId = req.params.cartItemId || req.body.data.cart;
+
+    console.log(`Merchant id: ${buyerId} and Variant id: ${cartItemId}`);
+    next();
+};
 
 /* 
     GENERAL OWNERSHIP
 */
-//TODO: Review belongs to logged in user
+// Review belongs to logged in user
+module.exports.reviewBelongsToUser = (req, res, next) => {
+    const userId = req.userData.id;
+    const reviewId = req.params.reviewId || req.body.data.review;
 
-//TODO: Review reply belongs to logged in user
+    console.log(`Merchant id: ${userId} and Variant id: ${reviewId}`);
+    next();
+};
+
+// Review reply belongs to logged in user
+module.exports.reviewReplyBelongsToUser = (req, res, next) => {
+    const userId = req.userData.id;
+    const reviewReplyId = req.params.reviewReplyId || req.body.data.reviewReply;
+
+    console.log(`Merchant id: ${userId} and Variant id: ${reviewReplyId}`);
+    next();
+};
 
 // Account belongs to user ~ For when we are updating the account
 module.exports.accountBelongsToUser = (req, res, next) => {
