@@ -47,3 +47,11 @@ module.exports.otpFailedToVerify = () => {
     //TODO: Probably translate
     return message;
 };
+
+// Generic auth failed
+module.exports.tokenAuthFailed = ()=>{
+    const message = `Auth failed. Invalid token provided`;
+
+    //TODO: Probably translate
+    return message;
+};
