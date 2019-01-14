@@ -206,7 +206,7 @@ module.exports.createProductVariant = (productVariantData, callback) => {
 
     return newProductVariant.save().then(createdProductVariant => {
         // Save the variant to the product
-        Product.findByIdAndUpdate(productVariantData.productId, {
+        Product.findByIdAndUpdate(productVariantData.product, {
             $push: {
                 variants: createdProductVariant
             }

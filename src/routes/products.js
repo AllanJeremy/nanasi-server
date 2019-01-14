@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const CheckAuth = require('../middleware/checkAuth');
+const Ownership = require('../middleware/entityOwnership');
+
 const product = require('../modules/products/products');
 
 /* PRODUCT VARIANTS 
@@ -9,8 +11,7 @@ Added here to avoid request param overlap with product/:attribute
 */
 // Create product variant
 //* Merchant accessible
-router.post('/variants', CheckAuth.merchantLoggedIn, (req, res, next) => { //TODO: Add db code
-    //TODO: Check if the product we are trying to add the filter to belongs to the currently logged in merchant
+router.post('/variants', CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, (req, res, next) => {
     product.createProductVariant(req.body.data, (response) => {
         return res.status(response.statusCode).json(response);
     });
@@ -18,7 +19,7 @@ router.post('/variants', CheckAuth.merchantLoggedIn, (req, res, next) => { //TOD
 
 // View multiple product variants belonging to a certain product
 //* Globally accessible
-router.get('/variants/:productId', (req, res, next) => { //TODO: Add db code
+router.get('/variants/:productId', (req, res, next) => {
     const filter = {
         productId: req.params.productId
     };
@@ -30,7 +31,7 @@ router.get('/variants/:productId', (req, res, next) => { //TODO: Add db code
 
 // View single product variant
 //* Globally accessible
-router.get('/single-variant/:variantId', (req, res, next) => { //TODO: Add db code
+router.get('/single-variant/:variantId', (req, res, next) => {
     product.getProductVariantById(req.params.variantId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -38,8 +39,7 @@ router.get('/single-variant/:variantId', (req, res, next) => { //TODO: Add db co
 
 // Update product variant
 //* Merchant accessible
-router.patch('/variants/:variantId', CheckAuth.merchantLoggedIn, (req, res, next) => {
-    //TODO: Check if the variant belongs to a product owned by currently logged in user before allowing update
+router.patch('/variants/:variantId', CheckAuth.merchantLoggedIn, Ownership.productVariantBelongsToMerchant, (req, res, next) => {
     product.updateProductVariant(req.params.variantId, req.body.data, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -47,8 +47,7 @@ router.patch('/variants/:variantId', CheckAuth.merchantLoggedIn, (req, res, next
 
 // Delete product variant
 //* Merchant accessible
-router.delete('/variants/:variantId', CheckAuth.merchantLoggedIn, (req, res, next) => {
-    //TODO: Check if the variant belongs to a product owned by currently logged in user before allowing delete
+router.delete('/variants/:variantId', CheckAuth.merchantLoggedIn, Ownership.productVariantBelongsToMerchant, (req, res, next) => {
     product.deleteProductVariant(req.params.variantId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -57,8 +56,7 @@ router.delete('/variants/:variantId', CheckAuth.merchantLoggedIn, (req, res, nex
 /* PRODUCTS */
 // Create products
 //* Merchant accessible
-router.post('/', CheckAuth.merchantLoggedIn, (req, res, next) => {
-    //TODO: Check that the product is being added to a store owned by the currently logged in merchant
+router.post('/', CheckAuth.merchantLoggedIn, Ownership.storeBelongsToMerchant, (req, res, next) => {
     product.createProduct(req.body.data, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -66,7 +64,7 @@ router.post('/', CheckAuth.merchantLoggedIn, (req, res, next) => {
 
 // View multiple products
 //* Globally accessible
-router.get('/', (req, res, next) => { //TODO: Add db code
+router.get('/', (req, res, next) => {
     product.getProducts(req.body.filters, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -74,7 +72,7 @@ router.get('/', (req, res, next) => { //TODO: Add db code
 
 // View merchant products
 //* Globally accessible
-router.get('/store/:storeId', (req, res, next) => { //TODO: Add db code
+router.get('/store/:storeId', (req, res, next) => {
     product.getStoreProducts(req.params.storeId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -82,7 +80,7 @@ router.get('/store/:storeId', (req, res, next) => { //TODO: Add db code
 
 // View single product
 //* Globally accessible
-router.get('/:productId', (req, res, next) => { //TODO: Add db code
+router.get('/:productId', (req, res, next) => {
     product.getProductById(req.params.productId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -90,8 +88,7 @@ router.get('/:productId', (req, res, next) => { //TODO: Add db code
 
 // Update product
 //* Merchant accessible
-router.patch('/:productId', CheckAuth.merchantLoggedIn, (req, res, next) => { //TODO: Add db code
-    //TODO: Check that the product is owned by the currently logged in merchant
+router.patch('/:productId', CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, (req, res, next) => {
     product.updateProduct(req.params.productId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -99,8 +96,7 @@ router.patch('/:productId', CheckAuth.merchantLoggedIn, (req, res, next) => { //
 
 // Delete products
 //* Merchant accessible
-router.delete('/:productId', CheckAuth.merchantLoggedIn, (req, res, next) => { //TODO: Add db code
-    //TODO: Check that the product is owned by the currently logged in merchant
+router.delete('/:productId', CheckAuth.merchantLoggedIn, Ownership.product, (req, res, next) => {
     product.deleteProduct(req.params.productId, response => {
         return res.status(response.statusCode).json(response);
     });

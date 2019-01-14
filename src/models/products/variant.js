@@ -12,7 +12,7 @@ const variantSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Image',
     }],
-    productId: {
+    product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'
     }
