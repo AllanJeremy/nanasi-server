@@ -23,7 +23,7 @@ const cartRoutes = require('./routes/cart');
 
 // const billingRoutes = require('./routes/billing');
 
-// const paymentRoutes = require('./routes/payments');
+const paymentRoutes = require('./routes/payments');
 
 // Connect to the database
 mongoose.connect('mongodb+srv://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD + '@nanasi-v6ykk.mongodb.net/nanasi?retryWrites=true', {
@@ -91,7 +91,7 @@ app.use('/cart', cartRoutes);
 
 // app.use('/billing',billingRoutes);
 
-// app.use('/payments',paymentRoutes);
+app.use('/payments', paymentRoutes);
 
 // Error handling
 app.use((req, res, next) => { // 404
