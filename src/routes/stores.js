@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const store = require('../modules/store/stores');
+const store = require('../modules/stores/stores');
 
 /* STORE ENDPOINTS */
 // Create store
