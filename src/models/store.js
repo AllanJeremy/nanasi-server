@@ -15,6 +15,11 @@ const storeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "ProductType",
         required: true
+    },
+
+    balance: {
+        type: Number,
+        default: 0
     }
 });
 
