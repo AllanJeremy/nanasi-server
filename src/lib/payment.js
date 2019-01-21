@@ -8,6 +8,7 @@ module.exports.checkout = (phone, amount, storeId, currencyCode, meta) => {
     const options = {
         productName: storeId,
         phoneNumber: phone,
+        providerChannel: 'Athena', //TODO: Remove in production
         currencyCode: currencyCode,
         amount: amount,
         metadata: meta
