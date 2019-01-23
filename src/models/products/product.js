@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 
+// Models referenced by this schema
 require('../../models/image');
 require('../../models/products/variant');
 require('../../models/products/category');
+
 // Schema
 const productSchema = new mongoose.Schema({
     store: {
