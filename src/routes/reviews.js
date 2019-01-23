@@ -1,118 +1,91 @@
 const express = require('express');
 const router = express.Router();
 
+const CheckAuth = require('../middleware/checkAuth');
+const Ownership = require('../middleware/entityOwnership');
+const review = require('../modules/reviews/reviews');
+
 /* REVIEW REPLY ENDPOINTS 
 Added here to avoid request param overlap with review/:attribute
 */
 // Create review reply ~ reply to a review
 //* Logged in user accessible
-router.post('/replies',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-    res.json({
-        message:"Creating reply"
-    });
+router.post('/replies', CheckAuth.userLoggedIn, (req, res, next) => {
+    review.createdReviewReply(req.userData.id, req.body.data, (response => {
+        return res.status(response.statusCode).json(response);
+    }));
 });
 
 // View multiple review replies
 //* Globally accessible
-router.get('/replies',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-    res.json({
-        message: `Viewing multiple review replies`
+router.get('/review-replies/:reviewId', (req, res, next) => {
+    review.getReviewReplies(req.params.reviewId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // View single reply
 //* Globally accessible
-router.get('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const replyId = req.params.replyId;
-    res.json({
-        id: replyId,
-        message: `Viewing single reply with id of ${replyId}`
+router.get('/replies/:replyId', (req, res, next) => {
+    review.getSingleReviewReply(req.params.replyId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Update reply
 //* Logged in user accessible
-router.patch('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const replyId = req.params.replyId;
-    res.json({
-        id: replyId,
-        message: `Updating reply with id of ${replyId}`
+router.patch('/replies/:replyId', CheckAuth.userLoggedIn, Ownership.reviewReplyBelongsToUser, (req, res, next) => {
+    review.updateReviewReply(req.params.replyId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Delete reply
 //* Logged in user accessible
-router.delete('/replies/:replyId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const replyId = req.params.replyId;
-    res.json({
-        id: replyId,
-        message: `Deleting reply with id of ${replyId}`
+router.delete('/replies/:replyId', CheckAuth.userLoggedIn, Ownership.reviewReplyBelongsToUser, (req, res, next) => {
+    review.deleteReviewReply(req.params.replyId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 /* REVIEW ENDPOINTS */
 // Create review
 //* Logged in user accessible
-router.post('/',(req,res,next)=>{//TODO: Add db code
-    res.status(201);
-    res.json({
-        message:"Creating review"
-    });
+router.post('/', CheckAuth.userLoggedIn, (req, res, next) => {
+    review.createReview(req.userData.id, req.body.data, (response => {
+        return res.status(response.statusCode).json(response);
+    }));
 });
 
-// View multiple reviews (Product reviews)
+// View product reviews
 //* Globally accessible
-router.get('/product/:productId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const productId = req.params.productId;
-    res.json({
-        id: productId,
-        message: `Viewing reviews for product with the id of ${productId}`
+router.get('/product/:productId', (req, res, next) => {
+    review.getProductReviews(req.params.productId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // View single review
 //* Globally accessible
-router.get('/:reviewId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const reviewId = req.params.reviewId;
-    res.json({
-        id: reviewId,
-        message: `Viewing single review with id of ${reviewId}`
+router.get('/:reviewId', (req, res, next) => {
+    review.getSingleReview(req.params.reviewId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Update review
 //* Logged in user accessible
-router.patch('/:reviewId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const reviewId = req.params.reviewId;
-    res.json({
-        id: reviewId,
-        message: `Updating review with id of ${reviewId}`
+router.patch('/:reviewId', CheckAuth.userLoggedIn, Ownership.reviewBelongsToUser, (req, res, next) => {
+    review.updateReview(req.params.reviewId, req.body.data, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Delete review
 //* Logged in user accessible
-router.delete('/:reviewId',(req,res,next)=>{//TODO: Add db code
-    res.status(200);
-
-    const reviewId = req.params.reviewId;
-    res.json({
-        id: reviewId,
-        message: `Deleting review with id of ${reviewId}`
+router.delete('/:reviewId', CheckAuth.userLoggedIn, Ownership.reviewBelongsToUser, (req, res, next) => {
+    review.deleteReview(req.params.reviewId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 

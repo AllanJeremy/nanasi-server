@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 
 const reviewSchema = new mongoose.Schema({
+    product: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
