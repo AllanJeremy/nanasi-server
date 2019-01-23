@@ -4,7 +4,6 @@ const ReviewReply = require('../../models/reviews/reply');
 const Api = require('../../lib/api');
 const FeedbackMessages = require('../../lang/feedbackMessages');
 
-
 /* 
    REVIEW HELPERS
 */
@@ -96,7 +95,6 @@ function _getSingleReviewReplyByFilter(filter, callback) {
             );
         });
 }
-
 
 // Create review
 module.exports.createReview = (userId, reviewData, callback) => {
