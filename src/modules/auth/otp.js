@@ -1,5 +1,5 @@
 // Packages
-const Moment = require('moment');
+const moment = require('moment');
 
 // Config
 const OtpConfig = require('../../config/otp');
@@ -29,7 +29,7 @@ function generateOtp() {
 
 // Generates and returns otp expiration time
 function _generateOtpExpirationTime() {
-    const expiry = Moment().add(OtpConfig.OTP_EXPIRY_TIME, 'seconds').unix();
+    const expiry = moment().add(OtpConfig.OTP_EXPIRY_TIME, 'seconds').unix();
 
     return expiry;
 }
@@ -108,7 +108,7 @@ module.exports.verifyOtp = (phone, otpToVerify, otpType, callback) => {
             }
             // Returns true if the otp was found & has not expired
             if (userFound) {
-                const otpHasExpired = Moment(userFound.otp.expiry).isAfter(Date.now());
+                const otpHasExpired = moment(userFound.otp.expiry).isAfter(Date.now());
                 const message = otpHasExpired ? AuthMessages.otpExpired() : AuthMessages.otpVerified();
 
                 //TODO: Delete the OTP from the user once it has been verified
