@@ -8,15 +8,9 @@ const Auth = require('../modules/auth/auth');
 /* AUTH ENDPOINTS */
 // Send OTP (one time password)
 router.post('/otp', (req, res, next) => {
-    res.status(200);
-
-    const otpData = {
-        type: req.body.type,
-        phone: req.body.phone
-    };
-
-    let response = otp.sendOtp(null, 'registration', res);
-    res.json(response);
+    otp.sendOtp(req.body.phone, req.body.type, (response) => {
+        return res.status(response.statusCode).json(response);
+    });
 });
 
 // Verify OTP (one time password)

@@ -37,26 +37,54 @@ function _generateOtpExpirationTime() {
 // Send otp ~ Returns ok = true & 
 module.exports.sendOtp = (phone, otpType, callback) => {
     const otp = generateOtp();
+    const otpExpiry = _generateOtpExpirationTime();
 
-    //TODO: Find a way of tracking last otp sent time by the current user
-    //TODO: Consider using JWT
+    const otpDbData = {
+        otp: {
+            password: otp,
+            otpType: otpType,
+            expiry: otpExpiry
+        }
+    };
 
-    // Send SMS
-    const otpMessage = SmsTemplates.sendOtp(otp, otpType);
-    Messaging.sendSms([phone], otpMessage, (smsResponse) => {
-        const otpData = {
-            phone: phone,
-            messageSent: (smsResponse.SMSMessageData.Recipients[0].statusCode == Messaging.messageStatusCode.SENT),
-            smsResponse: smsResponse,
-            otp: {
-                password: otp,
-                otpType: otpType,
-                expiry: _generateOtpExpirationTime()
+    // Save the OTP to the database
+    User.findOneAndUpdate({
+            phone: phone
+        }, otpDbData)
+        .then(userFound => {
+            if (!userFound) {
+                return callback(
+                    Api.getError(AuthMessages.otpSendFailed(), null, 403)
+                );
             }
-        };
-        console.log(`Sending ${otpType} otp to ${phone}`);
-        return callback(otpData);
-    });
+
+            //TODO: Find a way of tracking last otp sent time by the current user
+            //TODO: Consider using JWT
+
+            // Send SMS only if a user was found
+            const otpMessage = SmsTemplates.sendOtp(otp, otpType);
+            Messaging.sendSms([phone], otpMessage, (smsResponse) => {
+                const otpData = {
+                    phone: phone,
+                    messageSent: (smsResponse.SMSMessageData.Recipients[0].statusCode == Messaging.messageStatusCode.SENT),
+                    smsResponse: smsResponse,
+                    otp: {
+                        password: otp,
+                        otpType: otpType,
+                        expiry: otpExpiry
+                    }
+                };
+
+                //TODO: Check if OTP was actually sent on Africa's talking side
+                return callback(
+                    Api.getResponse(true, AuthMessages.otpSendSuccessful, otpData)
+                );
+            });
+        }).catch(err => {
+            return callback(
+                Api.getError(AuthMessages.otpSendFailed, null)
+            );
+        });
 
 };
 
