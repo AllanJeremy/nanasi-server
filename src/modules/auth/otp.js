@@ -118,11 +118,11 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
 };
 
 // Verify otp ~ Returns true if OTP was valid & false if otp was invalid
-module.exports.verifyOtp = (phone, otpToVerify, otpType, callback) => {
+module.exports.verifyOtp = (userId, otpToVerify, otpType, callback) => {
     const dataToCollect = '_id firstName lastName phone isActive'; //TODO: Move into config as "publicly" accessible user data
 
     return User.findOne({
-            phone: phone,
+            _id: userId,
             "otp.password": otpToVerify,
             "otp.otpType": otpType
         })
@@ -147,7 +147,7 @@ module.exports.verifyOtp = (phone, otpToVerify, otpType, callback) => {
                 );
             } else {
                 return callback(
-                    Api.getResponse(false, AuthMessages.otpFailedToVerify())
+                    Api.getError(AuthMessages.otpFailedToVerify(), undefined, 403)
                 );
             }
 
