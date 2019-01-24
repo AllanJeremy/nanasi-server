@@ -3,3 +3,4 @@ node_modules
 /nodemon.json
 /bfg.jar
 /app.yaml
+src/config/africasTalking.js
