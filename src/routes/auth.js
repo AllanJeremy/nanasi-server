@@ -14,8 +14,8 @@ router.post('/otp', (req, res, next) => {
 });
 
 // Verify OTP (one time password)
-router.post('/verifyOtp/:userId', (req, res, next) => {
-    otp.verifyOtp(req.params.userId, req.body.otp, req.body.type, (response) => {
+router.post('/verifyOtp', (req, res, next) => {
+    otp.verifyOtp(req.body.phone, req.body.otp, req.body.type, (response) => {
         res.status(response.statusCode).json(response);
     });
 
