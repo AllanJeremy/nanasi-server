@@ -49,8 +49,24 @@ module.exports.otpFailedToVerify = () => {
 };
 
 // Generic auth failed
-module.exports.tokenAuthFailed = ()=>{
+module.exports.tokenAuthFailed = () => {
     const message = `Auth failed. Invalid token provided`;
+
+    //TODO: Probably translate
+    return message;
+};
+
+// OTP sent
+module.exports.otpSendSuccessful = () => {
+    const message = `OTP sent.`;
+
+    //TODO: Probably translate
+    return message;
+};
+
+// Failed to send OTP
+module.exports.otpSendFailed = () => {
+    const message = `Sending OTP failed.`;
 
     //TODO: Probably translate
     return message;
