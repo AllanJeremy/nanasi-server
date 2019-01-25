@@ -6,9 +6,14 @@ const Ownership = require('../middleware/entityOwnership');
 
 const product = require('../modules/products/products');
 
+const uploadImage = require('../middleware/uploadFiles');
+
+
 /* PRODUCT VARIANTS 
 Added here to avoid request param overlap with product/:attribute
 */
+router.post('/upload', uploadImage.multer.single('image'), uploadImage.sendUploadToGCS);
+
 // Create product variant
 //* Merchant accessible
 router.post('/variants', CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, (req, res, next) => {
