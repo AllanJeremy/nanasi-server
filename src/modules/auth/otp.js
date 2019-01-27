@@ -52,6 +52,7 @@ module.exports.sendOtp = (phone, otpType, callback) => {
             phone: phone
         }, otpDbData)
         .then(userFound => {
+            // If the user was not found, try creating the
             if (!userFound) {
                 return callback(
                     Api.getError(AuthMessages.otpSendFailed(), null, 403)
@@ -82,7 +83,7 @@ module.exports.sendOtp = (phone, otpType, callback) => {
             });
         }).catch(err => {
             return callback(
-                Api.getError(AuthMessages.otpSendFailed, null)
+                Api.getError(AuthMessages.otpSendFailed, err)
             );
         });
 

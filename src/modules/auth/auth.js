@@ -33,25 +33,24 @@ module.exports.register = (userData, callback) => {
 
         } else { // No user with that phone exists - proceed to create user
             //TODO: Check if it was a bot using Google Captcha
+            const newUser = new User(userData);
 
-            // Try sending a OTP
-            Otp.sendOtp(userData.phone, OtpConfig.OtpTypes.REGISTER, (otpResponse) => {
-                if (!otpResponse.messageSent) {
-                    console.log(`Failed to send OTP`);
-                    return;
-                }
+            // Add user to the database
+            newUser.save().then(createdUser => {
 
-                const newUser = new User(userData);
-
-                // Add user to the database
-                newUser.save().then(createdUser => {
-                    const otpData = otpResponse.otp;
-
-                    // Add OTP data to the database
-                    Otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
-                        return callback(Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('user'), createdUser, 201));
-                    });
+                // Try sending a OTP
+                Otp.sendOtp(createdUser.phone, OtpConfig.OtpTypes.REGISTER, (otpResponse) => {
+                    let otpData = otpResponse.otp;
+                    if (!otpResponse.ok) {
+                        return callback(Api.getError(FeedbackMessages.operationFailed(`send otp`)));
+                    } else { //OTP Sent successfully
+                        // Add OTP data to the database
+                        Otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
+                            return callback(Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('user'), createdUser, 201));
+                        });
+                    }
                 });
+
             });
 
         }
@@ -66,7 +65,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
     Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.REGISTER, response => {
         // If the OTP was invalid ~ Reject Login
         if (!response.ok) {
-            return callback(Api.getResponse(false, AuthMessages.loginFailed(),null,401));
+            return callback(Api.getResponse(false, AuthMessages.loginFailed(), null, 401));
         }
 
         // Update the records in the database
@@ -81,7 +80,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
             // If no users were found
             if (!userFound) {
                 return callback(
-                    Api.getError(FeedbackMessages.itemNotFound('User to update'),null,404)
+                    Api.getError(FeedbackMessages.itemNotFound('User to update'), null, 404)
                 );
             }
             userFound.otp = undefined; // Remove the OTP ~  We are done with it for now
