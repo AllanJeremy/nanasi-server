@@ -33,7 +33,7 @@ mongoose.connect('mongodb+srv://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD 
 // Check for errors and log database connection status
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => console.log('Database successfully connected'))
+db.once('open', () => console.log('Database successfully connected'));
 
 // Create an express app
 const app = express();

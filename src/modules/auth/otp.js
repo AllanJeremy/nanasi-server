@@ -110,8 +110,11 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
         userFound.save();
         const message = `Successfully saved user otp`;
 
+        console.debug(`Successfully added OTP to database`);
         return Api.getResponse(true, message);
     }).catch(err => {
+        console.debug(`An error occurred while you trying to add OTP to db: `);
+        console.error(err);
         return Api.getError(err.message, err);
     }).then(response => {
         return callback(response);

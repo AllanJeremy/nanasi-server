@@ -60,7 +60,7 @@ module.exports.register = (userData, callback) => {
 
                 // Try sending a OTP
                 Otp.sendOtp(createdUser.phone, OtpConfig.OtpTypes.REGISTER, (otpResponse) => {
-                    let otpData = otpResponse.otp;
+                    let otpData = otpResponse.data.otp;
                     if (!otpResponse.ok) {
                         return callback(Api.getError(FeedbackMessages.operationFailed(`send otp`)));
                     } else { //OTP Sent successfully
