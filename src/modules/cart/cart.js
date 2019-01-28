@@ -1,7 +1,7 @@
  const Cart = require('../../models/cart');
 
  // Get multiple cart by filter
- function _getCartsByFilter(filter, callback) {
+ function _getCartItemsByFilter(filter, callback) {
      filter = filter || {};
      return Cart.find(filter)
          .populate('product', 'name')
@@ -26,7 +26,7 @@
          });
  }
 
- // Get product by filter
+ // Get cartItem by filter
  function _getSingleCartItemByFilter(filter, callback) {
      return Cart.findOne(filter)
          .populate('product', 'name')
@@ -38,7 +38,7 @@
 
              return callback(
                  Api.getResponse(isOk, message, {
-                     product: cartItemFound
+                     cartItem: cartItemFound
                  }, statusCode)
              );
          })
@@ -54,25 +54,86 @@
  */
  // Add item to cart
  module.exports.addCartItem = (itemData, callback) => {
+     const cartItem = new Cart(itemData);
 
+     return cartItem.save().then(createdCartItem => {
+         return callback(
+             Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Cart item'), createdCartItem, 201)
+         );
+     }).catch(err => {
+         return callback(
+             Api.getError(FeedbackMessages.operationFailed(`create cart item`), err)
+         );
+     });
  };
 
  // View cart items for the current user
  module.exports.getUserCart = (userId, callback) => {
-
+     return _getCartItemsByFilter({
+         user: userId
+     }, callback);
  };
 
  // Get single cart item
  module.exports.getCartItem = (cartItemId, callback) => {
-
+     return _getSingleCartItemByFilter({
+         _id: cartItemId
+     }, callback);
  };
 
  // Update cart item ~ Often used to update the item quantity in the cart
  module.exports.updateCartItem = (cartItemId, updateData, callback) => {
-
+     return Cart.findByIdAndUpdate(cartItemId, updateData).then((cartItemFound) => {
+         // Check if cartItem was found
+         if (cartItemFound) {
+             // No errors ~ Updated the cartItem
+             return callback(
+                 Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`cart item (${cartItemFound.name})`), {
+                     id: cartItemId
+                 })
+             );
+         } else {
+             return callback(
+                 Api.getError(FeedbackMessages.itemNotFound(`Cart item`), null, 404)
+             );
+         }
+     }).catch(err => {
+         return callback(
+             Api.getError(FeedbackMessages.operationFailed(`update cart item`), err)
+         );
+     });
  };
 
  // Delete cart item ~ Remove item from cart
- module.exports.deleteCartItem = (itemData, callback) => {
-
+ module.exports.deleteCartItem = (cartItemId, callback) => {
+     return Cart.findByIdAndDelete(cartItemId).then((cartItemDeleted) => {
+         if (cartItemDeleted) {
+             // No errors ~ Deleted the cartItem
+             return callback(
+                 Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('cart item'), {
+                     id: cartItemId,
+                     cartItemName: cartItemDeleted.name
+                 })
+             );
+         } else {
+             return callback(
+                 Api.getError(FeedbackMessages.itemNotFound(`Cart`), null, 404)
+             );
+         }
+     }).catch(err => {
+         return callback(
+             Api.getError(FeedbackMessages.operationFailed(`delete cart item`), err)
+         );
+     });
  };
+
+ /* 
+    ABANDONED CARTS
+ */
+ // TODO: Add abandoned cart item
+
+ // TODO: Get all abandoned carts
+
+ // TODO: Get abandoned carts by store
+
+ // TODO: Resolve abandoned carts
