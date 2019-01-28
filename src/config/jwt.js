@@ -1,0 +1,1 @@
+module.exports.EXPIRY_TIME = '1h';

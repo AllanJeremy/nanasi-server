@@ -26,7 +26,7 @@ router.post('/verifyOtp', (req, res, next) => {
 router.post('/login', (req, res, next) => { // TODO: Add auth & db code
     // Expected data
     Auth.login(req.body.phone, req.body.otp, (response) => {
-        return res.status(200).json(response);
+        return res.status(response.statusCode).json(response);
     });
 });
 

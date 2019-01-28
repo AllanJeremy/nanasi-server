@@ -98,7 +98,7 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
     };
 
     // 
-    User.findById(userId, (err, userFound, callback) => {
+    User.findById(userId, (err, userFound) => {
         // If there was any error fetching the message, return it
         if (err) {
             const message = `An error occured while trying to save the user otp ${err.message}`;

@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 
 // Config
 const OtpConfig = require('../../config/otp');
+const JwtConfig = require('../../config/jwt');
 
 // Libraries
 const Api = require('../../lib/api');
@@ -18,6 +19,25 @@ const AuthMessages = require('../../lang/authMessages');
 const Otp = require('../../modules/auth/otp');
 const user = require('../../modules/users/users');
 
+function _getJwtData(userData) {
+    return {
+        id: userData._id,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        phone: userData.phone,
+    };
+}
+
+// Sign JWT
+function _signJwt(data) {
+    let isOk, message, responseData;
+
+    const token = jwt.sign(data, process.env.JWT_SECRET, {
+        expiresIn: JwtConfig.EXPIRY_TIME
+    });
+
+    return token;
+}
 
 // Register new user
 module.exports.register = (userData, callback) => {
@@ -45,6 +65,7 @@ module.exports.register = (userData, callback) => {
                         return callback(Api.getError(FeedbackMessages.operationFailed(`send otp`)));
                     } else { //OTP Sent successfully
                         // Add OTP data to the database
+                        console.debug(`Adding otp to DB`);
                         Otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
                             return callback(Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('user'), createdUser, 201));
                         });
@@ -65,7 +86,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
     Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.REGISTER, response => {
         // If the OTP was invalid ~ Reject Login
         if (!response.ok) {
-            return callback(Api.getResponse(false, AuthMessages.loginFailed(), null, 401));
+            return callback(Api.getResponse(false, AuthMessages.otpFailedToVerify(), null, 401));
         }
 
         // Update the records in the database
@@ -77,7 +98,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
                 return callback(Api.getError(err.message, err));
             }
 
-            // If no users were found
+            // If no users were found ~ reject otp verfication
             if (!userFound) {
                 return callback(
                     Api.getError(FeedbackMessages.itemNotFound('User to update'), null, 404)
@@ -89,9 +110,11 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
 
             userFound.save();
 
+            const token = _signJwt(_getJwtData(userFound));
             return callback(
                 Api.getResponse(true, AuthMessages.confirmRegistration(), {
-                    user: userFound
+                    user: userFound,
+                    token: token
                 })
             );
         }).catch(err => callback(Api.getError(err.message, err)));
@@ -105,39 +128,14 @@ module.exports.login = (phone, otpInput, callback) => {
     return Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.LOGIN, response => {
         // If the OTP was invalid ~ Reject Login
         if (!response.ok) {
-            return callback(Api.getResponse(false, AuthMessages.loginFailed()));
+            return callback(Api.getResponse(false, AuthMessages.loginFailed(), undefined, 401));
         }
         // Otp verified
         const userData = response.data.user;
-        jwt.sign({
-            id: userData._id,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            phone: userData.phone,
-        }, process.env.JWT_SECRET, {
-            expiresIn: '1h' //TODO: Move into config
-        }, (err, token) => {
-
-            // If there was an error creating the JWT
-            if (err) {
-                // Set error message
-                response.ok = false;
-                response.message = FeedbackMessages.failedToSignJWT();
-                response.error = err.message;
-
-                // Remove the data that had been set
-                response.data = undefined;
-
-            } else {
-
-                //Successfully created JWT - Return token generated
-                response.message = AuthMessages.loginSucceeded();
-                response.data.token = token;
-            }
-
-            // Call the callback with the JSON response we generated
-            return callback(response);
-        });
+        response.data.token = _signJwt(_getJwtData(userData));
+        return callback(
+            Api.getResponse(true, AuthMessages.loginSucceeded(), response.data)
+        );
     });
 };
 
