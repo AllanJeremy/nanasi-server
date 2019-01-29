@@ -1,6 +1,9 @@
 const Category = require('../../models/products/category');
 const ProductType = require('../../models/products/productType');
 
+const Api = require('../../lib/api');
+const FeedbackMessages = require('../../lang/feedbackMessages');
+
 /* 
     HELPERS
 */

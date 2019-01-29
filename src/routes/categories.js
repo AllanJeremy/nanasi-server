@@ -18,14 +18,14 @@ router.get('/productTypes/:productTypeId', (req, res, next) => {
 });
 
 // Get all categories
-router.get('/category', (req, res, next) => {
+router.get('/', (req, res, next) => {
     category.getCategories(req.body.filter, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
 
 // Get single category
-router.get('/category/:categoryId', (req, res, next) => {
+router.get('/:categoryId', (req, res, next) => {
     category.getSingleCategory(req.params.categoryId, (response) => {
         return res.status(response.statusCode).json(response);
     });
