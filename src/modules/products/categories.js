@@ -22,7 +22,7 @@ function _getProductTypesByFilter(filter, callback) {
             return callback(
                 Api.getResponse(isOk, message, {
                     count: productTypeCount,
-                    products: productTypesFound
+                    productTypes: productTypesFound
                 }, statusCode)
             );
         })
@@ -44,7 +44,7 @@ function _getSingleProductTypeByFilter(filter, callback) {
 
             return callback(
                 Api.getResponse(isOk, message, {
-                    product: productTypeFound
+                    productType: productTypeFound
                 }, statusCode)
             );
         })
