@@ -18,7 +18,7 @@ router.get('/', (req, res, next) => { //TODO: Add db code
 router.get('/:userId', (req, res, next) => { //TODO: Add db code
     user.getUserById(req.params.userId, (response) => {
         return res.status(response.statusCode).json(response);
-    })
+    });
 });
 
 // Activate user
