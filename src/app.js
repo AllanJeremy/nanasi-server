@@ -9,6 +9,8 @@ const authRoutes = require('./routes/auth');
 
 const productRoutes = require('./routes/products');
 
+const categoryRoutes = require('./routes/categories');
+
 const storeRoutes = require('./routes/stores');
 
 const orderRoutes = require('./routes/orders');
@@ -76,6 +78,8 @@ app.use((req, res, next) => {
 app.use('/auth', authRoutes);
 
 app.use('/products', productRoutes);
+
+app.use('/categories', categoryRoutes);
 
 app.use('/stores', storeRoutes);
 
