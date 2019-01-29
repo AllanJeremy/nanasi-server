@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const user = require('../modules/users/users');
+const CheckAuth = require('../middleware/checkAuth');
 
 /* USER ENDPOINTS */
 
 // Get multiple users 
 //* Admin accessible
-router.get('/', (req, res, next) => { //TODO: Add db code
+router.get('/', CheckAuth.adminLoggedIn, (req, res, next) => { //TODO: Add db code
     user.getUsers(req.body.filters, (response) => {
         return res.status(response.statusCode).json(response);
     });
@@ -23,7 +24,7 @@ router.get('/:userId', (req, res, next) => { //TODO: Add db code
 
 // Activate user
 //* Admin accessible
-router.patch('/activate/:userId', (req, res, next) => { //TODO: Add db code
+router.patch('/activate/:userId', CheckAuth.adminLoggedIn, (req, res, next) => { //TODO: Add db code
     res.status(200);
 
     const userId = req.param.userId;
@@ -35,7 +36,7 @@ router.patch('/activate/:userId', (req, res, next) => { //TODO: Add db code
 
 // Deactivate currently logged in user ~ equivalent of 'delete'
 //* Logged in user accessible
-router.patch('/deactivate', (req, res, next) => { //TODO: Add db code
+router.patch('/deactivate', CheckAuth.userLoggedIn, (req, res, next) => { //TODO: Add db code
     res.status(200);
 
     const userId = req.param.userId;
@@ -47,7 +48,7 @@ router.patch('/deactivate', (req, res, next) => { //TODO: Add db code
 
 // Deactivate user with the id of `:userId`
 //* Admin accessible
-router.patch('/deactivate/:userId', (req, res, next) => { //TODO: Add db code
+router.patch('/deactivate/:userId', CheckAuth.adminLoggedIn, (req, res, next) => { //TODO: Add db code
     res.status(200);
 
     const userId = req.param.userId;
@@ -59,7 +60,7 @@ router.patch('/deactivate/:userId', (req, res, next) => { //TODO: Add db code
 
 // Update user
 //* Logged in user accessible
-router.patch('/:userId', (req, res, next) => { //TODO: Add db code
+router.patch('/:userId', CheckAuth.userLoggedIn, (req, res, next) => { //TODO: Add db code
     res.status(200);
 
     const userId = req.param.userId;
