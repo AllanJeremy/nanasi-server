@@ -12,7 +12,7 @@ const FeedbackMessages = require('../../lang/feedbackMessages');
 function _getProductTypesByFilter(filter, callback) {
     filter = filter || {};
     return ProductType.find(filter)
-        // .populate('image')
+        .populate('image')
         .then((productTypesFound) => {
             const productTypeCount = productTypesFound.length;
             const isOk = (productTypeCount > 0);
