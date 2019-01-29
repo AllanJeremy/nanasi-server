@@ -82,7 +82,7 @@ module.exports.getStores = (filter, callback) => {
 // Get stores by merchantId
 module.exports.getMerchantStores = (merchantId, callback) => {
     return _getStoresByFilter({
-        merchantId: merchantId
+        merchant: merchantId
     }, callback);
 };
 
