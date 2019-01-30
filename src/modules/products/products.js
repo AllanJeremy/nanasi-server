@@ -92,6 +92,13 @@ module.exports.getStoreProducts = (storeId, callback) => {
     }, callback);
 };
 
+// Get products by category
+module.exports.getProductsByCategory = (categoryId, callback) => {
+    return _getProductsByFilter({
+        category: categoryId
+    }, callback);
+};
+
 // Get product by productId
 module.exports.getProductById = (productId, callback) => {
     return _getSingleProductByFilter({

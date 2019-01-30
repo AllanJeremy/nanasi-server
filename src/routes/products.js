@@ -75,7 +75,15 @@ router.get('/', (req, res, next) => {
     });
 });
 
-// View merchant products
+// Get products by category
+//* Globally accessible
+router.get('/category/:categoryId', (req, res, next) => {
+    product.getProductsByCategory(req.params.categoryId, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// View store products
 //* Globally accessible
 router.get('/store/:storeId', (req, res, next) => {
     product.getStoreProducts(req.params.storeId, response => {
