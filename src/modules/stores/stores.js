@@ -86,6 +86,13 @@ module.exports.getMerchantStores = (merchantId, callback) => {
     }, callback);
 };
 
+// Get stores by product type
+module.exports.getStoresByProductType = (productTypeId, callback) => {
+    return _getStoresByFilter({
+        productType: productTypeId
+    }, callback);
+};
+
 // Get store by storeId
 module.exports.getStoreById = (storeId, callback) => {
     return _getSingleStoreByFilter({

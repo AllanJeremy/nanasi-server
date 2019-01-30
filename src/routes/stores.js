@@ -26,8 +26,15 @@ router.get('/', (req, res, next) => {
 // Get logged in merchant stores
 //* Globally accessible
 router.get('/merchant', CheckAuth.merchantLoggedIn, (req, res, next) => {
-    console.debug(req.userData.id);
     store.getMerchantStores(req.userData.id, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// Get stores by product type
+//* Globally accessible
+router.get('/productType/:productTypeId', (req, res, next) => {
+    store.getStoresByProductType(req.params.productTypeId, response => {
         return res.status(response.statusCode).json(response);
     });
 });
