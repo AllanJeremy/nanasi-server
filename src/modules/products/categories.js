@@ -70,7 +70,7 @@ function _getCategoriesByFilter(filter, callback) {
             return callback(
                 Api.getResponse(isOk, message, {
                     count: categoryCount,
-                    products: categoriesFound
+                    categories: categoriesFound
                 }, statusCode)
             );
         })
@@ -93,7 +93,7 @@ function _getSingleCategoryByFilter(filter, callback) {
 
             return callback(
                 Api.getResponse(isOk, message, {
-                    product: categoryFound
+                    category: categoryFound
                 }, statusCode)
             );
         })
@@ -137,6 +137,6 @@ module.exports.getSingleCategory = (categoryId, callback) => {
 // Get product type categories
 module.exports.getProductTypeCategories = (productTypeId, callback) => {
     return _getCategoriesByFilter({
-        productType: productTypeId
+        "productType.id": productTypeId
     }, callback);
 };
