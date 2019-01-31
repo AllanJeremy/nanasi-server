@@ -9,3 +9,11 @@ module.exports.acceptedTypes = [
     'image/tiff',
     'image/svg+xml'
 ];
+
+// Directories used to upload the various files
+module.exports.directory = {
+    PRODUCTS: 'products',
+    PRODUCT_TYPES: 'productTypes',
+    CATEGORIES: 'categories',
+    USERS: 'users'
+};
