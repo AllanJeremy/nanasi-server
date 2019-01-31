@@ -6,13 +6,13 @@ const Ownership = require('../middleware/entityOwnership');
 
 const product = require('../modules/products/products');
 
-const uploadImage = require('../middleware/uploadFiles');
+const gCloudUploader = require('../middleware/gCloudUploader');
 
 
 /* PRODUCT VARIANTS 
 Added here to avoid request param overlap with product/:attribute
 */
-router.post('/upload', uploadImage.multer.single('image'), uploadImage.sendUploadToGCS);
+router.post('/upload', gCloudUploader.multer.single('image'), gCloudUploader.sendUploadToGCS);
 
 // Create product variant
 //* Merchant accessible

@@ -106,7 +106,6 @@ module.exports.getProductById = (productId, callback) => {
     }, callback);
 };
 
-
 // Update product
 module.exports.updateProduct = (productId, updateData, callback) => {
     return Product.findByIdAndUpdate(productId, updateData).then((productFound) => {
@@ -154,6 +153,19 @@ module.exports.deleteProduct = (productId, callback) => {
     });
 };
 
+/* 
+    PRODUCT IMAGES
+*/
+//TODO: Add product image 
+module.exports.addProductImage = (productId, imageId, callback) => {};
+
+//TODO: Update productImage
+module.exports.updateProductImage = (productId, imageId, callback) => {};
+
+//TODO: Delete product image
+module.exports.deleteProductImage = (productId, imageId, callback) => {};
+
+// Update
 /* 
     PRODUCT VARIANT HELPERS
 */
