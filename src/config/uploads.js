@@ -17,3 +17,10 @@ module.exports.directory = {
     CATEGORIES: 'categories',
     USERS: 'users'
 };
+
+module.exports.maxUploads = {
+    PRODUCT_IMAGES: 5,
+    PRODUCT_VARIANT_IMAGES: 2,
+    CATEGORY_IMAGES: 1,
+    USER_IMAGES: 1
+};

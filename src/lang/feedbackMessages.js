@@ -26,6 +26,13 @@ module.exports.itemWithAttributeExists = (itemName, attributeName) => {
 /* 
     SUCCESS MESSAGES
 */
+module.exports.operationSucceeded = (operationName) => {
+    const message = `Successfully ${operationName}`;
+
+    //TODO: Probably translate
+    return message;
+};
+
 module.exports.itemsFound = (itemName) => {
     const message = `Found ${itemName}`;
 
@@ -68,6 +75,14 @@ module.exports.itemDeletedSuccessfully = (itemName) => {
 // Failed to sign JWT
 module.exports.failedToSignJWT = () => {
     const message = `Failed to sign JWT`;
+
+    //TODO: Probably translate
+    return message;
+};
+
+// Item already exists message
+module.exports.itemExists = (itemName) => {
+    const message = `${itemName} already exists`;
 
     //TODO: Probably translate
     return message;

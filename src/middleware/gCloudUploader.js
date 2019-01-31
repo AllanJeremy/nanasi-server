@@ -1,9 +1,16 @@
 const UploadConfig = require('../config/uploads');
 const GCloudConfig = require('../config/gcloud');
 
+const Api = require('../lib/api');
+const FeedbackMessages = require('../lang/feedbackMessages');
+
+const STORAGE_URL = `https://storage.googleapis.com`;
+
 const {
     Storage
 } = require('@google-cloud/storage');
+
+
 const storage = new Storage({
     projectId: GCloudConfig.GCLOUD_PROJECT
 });
@@ -33,23 +40,44 @@ const multer = Multer({
 
 // Get the public url of the file
 function getPublicUrl(filename) {
-    return `https://storage.googleapis.com/${GCloudConfig.CLOUD_BUCKET}/${filename}`;
+    return `${STORAGE_URL}/${GCloudConfig.CLOUD_BUCKET}/${filename}`;
+}
+
+// Get the file name from the public URL
+function getFileName(publicUrl) {
+    return publicUrl.split(`${STORAGE_URL}/`)[1];
 }
 
 function sendUploadToGCS(req, res, next) {
-    console.log(req);
+    // If no file was provided
     if (!req.file) {
-        return next();
+        const statusCode = 403;
+        return res.status(statusCode).json(Api.getError(
+            FeedbackMessages.operationFailed(`upload file. No file specified`),
+            undefined,
+            statusCode
+        ));
     }
 
-    const gcsname = Date.now() + req.file.originalname; //TODO: Change this into a random name
+    let dir = req.uploadData.directory || '';
+
+    // Set the directory if one has not yet been provided
+    if (dir) {
+        dir = dir ? `${dir}/` : '';
+    } else {
+        console.debug(`No directory provided, uploading to root directory`);
+    }
+
+    const gcsname = dir + (Date.now() + req.file.originalname); //TODO: Change this into a random name
     const file = bucket.file(gcsname);
+
+    // Store the filename as part of the gcs object
 
     const stream = file.createWriteStream({
         metadata: {
             contentType: req.file.mimetype
         },
-        resumable: false
+        resumable: true
     });
 
     stream.on('error', (err) => {
@@ -68,8 +96,23 @@ function sendUploadToGCS(req, res, next) {
     stream.end(req.file.buffer);
 }
 
+// Delete image from gcs
+function deleteFromGCS(req, res, next) {
+    const fileName = _getFileName(req.uploadData.imageUrl);
+
+    bucket.file(fileName).delete((err, response) => {
+        if (err) {
+            return Api.getError(err.message, err);
+        }
+
+        // File successfully deleted
+        next();
+    });
+}
+
 module.exports = {
     getPublicUrl,
     sendUploadToGCS,
+    deleteFromGCS,
     multer
 };

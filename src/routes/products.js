@@ -6,14 +6,20 @@ const Ownership = require('../middleware/entityOwnership');
 
 const product = require('../modules/products/products');
 
-const gCloudUploader = require('../middleware/gCloudUploader');
+const GCloudUploader = require('../middleware/gCloudUploader');
+const UploadManager = require('../middleware/uploadManager');
 
+/* 
+    PRODUCT IMAGES
+    Handles upload/deletion of images from google cloud platform
+*/
+router.post('/upload/:productId', /* CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, */ UploadManager.setupProductImage, GCloudUploader.multer.single('image'), GCloudUploader.sendUploadToGCS, UploadManager.saveProductImageToDb);
+
+router.post('/deleteImage', /* CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, */ UploadManager.getImageData, GCloudUploader.deleteFromGCS, UploadManager.deleteProductImage);
 
 /* PRODUCT VARIANTS 
 Added here to avoid request param overlap with product/:attribute
 */
-router.post('/upload', gCloudUploader.multer.single('image'), gCloudUploader.sendUploadToGCS);
-
 // Create product variant
 //* Merchant accessible
 router.post('/variants', CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, (req, res, next) => {

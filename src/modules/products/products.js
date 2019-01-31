@@ -1,3 +1,6 @@
+//Config
+const UploadConfig = require('../../config/uploads');
+
 // Models
 const Product = require('../../models/products/product');
 const ProductVariant = require('../../models/products/variant');
@@ -156,14 +159,91 @@ module.exports.deleteProduct = (productId, callback) => {
 /* 
     PRODUCT IMAGES
 */
-//TODO: Add product image 
-module.exports.addProductImage = (productId, imageId, callback) => {};
+// Check if the number of product images exceeds the maximum number of pictures
+//TODO: Make this a middleware
+function _canUploadProductImage(images) {
+    images = images || [];
+    return images.length > UploadConfig.maxUploads.PRODUCT_IMAGES;
+}
 
-//TODO: Update productImage
-module.exports.updateProductImage = (productId, imageId, callback) => {};
+// Add product image 
+module.exports.addProductImage = (productId, imageId, callback) => {
+    Product.findById(productId)
+        .then((productFound) => {
+            if (!productFound) {
+                return callback(
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Product`), 404)
+                );
+            }
 
-//TODO: Delete product image
-module.exports.deleteProductImage = (productId, imageId, callback) => {};
+            // Add the new image to the list of product images
+            productFound.images.push(imageId);
+            productFound.save();
+
+            // Product found, return success response
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`Product`))
+            );
+        })
+        .catch(err => {
+            return callback(
+                Api.getError(err.message, err)
+            );
+        });
+};
+
+// Delete product image
+module.exports.deleteProductImage = (productId, imageId, callback) => {
+    Product.findById(productId)
+        .populate('images')
+        .then((productFound) => {
+            if (!productFound) {
+                return callback(
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Product`), 404)
+                );
+            }
+            //TODO: Delete image from google cloud ~ use middleware
+
+            let deletedImage = null;
+            let imageIndex = -1;
+
+            // Remove the image with the matching index from the image array
+            productFound.images = productFound.images.filter((image, index) => {
+                const shouldBeKept = (image.id != imageId);
+
+                // Save the deleted image so we can return it as part of our response data
+                if (!shouldBeKept) {
+                    deletedImage = image;
+                    imageIndex = index;
+                }
+
+                return shouldBeKept;
+            });
+
+            // The image was not found in our product
+            if (imageIndex === -1) {
+                return callback(
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Product image`), 404)
+                );
+            }
+
+            // Update the database ~ deleted the image
+            productFound.save();
+
+            // Return the product with the deleted image
+            return callback(
+                Api.getResponse(true, FeedbackMessages.operationSucceeded(`deleted the image`), {
+                    product: productFound,
+                    deletedImage: deletedImage
+                })
+            );
+        })
+        .catch(err => {
+            return callback(
+                Api.getError(err.message, err)
+            );
+        });
+};
 
 // Update
 /* 

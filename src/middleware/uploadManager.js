@@ -4,9 +4,38 @@ const UploadConfig = require('../config/uploads');
 const Api = require('../lib/api');
 const FeedbackMessages = require('../lang/feedbackMessages');
 
+const Image = require('../models/image');
+
 const user = require('../modules/users/users');
 const products = require('../modules/products/products');
-const categories = require('../modules/products/categories');
+const category = require('../modules/products/categories');
+
+/* 
+    IMAGES
+*/
+module.exports.getImageData = (req, res, next) => {
+    //* Remember to pass in the image id as part of the request body
+    Image.findById(req.body.imageId)
+        .then(imageFound => {
+            // Image not found
+            if (!imageFound) {
+                console.debug(`Image not found`);
+                const statusCode = 404;
+                return res.status(statusCode).json(
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Image`), undefined, statusCode)
+                );
+            }
+
+            console.debug(`Image found`);
+            // Image found ~ Pass appropriate data
+            req.uploadData = req.uploadData || {};
+            req.uploadData.imageUrl = imageFound.imageUrl;
+            next();
+        })
+        .catch(err => {
+            return res.status(500).json(Api.getError(err.message, err));
+        });
+};
 
 /* 
     SETUP IMAGE DATA FUNCTIONS
@@ -72,15 +101,6 @@ module.exports.saveProductTypeToDb = (req, res, next) => { // TODO: Implement th
 module.exports.updateUserImage = (req, res, next) => { // TODO: Implement this
     const imageId = req.uploadData.uploadId;
     const userId = req.params.userId || req.body.userId;
-};
-
-module.exports.updateProductImage = (req, res, next) => {
-    const imageId = req.uploadData.uploadId;
-    const productId = req.params.productId || req.body.productId;
-
-    products.updateProductImage(productId, imageId, (response) => {
-        return res.status(response.statusCode).json(response);
-    });
 };
 
 module.exports.updateCategoryImage = (req, res, next) => { // TODO: Implement this
