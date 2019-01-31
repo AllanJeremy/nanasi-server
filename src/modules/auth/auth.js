@@ -20,12 +20,17 @@ const Otp = require('../../modules/auth/otp');
 const user = require('../../modules/users/users');
 
 function _getJwtData(userData) {
-    return {
+    let data = {
         id: userData._id,
         firstName: userData.firstName,
         lastName: userData.lastName,
-        phone: userData.phone,
+        accountType: userData.accountType,
+        phone: userData.phone
     };
+    data.email = userData.email;
+    data.isActive = userData.isActive;
+
+    return data;
 }
 
 // Sign JWT

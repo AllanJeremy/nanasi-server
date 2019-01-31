@@ -123,7 +123,7 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
 
 // Verify otp ~ Returns true if OTP was valid & false if otp was invalid
 module.exports.verifyOtp = (phone, otpToVerify, otpType, callback) => {
-    const dataToCollect = '_id firstName lastName phone isActive'; //TODO: Move into config as "publicly" accessible user data
+    const dataToCollect = '_id firstName lastName phone accountType isActive'; //TODO: Move into config as "publicly" accessible user data
 
     return User.findOne({
             phone: phone,

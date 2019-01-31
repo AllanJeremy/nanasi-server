@@ -4,7 +4,14 @@ const router = express.Router();
 const user = require('../modules/users/users');
 const CheckAuth = require('../middleware/checkAuth');
 
+const Api = require('../lib/api');
+
 /* USER ENDPOINTS */
+// Get a user given a certain token
+router.get('/token', CheckAuth.userLoggedIn, (req, res, next) => {
+    return res.status(200).json(Api.getResponse(true, `Successfully retrieved user data`, req.userData));
+});
+
 
 // Get multiple users 
 //* Admin accessible
