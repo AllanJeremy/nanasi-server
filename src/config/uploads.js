@@ -12,10 +12,10 @@ module.exports.acceptedTypes = [
 
 // Directories used to upload the various files
 module.exports.directory = {
-    PRODUCTS: 'products',
-    PRODUCT_TYPES: 'productTypes',
-    CATEGORIES: 'categories',
-    USERS: 'users'
+    PRODUCTS: 'images/products',
+    PRODUCT_TYPES: 'images/productTypes',
+    CATEGORIES: 'images/categories',
+    USERS: 'images/users'
 };
 
 module.exports.maxUploads = {
