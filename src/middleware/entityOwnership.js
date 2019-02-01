@@ -44,6 +44,14 @@ module.exports.cartItemBelongsToBuyer = (req, res, next) => {
     next();
 };
 
+// Order belongs to buyer
+module.exports.orderBelongsToBuyer = (req, res, next) => {
+    const buyerId = req.userData.id;
+    const orderId = req.params.orderId || req.body.userId;
+
+    next();
+};
+
 /* 
     GENERAL OWNERSHIP
 */

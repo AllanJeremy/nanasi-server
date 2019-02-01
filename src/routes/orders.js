@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const order = require('../modules/orders/orders');
+const CheckAuth = require('../middleware/checkAuth');
+const Ownership = require('../middleware/entityOwnership');
 
 /* ORDER ENDPOINTS */
 // Create order
 //* Buyer accessible
-router.post('/', (req, res, next) => { //TODO: Add db code
+router.post('/', CheckAuth.buyerLoggedIn, (req, res, next) => { //TODO: Add db code
     order.createOrder(req.body.data, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -14,7 +16,7 @@ router.post('/', (req, res, next) => { //TODO: Add db code
 
 // View logged in buyer orders
 //* Buyer accessible
-router.get('/', (req, res, next) => { //TODO: Add db code
+router.get('/', CheckAuth.buyerLoggedIn, (req, res, next) => { //TODO: Add db code
     order.getBuyerOrders(req.body.filter, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -22,7 +24,7 @@ router.get('/', (req, res, next) => { //TODO: Add db code
 
 // Get store orders
 //* Merchant accessible
-router.get('/store/:storeId', (req, res, next) => {
+router.get('/store/:storeId', CheckAuth.merchantLoggedIn, (req, res, next) => {
     order.getStoreOrders(req.params.storeId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -30,7 +32,7 @@ router.get('/store/:storeId', (req, res, next) => {
 
 // Get product orders
 //* Merchant accessible
-router.get('/product/:productId', (req, res, next) => {
+router.get('/product/:productId', CheckAuth.merchantLoggedIn, (req, res, next) => {
     order.getProductOrders(req.params.productId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -39,7 +41,7 @@ router.get('/product/:productId', (req, res, next) => {
 // View single order
 //* Merchant accessible
 //* Buyer accessible
-router.get('/:orderId', (req, res, next) => { //TODO: Add db code
+router.get('/:orderId', CheckAuth.userLoggedIn, (req, res, next) => { //TODO: Add middleware to check for buyer or merchant logged in in one function call
     order.getOrderById(req.params.orderId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -47,7 +49,7 @@ router.get('/:orderId', (req, res, next) => { //TODO: Add db code
 
 // Decline order
 //* Merchant accessible
-router.patch('/decline/:orderId', (req, res, next) => { //TODO: Add db code
+router.patch('/decline/:orderId', CheckAuth.merchantLoggedIn, (req, res, next) => { //TODO: Add db code
     order.declineOrder(req.params.orderId, req.body.reason, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -55,7 +57,7 @@ router.patch('/decline/:orderId', (req, res, next) => { //TODO: Add db code
 
 // Fulfil/Complete order
 //* Merchant accessible
-router.patch('/complete/:orderId', (req, res, next) => { //TODO: Add db code
+router.patch('/complete/:orderId', CheckAuth.merchantLoggedIn, (req, res, next) => { //TODO: Add db code
     order.fulfilOrder(req.params.orderId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -63,7 +65,7 @@ router.patch('/complete/:orderId', (req, res, next) => { //TODO: Add db code
 
 // Update order
 //* Buyer accessible
-router.patch('/:orderId', (req, res, next) => { //TODO: Add db code
+router.patch('/:orderId', CheckAuth.buyerLoggedIn, Ownership.orderBelongsToBuyer, (req, res, next) => { //TODO: Add db code
     order.updateOrder(req.params.orderId, req.body.data, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -71,7 +73,7 @@ router.patch('/:orderId', (req, res, next) => { //TODO: Add db code
 
 // Cancel order
 //* Buyer accessible
-router.delete('/:orderId', (req, res, next) => { //TODO: Add db code
+router.delete('/:orderId', CheckAuth.buyerLoggedIn, Ownership.orderBelongsToBuyer, (req, res, next) => { //TODO: Add db code
     order.cancelOrder(orderId, response => {
         res.status(response.statusCode).json(response);
     });
