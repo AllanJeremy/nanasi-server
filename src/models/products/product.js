@@ -25,6 +25,7 @@ const productSchema = new mongoose.Schema({
     salePrice: Number,
     tax: Number,
 
+    cost: Number,
     quantity: {
         type: Number,
         default: 1
