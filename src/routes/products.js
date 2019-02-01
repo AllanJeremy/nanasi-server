@@ -13,7 +13,7 @@ const UploadManager = require('../middleware/uploadManager');
     PRODUCT IMAGES
     Handles upload/deletion of images from google cloud platform
 */
-router.post('/upload/:productId', /* CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, */ UploadManager.setupProductImage, GCloudUploader.multer.single('image'), GCloudUploader.sendUploadToGCS, UploadManager.saveProductImageToDb);
+router.post('/upload/:productId', /* CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, */ UploadManager.setupProductImage, GCloudUploader.multer.single('image'), GCloudUploader.sendUploadToGCS, UploadManager.saveUploadedImageToDb, UploadManager.saveProductImageToDb);
 
 router.post('/deleteImage', /* CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, */ UploadManager.getImageData, GCloudUploader.deleteFromGCS, UploadManager.deleteProductImage);
 

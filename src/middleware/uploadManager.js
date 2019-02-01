@@ -37,6 +37,27 @@ module.exports.getImageData = (req, res, next) => {
         });
 };
 
+//* MUST be called after upload to GCS middleware function & before save to any collection that needs the reference
+module.exports.saveUploadedImageToDb = (req, res, next) => {
+    const image = new Image({
+        imageUrl: req.file.cloudStoragePublicUrl,
+        thumbnailUrl: req.file.cloudStoragePublicUrl //TODO: Create thumbnail version of the image
+    });
+
+    // Save the image to the database
+    image.save()
+        .then(uploadedImage => {
+            req.uploadData = req.uploadData || {};
+            req.uploadData.uploadedImage = uploadedImage;
+            next();
+        })
+        .catch(err => {
+            return res.status(500).json(
+                Api.getError(err.message, err)
+            );
+        });
+};
+
 /* 
     SETUP IMAGE DATA FUNCTIONS
     Sets image upload data as part of the request
@@ -76,7 +97,7 @@ module.exports.saveUserImageToDb = (req, res, next) => { // TODO: Implement this
 };
 
 module.exports.saveProductImageToDb = (req, res, next) => {
-    const imageId = req.uploadData.uploadId;
+    const imageId = req.uploadData.uploadedImage.id;
     const productId = req.params.productId || req.body.productId;
 
     products.addProductImage(productId, imageId, (response) => {
