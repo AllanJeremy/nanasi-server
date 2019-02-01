@@ -182,7 +182,7 @@ module.exports.addProductImage = (productId, imageId, callback) => {
 
             // Product found, return success response
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`Product`))
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`Product`), productFound)
             );
         })
         .catch(err => {
