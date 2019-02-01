@@ -101,6 +101,8 @@ module.exports.saveProductImageToDb = (req, res, next) => {
     const productId = req.params.productId || req.body.productId;
 
     products.addProductImage(productId, imageId, (response) => {
+        response.data = response.data || {};
+        response.data = req.uploadData.uploadedImage;
         return res.status(response.statusCode).json(response);
     });
 };
