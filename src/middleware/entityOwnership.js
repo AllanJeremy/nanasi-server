@@ -1,3 +1,6 @@
+const Api = require('../lib/api');
+const FeedbackMessages = require('../lang/feedbackMessages');
+
 const Store = require('../models/store');
 const Product = require('../models/products/product');
 const ProductVariant = require('../models/products/variant');
@@ -32,6 +35,13 @@ module.exports.productVariantBelongsToMerchant = (req, res, next) => {
     next();
 };
 
+module.exports.orderBelongsToMerchant = (req, res, next) => {
+    const merchantId = req.userData.id;
+    const orderId = req.params.orderId || req.body.userId;
+
+    console.log(`Checking if order belongs to merchant`);
+    next();
+};
 /* 
     BUYER OWNERSHIP
 */

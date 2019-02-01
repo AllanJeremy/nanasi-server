@@ -49,7 +49,7 @@ router.get('/:orderId', CheckAuth.userLoggedIn, (req, res, next) => { //TODO: Ad
 
 // Decline order
 //* Merchant accessible
-router.patch('/decline/:orderId', CheckAuth.merchantLoggedIn, (req, res, next) => { //TODO: Add db code
+router.patch('/decline/:orderId', CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => { //TODO: Add db code
     order.declineOrder(req.params.orderId, req.body.reason, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -57,7 +57,7 @@ router.patch('/decline/:orderId', CheckAuth.merchantLoggedIn, (req, res, next) =
 
 // Fulfil/Complete order
 //* Merchant accessible
-router.patch('/complete/:orderId', CheckAuth.merchantLoggedIn, (req, res, next) => { //TODO: Add db code
+router.patch('/complete/:orderId', CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => { //TODO: Add db code
     order.fulfilOrder(req.params.orderId, response => {
         return res.status(response.statusCode).json(response);
     });
