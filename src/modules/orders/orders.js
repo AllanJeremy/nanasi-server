@@ -116,10 +116,16 @@ module.exports.getBuyerOrders = (buyerId, callback) => {
     }, callback);
 };
 
-//TODO: View store orders ~ Get relationships
+// View store orders ~ Get relationships
 module.exports.getStoreOrders = (storeId, callback) => {
     return _getOrdersByFilter({
-        "product.store._id": storeId
+        "product.store.id": storeId
+    }, callback);
+};
+
+module.exports.getProductOrders = (productId, callback) => {
+    return _getOrdersByFilter({
+        "product.id": productId
     }, callback);
 };
 

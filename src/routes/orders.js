@@ -12,7 +12,7 @@ router.post('/', (req, res, next) => { //TODO: Add db code
     });
 });
 
-// View multiple orders
+// View logged in buyer orders
 //* Buyer accessible
 router.get('/', (req, res, next) => { //TODO: Add db code
     order.getBuyerOrders(req.body.filter, response => {
@@ -24,6 +24,14 @@ router.get('/', (req, res, next) => { //TODO: Add db code
 //* Merchant accessible
 router.get('/store/:storeId', (req, res, next) => {
     order.getStoreOrders(req.params.storeId, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// Get product orders
+//* Merchant accessible
+router.get('/product/:productId', (req, res, next) => {
+    order.getProductOrders(req.params.productId, response => {
         return res.status(response.statusCode).json(response);
     });
 });
