@@ -1,4 +1,6 @@
-const AfricasTalking = require('../config/africasTalking');
+const {
+    AfricasTalking
+} = require('../config/africasTalking');
 const Sms = AfricasTalking.SMS;
 
 const SENDER_ID = 'Nanasi.co';
