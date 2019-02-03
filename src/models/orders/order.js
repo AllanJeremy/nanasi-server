@@ -7,8 +7,6 @@ const orderSchema = new mongoose.Schema({
         ref: 'User'
     },
 
-    itemCount: Number, // Number of items ordered
-
     product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product'

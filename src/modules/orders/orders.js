@@ -1,4 +1,5 @@
 const Order = require('../../models/orders/order');
+const Cart = require('../../modules/cart/cart');
 
 /* 
     ORDER HELPERS
@@ -95,18 +96,48 @@ function _updateOrder(orderId, updateData, callback) {
     EXPORTS
 */
 // Create order
-module.exports.createOrder = (orderData, callback) => {
-    const newOrder = new Order(orderData);
+module.exports.createOrder = (cartId, userId, callback) => {
+    // If cart item found is a completed cart, don't return it. Means order has already been created for it
+    Cart.find({
+            _id: cartId,
+            user: userId,
+            orderIsCompleted: false
+        }).then(cartItemFound => {
+            // Cart items not found ~ Do not create order
+            if (!cartItemFound) {
+                return callback(
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Cart`), undefined, 404)
+                );
+            }
 
-    return newOrder.save().then(createdOrder => {
-        return callback(
-            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Order'), createdOrder, 201)
-        );
-    }).catch(err => {
-        return callback(
-            Api.getError(FeedbackMessages.operationFailed(`create order`), err)
-        );
-    });
+            const productsToAdd = cartItemFound.items;
+            const cartProductsCount = productsToAdd.length; //Number of products in this product
+
+            // Products not found in the cart provided
+            if (cartProductsCount < 1) {
+                return callback(
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Products in cart`), undefined, 404)
+                );
+            }
+
+            // Products found ~ Create order
+            Order.collection.insertMany(productsToAdd)
+                .then(createdOrder => {
+                    return callback(
+                        Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Order'), createdOrder, 201)
+                    );
+                })
+                .catch(err => {
+                    return callback(
+                        Api.getError(FeedbackMessages.operationFailed(`create order`), err)
+                    );
+                });
+        })
+        .catch(err => {
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed(`find cart items`), err)
+            );
+        });
 };
 
 // View buyer orders 
