@@ -136,7 +136,21 @@
                  );
              }
 
+             // Calculating total cart price
+             let total = 0;
+             cartItemFound.items.map(product => {
+                 let productPrice = product.salePrice || product.regularPrice;
 
+                 total += (product.quantity * productPrice);
+             });
+
+             //* Nanasi will still retain their revenue (8% of regular price)
+
+             return callback(
+                 Api.getResponse(true, FeedbackMessages.operationSucceeded(`calculated cart total`), {
+                     total: total
+                 })
+             );
          })
          .catch(err => {
              return callback(
