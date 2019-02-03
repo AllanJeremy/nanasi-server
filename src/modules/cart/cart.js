@@ -1,7 +1,72 @@
  const Cart = require('../../models/cart');
+ const Api = require('../../lib/api');
+ const FeedbackMessages = require('../../lang/feedbackMessages');
+
+ // Add item to cart
+ function _addCartItems(userId, itemsToAdd, callback) { // items = [{product: <id>, quantity: <qty>}]
+     Cart.findOne({
+             user: userId,
+             orderIsCompleted: false
+         })
+         .then(cartFound => {
+             let cartItems = cartFound.items;
+             // Check if the item being added already exists in the cart
+             if (!carItemFound || (cartItems.length < 1)) { // Item does not exist ~ create it
+                 const cartItem = new Cart({
+                     items: itemsToAdd,
+                     user: userId
+                 });
+
+                 return cartItem.save().then(createdCartItem => {
+                     return callback(
+                         Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Cart item'), createdCartItem, 201)
+                     );
+                 }).catch(err => {
+                     return callback(
+                         Api.getError(FeedbackMessages.operationFailed(`create cart item`), err)
+                     );
+                 });
+             }
+
+             // Cart item found
+             let itemCartIndex; // index of the item in the cart
+             let productId;
+
+
+             itemsToAdd.map(itemToAdd => {
+                 productId = itemToAdd.productId; //* Remember to pass this in as productId and not product
+                 itemCartIndex = cartItems.indexOf(productId);
+
+                 // This specific item already exists in the cart found ~ update quantity
+                 if (itemCartIndex !== -1) {
+                     cartFound.items[itemCartIndex].quantity = itemToAdd.quantity;
+                 } else { // Item does not exist in cart, add it
+                     // Product id
+                     cartFound.items.push(itemToAdd);
+                 }
+             });
+
+             // Save cart items to database
+             cartFound.save()
+                 .then(createdCartItem => {
+                     return callback(
+                         Api.getResponse(true, FeedbackMessages.operationSucceeded('added cart item'), createdCartItem, 201)
+                     );
+                 }).catch(err => {
+                     return callback(
+                         Api.getError(FeedbackMessages.operationFailed(`add cart item`), err)
+                     );
+                 });
+         })
+         .catch(err => {
+             return callback(
+                 Api.getError(err.message, err)
+             );
+         });
+ }
 
  // Get multiple cart by filter
- function _getCartItemsByFilter(filter, callback) {
+ function _getCartsByFilter(filter, callback) {
      filter = filter || {};
      return Cart.find(filter)
          .populate('product', 'name')
@@ -27,7 +92,7 @@
  }
 
  // Get cartItem by filter
- function _getSingleCartItemByFilter(filter, callback) {
+ function _getSingleCartByFilter(filter, callback) {
      return Cart.findOne(filter)
          .populate('product', 'name')
          .populate('user')
@@ -53,30 +118,20 @@
      EXPORTS
  */
  // Add item to cart
- module.exports.addCartItem = (itemData, callback) => {
-     const cartItem = new Cart(itemData);
-
-     return cartItem.save().then(createdCartItem => {
-         return callback(
-             Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Cart item'), createdCartItem, 201)
-         );
-     }).catch(err => {
-         return callback(
-             Api.getError(FeedbackMessages.operationFailed(`create cart item`), err)
-         );
-     });
+ module.exports.addCartItem = (userId, itemsToAdd, callback) => {
+     return _addCartItems(userId, itemsToAdd, callback);
  };
 
  // View cart items for the current user
  module.exports.getUserCart = (userId, callback) => {
-     return _getCartItemsByFilter({
+     return _getCartsByFilter({
          user: userId
      }, callback);
  };
 
  // Get single cart item
  module.exports.getCartItem = (cartItemId, callback) => {
-     return _getSingleCartItemByFilter({
+     return _getSingleCartByFilter({
          _id: cartItemId
      }, callback);
  };
