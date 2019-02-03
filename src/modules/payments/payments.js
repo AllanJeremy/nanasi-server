@@ -15,7 +15,7 @@ module.exports.buyerCheckout = (cartId, callback) => {
 
         // Successfully retrieved cart total
         const cartTotal = cartResponse.data.total;
-        const userId = cartResponse.data.cart.userId;
+        const userId = cartResponse.data.userId;
 
         // Try getting the user before trying to make the payment
         user.getUserById(userId, (userResponse) => {
@@ -41,11 +41,14 @@ module.exports.buyerCheckout = (cartId, callback) => {
                     );
                 }
 
+                // Send Nanasi cut & retain merchant cut as the balance
+                PaymentLib.sendNanasiRevenueFromCheckout(cartResponse.items);
+
                 // Checkout was successful
                 return callback(
                     Api.getResponse(true, FeedbackMessages.operationSucceeded(`completed checkout.`), {
                         total: cartTotal,
-                        userId: userId
+                        userId: userId,
                     })
                 );
             });

@@ -127,8 +127,9 @@
      });
  };
 
- module.exports.getCartTotal = (cartId, callback) => {
+ module.exports.getCartTotal = (cartId, callback) => { //TODO: Debug
      Cart.findById(cartId)
+         .populate('items.product')
          .then(cartItemFound => {
              if (!cartItemFound) {
                  return callback(
@@ -148,7 +149,9 @@
 
              return callback(
                  Api.getResponse(true, FeedbackMessages.operationSucceeded(`calculated cart total`), {
-                     total: total
+                     total: total,
+                     userId: cartItemFound.user,
+                     items: cartItemFound.items
                  })
              );
          })
