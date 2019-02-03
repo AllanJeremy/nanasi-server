@@ -27,8 +27,10 @@ const cartRoutes = require('./routes/cart');
 
 const paymentRoutes = require('./routes/payments');
 
+const DB_CONNECTION_STRING = 'mongodb://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD + '@nanasi-shard-00-00-v6ykk.mongodb.net:27017,nanasi-shard-00-01-v6ykk.mongodb.net:27017,nanasi-shard-00-02-v6ykk.mongodb.net:27017/nanasi?ssl=true&replicaSet=Nanasi-shard-0&authSource=admin&retryWrites=true';
+
 // Connect to the database
-mongoose.connect('mongodb+srv://blue-dwarf:' + process.env.MONGO_ATLAS_PASSWORD + '@nanasi-v6ykk.mongodb.net/nanasi?retryWrites=true', {
+mongoose.connect(DB_CONNECTION_STRING, {
     useNewUrlParser: true
 });
 
