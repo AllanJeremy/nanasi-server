@@ -16,15 +16,15 @@ router.post('/', CheckAuth.buyerLoggedIn, (req, res, next) => { //TODO: Add db c
 
 // View logged in buyer orders
 //* Buyer accessible
-router.get('/', CheckAuth.buyerLoggedIn, (req, res, next) => { //TODO: Add db code
-    order.getBuyerOrders(req.body.filter, response => {
+router.get('/', CheckAuth.buyerLoggedIn, Ownership.orderBelongsToBuyer, (req, res, next) => { //TODO: Add db code
+    order.getBuyerOrders(req.userData.id, response => {
         return res.status(response.statusCode).json(response);
     });
 });
 
 // Get store orders
 //* Merchant accessible
-router.get('/store/:storeId', CheckAuth.merchantLoggedIn, (req, res, next) => {
+router.get('/store/:storeId', CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => {
     order.getStoreOrders(req.params.storeId, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -32,7 +32,7 @@ router.get('/store/:storeId', CheckAuth.merchantLoggedIn, (req, res, next) => {
 
 // Get product orders
 //* Merchant accessible
-router.get('/product/:productId', CheckAuth.merchantLoggedIn, (req, res, next) => {
+router.get('/product/:productId', CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => {
     order.getProductOrders(req.params.productId, response => {
         return res.status(response.statusCode).json(response);
     });
