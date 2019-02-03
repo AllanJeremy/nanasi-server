@@ -96,11 +96,10 @@ function _updateOrder(orderId, updateData, callback) {
     EXPORTS
 */
 // Create order
-module.exports.createOrder = (cartId, userId, callback) => {
+module.exports.createOrder = (cartId, callback) => {
     // If cart item found is a completed cart, don't return it. Means order has already been created for it
     Cart.find({
             _id: cartId,
-            user: userId,
             orderIsCompleted: false
         }).then(cartItemFound => {
             // Cart items not found ~ Do not create order
@@ -110,7 +109,7 @@ module.exports.createOrder = (cartId, userId, callback) => {
                 );
             }
 
-            const productsToAdd = cartItemFound.items;
+            let productsToAdd = cartItemFound.items;
             const cartProductsCount = productsToAdd.length; //Number of products in this product
 
             // Products not found in the cart provided
@@ -119,6 +118,12 @@ module.exports.createOrder = (cartId, userId, callback) => {
                     Api.getResponse(false, FeedbackMessages.itemNotFound(`Products in cart`), undefined, 404)
                 );
             }
+
+            // Add userId to order data ~ Each order will have the appropriate userId now
+            productsToAdd = productsToAdd.map((product) => {
+                product.user = cartItemFound.user;
+                return product;
+            });
 
             // Products found ~ Create order
             Order.collection.insertMany(productsToAdd)
