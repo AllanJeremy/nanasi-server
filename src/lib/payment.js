@@ -5,7 +5,7 @@ const {
 const Payments = AfricasTalking.PAYMENTS;
 
 // Checkout
-module.exports.checkout = (phone, amount, meta, currencyCode) => {
+module.exports.checkout = (phone, amount, meta, currencyCode, callback) => {
     currencyCode = currencyCode || 'KES';
 
     const options = {
@@ -19,9 +19,11 @@ module.exports.checkout = (phone, amount, meta, currencyCode) => {
 
     Payments.mobileCheckout(options)
         .then(response => {
-            console.log(response);
+            console.log(response)
+            callback(null, response);
         }).catch(err => {
             console.log(err);
+            callback(err);
         });
 };
 

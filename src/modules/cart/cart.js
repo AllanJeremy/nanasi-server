@@ -88,7 +88,7 @@
          if (cartItemFound) {
              // No errors ~ Updated the cartItem
              return callback(
-                 Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`cart item (${cartItemFound.name})`), {
+                 Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`cart item`), {
                      id: cartItemId
                  })
              );
@@ -125,6 +125,24 @@
              Api.getError(FeedbackMessages.operationFailed(`delete cart item`), err)
          );
      });
+ };
+
+ module.exports.getCartTotal = (cartId, callback) => {
+     Cart.findById(cartId)
+         .then(cartItemFound => {
+             if (!cartItemFound) {
+                 return callback(
+                     Api.getError(FeedbackMessages.itemNotFound(`Cart item`), null, 404)
+                 );
+             }
+
+
+         })
+         .catch(err => {
+             return callback(
+                 Api.getError(FeedbackMessages.operationFailed(`calculate cart total`), err)
+             );
+         });
  };
 
  /* 
