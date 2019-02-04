@@ -15,6 +15,10 @@ const billingInfoSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
         default: PaymentMethods.MPESA
+    },
+    details: {
+        type: Object,
+        default: {}
     }
 });
 
