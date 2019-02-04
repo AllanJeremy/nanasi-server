@@ -30,6 +30,14 @@ router.get('/store/:storeId', CheckAuth.merchantLoggedIn, Ownership.orderBelongs
     });
 });
 
+// Get store sales
+//* Merchant accessible
+router.get('/storeSales/:storeId', CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => {
+    order.getStoreSales(req.params.storeId, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
 // Get product orders
 //* Merchant accessible
 router.get('/product/:productId', CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => {

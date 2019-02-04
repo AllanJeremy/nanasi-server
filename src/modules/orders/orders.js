@@ -7,11 +7,12 @@ const Cart = require('../../modules/cart/cart');
 // Get multiple orders by filter
 function _getOrdersByFilter(filter, callback) {
     filter = filter || {};
-    //TODO: Check if the orders belongs to the user that requested it: Possibly pass userId as part of filter
+
 
     return Order.find(filter)
         .populate({
             path: 'product',
+            select: 'regularPrice salePrice',
             populate: {
                 path: 'store',
                 select: 'name _id'
@@ -29,10 +30,23 @@ function _getOrdersByFilter(filter, callback) {
             const statusCode = isOk ? 200 : 404;
             const message = isOk ? FeedbackMessages.itemsFoundWithCount(ordersFound, 'Orders') : FeedbackMessages.itemNotFound('Orders');
 
+            // Calculate the order total
+            let orderTotal = 0;
+            let productPrice = 0;
+            ordersFound.map(order => {
+                productPrice = order.product.salePrice || order.product.regularPrice;
+                if (productPrice) {
+                    orderTotal += (productPrice * order.quantity);
+                }
+
+                productPrice = 0;
+            });
+
             return callback(
                 Api.getResponse(isOk, message, {
                     count: orderCount,
-                    orders: ordersFound
+                    orders: ordersFound,
+                    total: orderTotal
                 }, statusCode)
             );
         });
@@ -45,9 +59,10 @@ function _getSingleOrderByFilter(filter, callback) {
     return Order.findOne(filter)
         .populate({
             path: 'product',
+            select: 'regularPrice salePrice',
             populate: {
                 path: 'store',
-                select: '_id name'
+                select: 'name _id'
             }
         })
         .then((err, orderFound) => {
@@ -61,9 +76,13 @@ function _getSingleOrderByFilter(filter, callback) {
             const statusCode = isOk ? 200 : 404;
             const message = isOk ? FeedbackMessages.itemsFound('Order') : FeedbackMessages.itemNotFound('Order');
 
+            let productPrice = orderFound.product.salePrice || orderFound.product.regularPrice;
+            let orderTotal = productPrice * orderFound.quantity;
+
             return callback(
                 Api.getResponse(isOk, message, {
-                    order: orderFound
+                    order: orderFound,
+                    total: orderTotal
                 }, statusCode)
             );
         });
@@ -155,7 +174,16 @@ module.exports.getBuyerOrders = (buyerId, callback) => {
 // View store orders ~ Get relationships
 module.exports.getStoreOrders = (storeId, callback) => {
     return _getOrdersByFilter({
-        "product.store.id": storeId
+        "product.store.id": storeId,
+        isFulfilled: false
+    }, callback);
+};
+
+// View store orders ~ Get relationships
+module.exports.getStoreSales = (storeId, callback) => {
+    return _getOrdersByFilter({
+        "product.store.id": storeId,
+        isFulfilled: true
     }, callback);
 };
 
