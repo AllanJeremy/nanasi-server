@@ -2,6 +2,54 @@
  const Api = require('../../lib/api');
  const FeedbackMessages = require('../../lang/feedbackMessages');
 
+ // Get multiple cart by filter
+ function _getCartsByFilter(filter, callback) {
+     filter = filter || {};
+     return Cart.find(filter)
+         .populate('product', 'name')
+         .populate('user', '_id name')
+         .then((cartFound) => {
+             const cartCount = cartFound.length;
+             const isOk = (cartCount > 0);
+             const statusCode = isOk ? 200 : 404;
+             const message = isOk ? FeedbackMessages.itemsFoundWithCount(cartFound, 'Carts') : FeedbackMessages.itemNotFound('Carts');
+
+             return callback(
+                 Api.getResponse(isOk, message, {
+                     count: cartCount,
+                     cart: cartFound
+                 }, statusCode)
+             );
+         })
+         .catch(err => {
+             return callback(
+                 Api.getError(FeedbackMessages.operationFailed('get cart'), err)
+             );
+         });
+ }
+
+ // Get cartItem by filter
+ function _getSingleCartByFilter(filter, callback) {
+     return Cart.findOne(filter)
+         .populate('product', 'name')
+         .populate('user')
+         .then((cartItemFound) => {
+             const isOk = cartItemFound ? true : false;
+             const statusCode = isOk ? 200 : 404;
+             const message = isOk ? FeedbackMessages.itemsFound('Cart item') : FeedbackMessages.itemNotFound('Cart');
+
+             return callback(
+                 Api.getResponse(isOk, message, {
+                     cartItem: cartItemFound
+                 }, statusCode)
+             );
+         })
+         .catch(err => {
+             return callback(
+                 Api.getError(FeedbackMessages.operationFailed('get cart item'), err)
+             );
+         });
+ }
  // Add item to cart
  function _addCartItems(userId, itemsToAdd, callback) { // items = [{product: <id>, quantity: <qty>}]
      Cart.findOne({
@@ -65,51 +113,38 @@
          });
  }
 
- // Get multiple cart by filter
- function _getCartsByFilter(filter, callback) {
-     filter = filter || {};
-     return Cart.find(filter)
-         .populate('product', 'name')
-         .populate('user', '_id name')
-         .then((cartFound) => {
-             const cartCount = cartFound.length;
-             const isOk = (cartCount > 0);
-             const statusCode = isOk ? 200 : 404;
-             const message = isOk ? FeedbackMessages.itemsFoundWithCount(cartFound, 'Carts') : FeedbackMessages.itemNotFound('Carts');
+ // Delete single cart item
+ function _removeSingleCartItem(cartId, productId, callback) {
+     Cart.findById(cartId)
+         .then(cartFound => {
+             if (!cartFound) {
+                 return callback(
+                     Api.getResponse(false, FeedbackMessages.itemNotFound(`Cart`), undefined, 404)
+                 );
+             }
 
-             return callback(
-                 Api.getResponse(isOk, message, {
-                     count: cartCount,
-                     cart: cartFound
-                 }, statusCode)
-             );
+             // Cart item found ~ Find item to remove
+             cartFound.items = cartFound.items.filter(itemFound => {
+                 return (itemFound.product != productId);
+             });
+
+             // Update cart ~ remove cart item
+             cartFound.items.save()
+                 .then(updatedCart => {
+                     return callback(
+                         Api.getResponse(true, FeedbackMessages.operationSucceeded(`removed cart item`), updatedCart)
+                     );
+                 })
+                 .catch(err => {
+                     return callback(
+                         Api.getError(err.message, err)
+                     );
+                 });
+
          })
          .catch(err => {
              return callback(
-                 Api.getError(FeedbackMessages.operationFailed('get cart'), err)
-             );
-         });
- }
-
- // Get cartItem by filter
- function _getSingleCartByFilter(filter, callback) {
-     return Cart.findOne(filter)
-         .populate('product', 'name')
-         .populate('user')
-         .then((cartItemFound) => {
-             const isOk = cartItemFound ? true : false;
-             const statusCode = isOk ? 200 : 404;
-             const message = isOk ? FeedbackMessages.itemsFound('Cart item') : FeedbackMessages.itemNotFound('Cart');
-
-             return callback(
-                 Api.getResponse(isOk, message, {
-                     cartItem: cartItemFound
-                 }, statusCode)
-             );
-         })
-         .catch(err => {
-             return callback(
-                 Api.getError(FeedbackMessages.operationFailed('get cart item'), err)
+                 Api.getError(err.message, err)
              );
          });
  }
@@ -159,14 +194,19 @@
      });
  };
 
- // Delete cart item ~ Remove item from cart
- module.exports.deleteCartItem = (cartItemId, callback) => {
-     return Cart.findByIdAndDelete(cartItemId).then((cartItemDeleted) => {
+ // Delete single cart item
+ module.exports.removeCartItem = (cartId, productId, callback) => {
+     return _removeSingleCartItem(cartId, productId, callback);
+ };
+
+ // Delete entire cart
+ module.exports.deleteCart = (cartId, callback) => {
+     return Cart.findByIdAndDelete(cartId).then((cartItemDeleted) => {
          if (cartItemDeleted) {
              // No errors ~ Deleted the cartItem
              return callback(
                  Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('cart item'), {
-                     id: cartItemId,
+                     id: cartId,
                      cartItemName: cartItemDeleted.name
                  })
              );
