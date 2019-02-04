@@ -45,12 +45,12 @@ module.exports.orderBelongsToMerchant = (req, res, next) => {
 /* 
     BUYER OWNERSHIP
 */
-// Cart item belongs to buyer
-module.exports.cartItemBelongsToBuyer = (req, res, next) => {
+// Cart belongs to buyer
+module.exports.cartBelongsToBuyer = (req, res, next) => {
     const buyerId = req.userData.id;
-    const cartItemId = req.params.cartItemId || req.body.data.cart;
+    const cartId = req.params.cartId || req.body.data.cart;
 
-    console.log(`Merchant id: ${buyerId} and Variant id: ${cartItemId}`);
+    console.log(`Merchant id: ${buyerId} and Variant id: ${cartId}`);
     next();
 };
 
