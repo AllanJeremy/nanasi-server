@@ -153,14 +153,15 @@
      EXPORTS
  */
  // Add item to cart
- module.exports.addCartItem = (userId, itemsToAdd, callback) => {
+ module.exports.addCartItems = (userId, itemsToAdd, callback) => {
      return _addCartItems(userId, itemsToAdd, callback);
  };
 
  // View cart items for the current user
  module.exports.getUserCart = (userId, callback) => {
      return _getCartsByFilter({
-         user: userId
+         user: userId,
+         orderIsCompleted: false
      }, callback);
  };
 
@@ -172,7 +173,7 @@
  };
 
  // Update cart item ~ Often used to update the item quantity in the cart
- module.exports.updateCartItem = (cartItemId, updateData, callback) => {
+ module.exports.updateCart = (cartItemId, updateData, callback) => {
      return Cart.findByIdAndUpdate(cartItemId, updateData).then((cartItemFound) => {
          // Check if cartItem was found
          if (cartItemFound) {

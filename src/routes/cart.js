@@ -17,8 +17,7 @@ const Ownership = require("../middleware/entityOwnership");
 // Add item to cart
 //* Buyer accessible
 router.post("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
-    req.body.data.user = req.userData._id;
-    cart.addCartItem(req.body.data, response => {
+    cart.addCartItems(req.userData.id, req.body.items, response => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -26,31 +25,39 @@ router.post("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
 // View cart items for the current user
 //* Buyer accessible
 router.get("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
-    cart.getUserCart(req.userData._id, response => {
+    cart.getUserCart(req.userData.id, response => {
         return res.status(response.statusCode).json(response);
     });
 });
 
-// Get single cart item
+// Get single cart
 //* Buyer accessible
-router.get("/:cartItemId", CheckAuth.buyerLoggedIn, (req, res, next) => {
-    cart.getCartItem(req.params.cartItemId, response => {
+router.get("/:cartId", CheckAuth.buyerLoggedIn, (req, res, next) => {
+    cart.getCart(req.params.cartId, response => {
         return res.status(response.statusCode).json(response);
     });
 });
 
-// Update cart item ~ Often used to update the item quantity in the cart
+// Update cart ~ Often used to update the item quantity in the cart
 //* Buyer accessible
-router.patch("/:cartItemId", CheckAuth.buyerLoggedIn, Ownership.cartItemBelongsToBuyer, (req, res, next) => {
-    cart.updateCartItem(req.params.cartItemId, req.body.data, response => {
+router.patch("/:cartId", CheckAuth.buyerLoggedIn, Ownership.cartBelongsToBuyer, (req, res, next) => {
+    cart.updateCart(req.params.cartId, req.body.data, response => {
         return res.status(response.statusCode).json(response);
     });
 });
 
-// Delete cart item ~ Remove item from cart
+// Remove cart item ~ Remove item from cart
 //* Buyer accessible
-router.get("/:cartItemId", CheckAuth.buyerLoggedIn, Ownership.cartItemBelongsToBuyer, (req, res, next) => {
-    cart.deleteCartItem(req.params.cartItemId, response => {
+router.patch("/removeCartItem/:cartId", CheckAuth.buyerLoggedIn, Ownership.cartBelongsToBuyer, (req, res, next) => {
+    cart.removeCartItem(req.params.cartId, req.body.productId, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// Deletes the entire cart with the id of cart
+//* Buyer accessible
+router.delete("/:cartId", CheckAuth.buyerLoggedIn, Ownership.cartBelongsToBuyer, (req, res, next) => {
+    cart.deleteCart(req.params.cartId, response => {
         return res.status(response.statusCode).json(response);
     });
 });
