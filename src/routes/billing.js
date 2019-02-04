@@ -15,7 +15,7 @@ router.post('/', CheckAuth.userLoggedIn, (req, res, next) => {
 
 // Update billing information
 //* Logged in user accessible
-router.patch('/', CheckAuth.userLoggedIn, Ownership.billingInfoBelongsToUser, (req, res, next) => {
+router.patch('/:billingId', CheckAuth.userLoggedIn, Ownership.billingInfoBelongsToUser, (req, res, next) => {
     billing.updateBillingInfo(req.userData.id, req.body.data, response => {
         return res.status(response.statusCode).json(response);
     });
@@ -29,7 +29,7 @@ router.get('/', CheckAuth.userLoggedIn, Ownership.billingInfoBelongsToUser, (req
     });
 });
 
-// Get single billing information
+// Get single billing information details
 //* Logged in user accessible
 router.get('/:billingId', CheckAuth.userLoggedIn, Ownership.billingInfoBelongsToUser, (req, res, next) => {
     billing.getSingleBillingInfo(req.params.billingId, response => {

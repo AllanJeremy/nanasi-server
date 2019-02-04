@@ -109,9 +109,9 @@ module.exports.addBillingInfo = (userId, billingInfo, callback) => {
 };
 
 // Update billing information
-module.exports.updateBillingInfo = (userId, updateData, callback) => {
+module.exports.updateBillingInfo = (billingId, updateData, callback) => {
     _updateBillingInfo({
-        user: userId
+        _id: billingId
     }, callback);
 };
 
