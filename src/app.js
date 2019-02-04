@@ -19,6 +19,8 @@ const reviewRoutes = require('./routes/reviews');
 
 const userRoutes = require('./routes/users');
 
+const billingRoutes = require('./routes/billing');
+
 const notificationRoutes = require('./routes/notifications');
 
 const cartRoutes = require('./routes/cart');
@@ -90,6 +92,8 @@ app.use('/orders', orderRoutes);
 app.use('/reviews', reviewRoutes);
 
 app.use('/users', userRoutes);
+
+app.use('/billing', billingRoutes);
 
 app.use('/notifications', notificationRoutes);
 
