@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
 
-require('./users/address');
+require('./address');
 
 const userSchema = new mongoose.Schema({
     firstName: {
