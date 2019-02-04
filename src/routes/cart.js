@@ -14,7 +14,7 @@ const Ownership = require("../middleware/entityOwnership");
 
 // TODO: Resolve abandoned carts
 
-// Add item to cart
+// Add items to cart
 //* Buyer accessible
 router.post("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
     cart.addCartItems(req.userData.id, req.body.items, response => {
