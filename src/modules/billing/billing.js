@@ -1,40 +1,137 @@
+const BillingInfo = require('../../models/billingInfo');
+
 // Libraries
 const Api = require('../../lib/api');
 const FeedbackMessages = require('../../lang/feedbackMessages');
 
-const BillingInfo = require('../../models/billingInfo');
-
 /* 
     HELPERS
 */
+// Add billing information
+function _addBillingInfo(userId, billingInfo, callback) {
+    billingInfo = billingInfo || {};
+    billingInfo.user = userId;
+
+    const billingInfoInstance = new BillingInfo(billingInfo);
+
+    billingInfoInstance.save().then(billingInfoAdded => {
+        return callback(
+            Api.getResponse(true, FeedbackMessages.operationSucceeded(`added billing information`), billingInfoAdded, 201)
+        );
+    }).catch(err => {
+        return callback(
+            Api.getError(err.message, err)
+        );
+    });
+}
+
 // Get multiple billing information
+function _getBillingInfo(filter, callback) {
+    BillingInfo.find(filter)
+        .then(billingInfoFound => {
+            const billingInfoCount = billingInfoFound.length;
+            const isOk = (billingInfoCount > 0);
+            const statusCode = isOk ? 200 : 404;
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(billingInfoFound, 'Billing information') : FeedbackMessages.itemNotFound('Billing information');
+
+            return callback(
+                Api.getResponse(isOk, message, billingInfoFound, statusCode)
+            );
+
+        })
+        .catch(err => {
+            return callback(
+                Api.getError(err.message, err)
+            );
+        });
+}
 
 // Get single billing information
+function _getSingleBillingInfo(filter, callback) {
+    BillingInfo.findOne(filter)
+        .then(billingInfoFound => {
+            if (!billingInfoFound) {
+                return callback(
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Billing information`), undefined, 404)
+                );
+            }
+
+            // Billing information found, return it to the user
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemsFound(`Billing information`), billingInfoFound)
+            );
+        })
+        .catch(err => {
+            return callback(
+                Api.getError(err.message, err)
+            );
+        })
+}
+
+// Update billing information
+function _updateBillingInfo(filter, updateData, callback) {
+    BillingInfo.findOneAndUpdate(filter, updateData)
+        .then(billingInfoFound => {
+            if (!billingInfoFound) {
+                return callback(
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Billing information`), undefined, 403)
+                );
+            }
+        })
+        .catch(err => {
+            return callback(
+                Api.getError(err.message, err)
+            );
+        });
+}
+
+// Delete billing information
+function _deleteBillingInfo(filter, callback) {
+    BillingInfo.findOneAndDelete(filter)
+        .then(billingInfoDeleted => {
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully(`Billing information`), billingInfoDeleted)
+            );
+        })
+        .catch(err => {
+            return callback(
+                Api.getError(err.message, err)
+            );
+        });
+}
 
 /* 
     EXPORTS
 */
-// TODO: Add billing information
+// Add billing information
 module.exports.addBillingInfo = (userId, billingInfo, callback) => {
-
+    _addBillingInfo(userId, billingInfo, callback);
 };
 
-// TODO: Update billing information
+// Update billing information
 module.exports.updateBillingInfo = (userId, updateData, callback) => {
-
+    _updateBillingInfo({
+        user: userId
+    }, callback);
 };
 
-// TODO: Get user billing information
-module.exports.getCurrentUserBillingInfo = (userId, callback) => {
-
+// Get user billing information
+module.exports.getUserBillingInfo = (userId, callback) => {
+    _getBillingInfo({
+        user: userId
+    }, callback);
 };
 
-// TODO: Get single billing information
+// Get single billing information
 module.exports.getSingleBillingInfo = (billingId, callback) => {
-
+    _getSingleBillingInfo({
+        _id: billingId
+    }, callback);
 };
 
-// TODO: Delete billing information
+// Delete billing information
 module.exports.deleteBillingInfo = (billingId, callback) => {
-
+    _deleteBillingInfo({
+        _id: billingId
+    }, callback);
 };

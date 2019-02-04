@@ -24,7 +24,7 @@ router.patch('/', CheckAuth.userLoggedIn, Ownership.billingInfoBelongsToUser, (r
 // Get currently logged in user billing information
 //* Logged in user accessible
 router.get('/', CheckAuth.userLoggedIn, Ownership.billingInfoBelongsToUser, (req, res, next) => {
-    billing.getCurrentUserBillingInfo(req.userData.id, response => {
+    billing.getUserBillingInfo(req.userData.id, response => {
         return res.status(response.statusCode).json(response);
     });
 });
