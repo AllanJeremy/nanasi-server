@@ -89,3 +89,10 @@ module.exports.accountBelongsToUser = (req, res, next) => {
 
     next();
 };
+
+// Billing information belongs to user
+module.exports.billingInfoBelongsToUser = (req, res, next) => {
+    const userId = req.userData.id;
+
+    next();
+};
