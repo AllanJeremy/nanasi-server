@@ -6,6 +6,37 @@ const CheckAuth = require('../middleware/checkAuth');
 
 const Api = require('../lib/api');
 
+
+/* ADDRESS ENDPOINTS */
+// Add address
+router.post('/address', CheckAuth.userLoggedIn, (req, res, next) => {
+    user.addAddress(req.userData.id, req.body.data, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// Get single address
+router.get('/address/:addressId', CheckAuth.userLoggedIn, (req, res, next) => {
+    user.getSingleAddress(req.params.addressId, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// Update address
+router.patch('/address/:addressId', CheckAuth.userLoggedIn, (req, res, next) => {
+    user.updateAddress(req.params.addressId, req.body.data, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// Delete address
+router.delete('/address/:addressId', CheckAuth.userLoggedIn, (req, res, next) => {
+    user.deleteAddress(req.userData.id, req.params.addressId, response => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+
 /* USER ENDPOINTS */
 // Get a user given a certain token
 router.get('/token', CheckAuth.userLoggedIn, (req, res, next) => {
@@ -32,48 +63,32 @@ router.get('/:userId', (req, res, next) => { //TODO: Add db code
 // Activate user
 //* Admin accessible
 router.patch('/activate/:userId', CheckAuth.adminLoggedIn, (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const userId = req.param.userId;
-    res.json({
-        id: userId,
-        message: `Activating user with the id of ${userId}`
+    user.enableUserAccount(req.params.userId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Deactivate currently logged in user ~ equivalent of 'delete'
 //* Logged in user accessible
 router.patch('/deactivate', CheckAuth.userLoggedIn, (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const userId = req.param.userId;
-    res.json({
-        id: userId,
-        message: `Activating user with the id of ${userId}`
+    user.disableUserAccount(req.userData.id, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
 // Deactivate user with the id of `:userId`
 //* Admin accessible
 router.patch('/deactivate/:userId', CheckAuth.adminLoggedIn, (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const userId = req.param.userId;
-    res.json({
-        id: userId,
-        message: `Activating user with the id of ${userId}`
+    user.disableUserAccount(req.params.userId, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
-// Update user
+// Update currently logged in user account
 //* Logged in user accessible
-router.patch('/:userId', CheckAuth.userLoggedIn, (req, res, next) => { //TODO: Add db code
-    res.status(200);
-
-    const userId = req.param.userId;
-    res.json({
-        id: userId,
-        message: `Viewing user with the id of ${userId}`
+router.patch('/', CheckAuth.userLoggedIn, (req, res, next) => { //TODO: Add db code
+    user.updateUser(req.userData.id, req.body.data, response => {
+        return res.status(response.statusCode).json(response);
     });
 });
 
