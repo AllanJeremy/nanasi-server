@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
 
+require('./users/address');
+
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -42,7 +44,10 @@ const userSchema = new mongoose.Schema({
         otpType: String,
         expiry: Date
     },
-
+    address: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Address'
+    },
     registrationConfirmed: {
         type: Boolean,
         default: false

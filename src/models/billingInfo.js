@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const PaymentMethods = require('../config/paymentMethods');
 
+require('./users/address');
+
 const billingInfoSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
