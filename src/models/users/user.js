@@ -56,7 +56,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-
+    balance: { //Account balance
+        type: Number,
+        default: 0
+    }
 });
 
 // Exports

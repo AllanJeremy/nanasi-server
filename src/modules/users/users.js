@@ -44,9 +44,7 @@ function _getSingleUserByFilter(filter, callback) {
         const message = isOk ? FeedbackMessages.itemsFound('User') : FeedbackMessages.itemNotFound('User');
 
         return callback(
-            Api.getResponse(isOk, message, {
-                user: userFound
-            }, statusCode)
+            Api.getResponse(isOk, message, userFound, statusCode)
         );
     });
 }
