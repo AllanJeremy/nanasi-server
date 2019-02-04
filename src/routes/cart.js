@@ -30,21 +30,6 @@ router.get("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
     });
 });
 
-// Get single cart
-//* Buyer accessible
-router.get("/:cartId", CheckAuth.buyerLoggedIn, (req, res, next) => {
-    cart.getCart(req.params.cartId, response => {
-        return res.status(response.statusCode).json(response);
-    });
-});
-
-// Update cart ~ Often used to update the item quantity in the cart
-//* Buyer accessible
-router.patch("/:cartId", CheckAuth.buyerLoggedIn, Ownership.cartBelongsToBuyer, (req, res, next) => {
-    cart.updateCart(req.params.cartId, req.body.data, response => {
-        return res.status(response.statusCode).json(response);
-    });
-});
 
 // Remove cart item ~ Remove item from cart
 //* Buyer accessible
