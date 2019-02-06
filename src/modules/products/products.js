@@ -91,7 +91,9 @@ module.exports.getProducts = (filter, callback) => {
 // Get products by storeId
 module.exports.getStoreProducts = (storeId, callback) => {
     return _getProductsByFilter({
-        storeId: storeId
+        store: {
+            _id: storeId
+        }
     }, callback);
 };
 
