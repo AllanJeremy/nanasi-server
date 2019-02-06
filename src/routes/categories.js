@@ -24,6 +24,13 @@ router.get('/', (req, res, next) => {
     });
 });
 
+// Get product type categories
+router.get('/categoryByProductType/:productTypeId', (req, res, next) => {
+    category.getProductTypeCategories(req.params.productTypeId, (response) => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
 // Get single category
 router.get('/:categoryId', (req, res, next) => {
     category.getSingleCategory(req.params.categoryId, (response) => {
@@ -31,12 +38,7 @@ router.get('/:categoryId', (req, res, next) => {
     });
 });
 
-// Get product type categories
-router.get('/categoryByProductType/:productTypeId', (req, res, next) => {
-    category.getProductTypeCategories(req.params.productTypeId, (response) => {
-        return res.status(response.statusCode).json(response);
-    });
-});
+
 
 
 module.exports = router;
