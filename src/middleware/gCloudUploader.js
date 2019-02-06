@@ -77,7 +77,7 @@ function sendUploadToGCS(req, res, next) {
         metadata: {
             contentType: req.file.mimetype
         },
-        resumable: true
+        resumable: false
     });
 
     stream.on('error', (err) => {
