@@ -12,7 +12,7 @@
              const cartCount = cartFound.length;
              const isOk = (cartCount > 0);
              const statusCode = isOk ? 200 : 404;
-             const message = isOk ? FeedbackMessages.itemsFoundWithCount(cartFound, 'Carts') : FeedbackMessages.itemNotFound('Carts');
+             const message = isOk ? FeedbackMessages.itemsFoundWithCount(cartFound, 'Cart items') : FeedbackMessages.itemNotFound('Carts');
 
              return callback(
                  Api.getResponse(isOk, message, {

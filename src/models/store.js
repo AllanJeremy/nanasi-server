@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+require('./image');
 const storeSchema = new mongoose.Schema({
     merchant: {
         type: mongoose.Schema.Types.ObjectId,
@@ -8,6 +9,11 @@ const storeSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+
+    image: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Image"
     },
 
     //Type of product the store is expected to sell
