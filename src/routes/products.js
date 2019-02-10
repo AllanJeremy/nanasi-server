@@ -116,6 +116,7 @@ router.patch('/:productId', CheckAuth.merchantLoggedIn, Ownership.productBelongs
 // Delete products
 //* Merchant accessible
 router.delete('/:productId', CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, (req, res, next) => {
+    console.log(`delete product`);
     product.deleteProduct(req.params.productId, response => {
         return res.status(response.statusCode).json(response);
     });
