@@ -17,8 +17,8 @@ function _sendOwnershipAuthFailedResponse(res, message) {
 }
 
 // Server error while trying to get ownership
-function _serverErrorInOwnershipAuth(err) {
-    return Api.getError(OwnershipMessages.serverError(err.message), err);
+function _serverErrorInOwnershipAuth(res, err) {
+    return res.status(500).json(Api.getError(OwnershipMessages.serverError(err.message), err));
 }
 
 /* 
@@ -40,7 +40,7 @@ module.exports.storeBelongsToMerchant = (req, res, next) => {
         // Store belongs to merchant ~ we can move to next middleware
         next();
     }).catch(err => {
-        return _serverErrorInOwnershipAuth(err);
+        return _serverErrorInOwnershipAuth(res, err);
     });
 };
 
@@ -63,7 +63,7 @@ module.exports.productBelongsToMerchant = (req, res, next) => {
         // Product belongs to merchant ~ we can move to next middleware
         next();
     }).catch(err => {
-        return _serverErrorInOwnershipAuth(err);
+        return _serverErrorInOwnershipAuth(res, err);
     });
 };
 
@@ -89,7 +89,7 @@ module.exports.productVariantBelongsToMerchant = (req, res, next) => {
         // Store belongs to merchant ~ we can move to next middleware
         next();
     }).catch(err => {
-        return _serverErrorInOwnershipAuth(err);
+        return _serverErrorInOwnershipAuth(res, err);
     });
 };
 
@@ -97,8 +97,25 @@ module.exports.orderBelongsToMerchant = (req, res, next) => {
     const merchantId = req.userData.id;
     const orderId = req.params.orderId || req.body.userId;
 
-    console.log(`Checking if order belongs to merchant`);
-    next();
+    Order.find({
+        _id: orderId,
+        "product.store.merchant": merchantId
+    }).populate({
+        path: 'product',
+        select: {
+            path: 'store',
+            select: 'merchant'
+        }
+    }).then((orderFound) => {
+        if (!orderFound) {
+            return _sendOwnershipAuthFailedResponse(res, OwnershipMessages.orderDoesNotBelongToMerchant());
+        }
+
+        // Store belongs to merchant ~ we can move to next middleware
+        next();
+    }).catch(err => {
+        return _serverErrorInOwnershipAuth(res, err);
+    });
 };
 /* 
     BUYER OWNERSHIP
