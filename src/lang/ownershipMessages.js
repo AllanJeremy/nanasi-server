@@ -45,3 +45,10 @@ module.exports.accountDoesNotBelongToUser = () => {
 module.exports.billingInfoDoesNotBelongToUser = () => {
     return _entityDoesNotBelongToUser('billing information', 'user');
 };
+
+module.exports.serverError = (errorMessage) => {
+    const message = `A server error occured while trying to verify ownership:
+    ${errorMessage}`;
+
+    return message;
+};
