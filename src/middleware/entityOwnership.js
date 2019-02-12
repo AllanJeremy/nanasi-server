@@ -6,12 +6,17 @@ const Product = require("../models/products/product");
 const ProductVariant = require("../models/products/variant");
 
 // Returns a JSON response - used when ownership authorization failed, takes the request response as the first parameter, along with a message
-function _ownershipAuthFailedResponse(res, message) {
+function _sendOwnershipAuthFailedResponse(res, message) {
     const statusCode = 401; //401 - Unauthorized status code
 
     return res.status(statusCode).json(
         Api.getResponse(false, message, undefined, statusCode)
     );
+}
+
+// Server error while trying to get ownership
+function _serverErrorInOwnershipAuth(err) {
+    return Api.getError(OwnershipMessages.serverError(err.message), err);
 }
 
 /* 
@@ -22,8 +27,19 @@ module.exports.storeBelongsToMerchant = (req, res, next) => {
     const merchantId = req.userData.id;
     const storeId = req.params.storeId;
 
+    Store.find({
+        _id: storeId,
+        merchant: merchantId
+    }).then((storeFound) => {
+        if (!storeFound) {
+            return _sendOwnershipAuthFailedResponse(res, OwnershipMessages.storeDoesNotBelongToMerchant());
+        }
 
-    next();
+        // Store belongs to merchant ~ we can move to next middleware
+        next();
+    }).catch(err => {
+        return _serverErrorInOwnershipAuth(err);
+    });
 };
 
 // Product belongs to merchant
