@@ -47,8 +47,22 @@ module.exports.productBelongsToMerchant = (req, res, next) => {
     const merchantId = req.userData.id;
     const productId = req.params.productId;
 
-    console.log(`Merchant id: ${merchantId} and Product id: ${productId}`);
-    next();
+    Product.find({
+        _id: productId,
+        "store.merchant": merchantId
+    }).populate({
+        path: 'store',
+        select: 'merchant'
+    }).then((productFound) => {
+        if (!productFound) {
+            return _sendOwnershipAuthFailedResponse(res, OwnershipMessages.productDoesNotBelongToMerchant());
+        }
+
+        // Store belongs to merchant ~ we can move to next middleware
+        next();
+    }).catch(err => {
+        return _serverErrorInOwnershipAuth(err);
+    });
 };
 
 // Product variant belongs to merchant
