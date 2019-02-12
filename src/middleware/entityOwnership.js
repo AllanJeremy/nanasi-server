@@ -6,6 +6,9 @@ const Product = require("../models/products/product");
 const ProductVariant = require("../models/products/variant");
 const Order = require("../models/orders/order");
 const Cart = require("../models/cart");
+const Review = require("../models/reviews/review");
+const ReviewReply = require("../models/reviews/reply");
+
 
 // Returns a JSON response - used when ownership authorization failed, takes the request response as the first parameter, along with a message
 function _sendOwnershipAuthFailedResponse(res, message) {
