@@ -4,6 +4,8 @@ const OwnershipMessages = require("../lang/ownershipMessages");
 const Store = require("../models/store");
 const Product = require("../models/products/product");
 const ProductVariant = require("../models/products/variant");
+const Order = require("../models/orders/order");
+const Cart = require("../models/cart");
 
 // Returns a JSON response - used when ownership authorization failed, takes the request response as the first parameter, along with a message
 function _sendOwnershipAuthFailedResponse(res, message) {
@@ -53,12 +55,12 @@ module.exports.productBelongsToMerchant = (req, res, next) => {
     }).populate({
         path: 'store',
         select: 'merchant'
-    }).then((productFound) => {
-        if (!productFound) {
+    }).then((variantFound) => {
+        if (!variantFound) {
             return _sendOwnershipAuthFailedResponse(res, OwnershipMessages.productDoesNotBelongToMerchant());
         }
 
-        // Store belongs to merchant ~ we can move to next middleware
+        // Product belongs to merchant ~ we can move to next middleware
         next();
     }).catch(err => {
         return _serverErrorInOwnershipAuth(err);
@@ -70,8 +72,25 @@ module.exports.productVariantBelongsToMerchant = (req, res, next) => {
     const merchantId = req.userData.id;
     const variantId = req.params.variantId;
 
-    console.log(`Merchant id: ${merchantId} and Variant id: ${variantId}`);
-    next();
+    ProductVariant.find({
+        _id: variantId,
+        "product.store.merchant": merchantId
+    }).populate({
+        path: 'product',
+        select: {
+            path: 'store',
+            select: 'merchant'
+        }
+    }).then((variantFound) => {
+        if (!variantFound) {
+            return _sendOwnershipAuthFailedResponse(res, OwnershipMessages.productVariantDoesNotBelongToMerchant());
+        }
+
+        // Store belongs to merchant ~ we can move to next middleware
+        next();
+    }).catch(err => {
+        return _serverErrorInOwnershipAuth(err);
+    });
 };
 
 module.exports.orderBelongsToMerchant = (req, res, next) => {
