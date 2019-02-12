@@ -134,7 +134,19 @@ module.exports.orderBelongsToBuyer = (req, res, next) => {
     const buyerId = req.userData.id;
     const orderId = req.params.orderId;
 
-    next();
+    Order.find({
+        _id: orderId,
+        user: buyerId
+    }).then((orderFound) => {
+        if (!orderFound) {
+            return _sendOwnershipAuthFailedResponse(res, OwnershipMessages.orderDoesNotBelongToBuyer());
+        }
+
+        // Store belongs to merchant ~ we can move to next middleware
+        next();
+    }).catch(err => {
+        return _serverErrorInOwnershipAuth(res, err);
+    });
 };
 
 /* 
