@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const variantSchema = new mongoose.Schema({
     name: String,
@@ -10,13 +10,13 @@ const variantSchema = new mongoose.Schema({
     salePrice: Number,
     images: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Image',
+        ref: "Image",
     }],
     product: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product'
+        ref: "Product"
     }
 });
 
 // Exports
-module.exports = mongoose.model('Variant', variantSchema);
+module.exports = mongoose.model("Variant", variantSchema);

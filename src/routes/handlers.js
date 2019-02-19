@@ -1,10 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const CheckAuth = require('../middleware/checkAuth');
+const CheckAuth = require("../middleware/checkAuth");
 
-const CheckoutHandler = require('../handlers/checkoutHandler');
+const CheckoutHandler = require("../handlers/checkoutHandler");
 
-router.get('/checkout', (req, res, next) => {
+router.get("/checkout", (req, res, next) => {
 
     // CheckoutHandler.handleCheckout();
 });

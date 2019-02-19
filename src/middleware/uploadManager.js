@@ -1,14 +1,14 @@
 //* Sets the various directories that will be used for uploads
-const UploadConfig = require('../config/uploads');
+const UploadConfig = require("../config/uploads");
 
-const Api = require('../lib/api');
-const FeedbackMessages = require('../lang/feedbackMessages');
+const Api = require("../lib/api");
+const FeedbackMessages = require("../lang/feedbackMessages");
 
-const Image = require('../models/image');
+const Image = require("../models/image");
 
-const user = require('../modules/users/users');
-const products = require('../modules/products/products');
-const category = require('../modules/products/categories');
+const user = require("../modules/users/users");
+const products = require("../modules/products/products");
+const category = require("../modules/products/categories");
 
 /* 
     IMAGES

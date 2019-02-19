@@ -1,23 +1,23 @@
 // Modules
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 // Config
-const OtpConfig = require('../../config/otp');
-const JwtConfig = require('../../config/jwt');
+const OtpConfig = require("../../config/otp");
+const JwtConfig = require("../../config/jwt");
 
 // Libraries
-const Api = require('../../lib/api');
+const Api = require("../../lib/api");
 
 // Models
-const User = require('../../models/users/user');
+const User = require("../../models/users/user");
 
 //Lang files
-const FeedbackMessages = require('../../lang/feedbackMessages');
-const AuthMessages = require('../../lang/authMessages');
+const FeedbackMessages = require("../../lang/feedbackMessages");
+const AuthMessages = require("../../lang/authMessages");
 
 // Modules
-const Otp = require('../../modules/auth/otp');
-const user = require('../../modules/users/users');
+const Otp = require("../../modules/auth/otp");
+const user = require("../../modules/users/users");
 
 function _getJwtData(userData) {
     let data = {
@@ -52,7 +52,7 @@ module.exports.register = (userData, callback) => {
     }).exec().then(user => {
         // If we found a user by that phone
         if (user.length > 0) {
-            const message = FeedbackMessages.itemWithAttributeExists('User', 'phone number');
+            const message = FeedbackMessages.itemWithAttributeExists("User", "phone number");
 
             return callback(Api.getResponse(false, message, null, 409));
 
@@ -72,7 +72,7 @@ module.exports.register = (userData, callback) => {
                         // Add OTP data to the database
                         console.debug(`Adding otp to DB`);
                         Otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
-                            return callback(Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('user'), createdUser, 201));
+                            return callback(Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("user"), createdUser, 201));
                         });
                     }
                 });
@@ -106,7 +106,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
             // If no users were found ~ reject otp verfication
             if (!userFound) {
                 return callback(
-                    Api.getError(FeedbackMessages.itemNotFound('User to update'), null, 404)
+                    Api.getError(FeedbackMessages.itemNotFound("User to update"), null, 404)
                 );
             }
             userFound.otp = undefined; // Remove the OTP ~  We are done with it for now

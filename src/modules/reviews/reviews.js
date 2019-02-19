@@ -1,8 +1,8 @@
-const Review = require('../../models/reviews/review');
-const ReviewReply = require('../../models/reviews/reply');
+const Review = require("../../models/reviews/review");
+const ReviewReply = require("../../models/reviews/reply");
 
-const Api = require('../../lib/api');
-const FeedbackMessages = require('../../lang/feedbackMessages');
+const Api = require("../../lib/api");
+const FeedbackMessages = require("../../lang/feedbackMessages");
 
 /* 
    REVIEW HELPERS
@@ -10,7 +10,7 @@ const FeedbackMessages = require('../../lang/feedbackMessages');
 function _getReviewsByFilter(filter, callback) {
     filter = filter || {};
     Review.find(filter)
-        .populate('user', 'firstName lastName')
+        .populate("user", "firstName lastName")
         .then(reviewsFound => {
             const reviewCount = reviewsFound.length;
             const isOk = reviewCount > 0;
@@ -34,7 +34,7 @@ function _getReviewsByFilter(filter, callback) {
 function _getSingleReviewByFilter(filter, callback) {
     filter = filter || {};
     Review.findOne(filter)
-        .populate('user', 'firstName lastName')
+        .populate("user", "firstName lastName")
         .then(reviewFound => {
             const statusCode = reviewFound ? 200 : 404;
             const message = reviewFound ? FeedbackMessages.itemsFound(`Review`) : FeedbackMessages.itemNotFound(`Review`);
@@ -56,7 +56,7 @@ function _getSingleReviewByFilter(filter, callback) {
 function _getReviewRepliesByFilter(filter, callback) {
     filter = filter || {};
     ReviewReply.find(filter)
-        .populate('user', 'firstName lastName')
+        .populate("user", "firstName lastName")
         .then(reviewsFound => {
             const reviewCount = reviewsFound.length;
             const isOk = reviewCount > 0;
@@ -80,7 +80,7 @@ function _getReviewRepliesByFilter(filter, callback) {
 function _getSingleReviewReplyByFilter(filter, callback) {
     filter = filter || {};
     ReviewReply.findOne(filter)
-        .populate('user', 'firstName lastName')
+        .populate("user", "firstName lastName")
         .then(reviewFound => {
             const statusCode = reviewFound ? 200 : 404;
             const message = reviewFound ? FeedbackMessages.itemsFound(`Review`) : FeedbackMessages.itemNotFound(`Review`);
@@ -152,7 +152,7 @@ module.exports.deleteReview = (reviewId, callback) => {
 
         if (reviewDeleted) {
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('review'))
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully("review"))
             );
         } else {
             return callback(
@@ -224,7 +224,7 @@ module.exports.deleteReviewReply = (replyId, callback) => {
     return ReviewReply.findByIdAndDelete(replyId).then((replyDeleted) => {
         if (replyDeleted) {
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('review reply'))
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully("review reply"))
             );
         } else {
             return callback(

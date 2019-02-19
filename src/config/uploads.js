@@ -3,19 +3,19 @@ module.exports.sizeLimits = {
 };
 
 module.exports.acceptedTypes = [
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/tiff',
-    'image/svg+xml'
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/tiff",
+    "image/svg+xml"
 ];
 
 // Directories used to upload the various files
 module.exports.directory = {
-    PRODUCTS: 'images/products',
-    PRODUCT_TYPES: 'images/productTypes',
-    CATEGORIES: 'images/categories',
-    USERS: 'images/users'
+    PRODUCTS: "images/products",
+    PRODUCT_TYPES: "images/productTypes",
+    CATEGORIES: "images/categories",
+    USERS: "images/users"
 };
 
 module.exports.maxUploads = {

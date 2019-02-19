@@ -1,4 +1,4 @@
 module.exports = {
-    CARD: 'card',
-    MPESA: 'mpesa'
+    CARD: "card",
+    MPESA: "mpesa"
 };

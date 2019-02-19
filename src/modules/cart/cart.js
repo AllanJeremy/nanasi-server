@@ -1,18 +1,18 @@
- const Cart = require('../../models/cart');
- const Api = require('../../lib/api');
- const FeedbackMessages = require('../../lang/feedbackMessages');
+ const Cart = require("../../models/cart");
+ const Api = require("../../lib/api");
+ const FeedbackMessages = require("../../lang/feedbackMessages");
 
  // Get multiple cart by filter
  function _getCartsByFilter(filter, callback) {
      filter = filter || {};
      return Cart.find(filter)
-         .populate('product', 'name')
-         .populate('user', '_id name')
+         .populate("product", "name")
+         .populate("user", "_id name")
          .then((cartFound) => {
              const cartCount = cartFound.length;
              const isOk = (cartCount > 0);
              const statusCode = isOk ? 200 : 404;
-             const message = isOk ? FeedbackMessages.itemsFoundWithCount(cartFound, 'Cart items') : FeedbackMessages.itemNotFound('Carts');
+             const message = isOk ? FeedbackMessages.itemsFoundWithCount(cartFound, "Cart items") : FeedbackMessages.itemNotFound("Carts");
 
              return callback(
                  Api.getResponse(isOk, message, {
@@ -23,7 +23,7 @@
          })
          .catch(err => {
              return callback(
-                 Api.getError(FeedbackMessages.operationFailed('get cart'), err)
+                 Api.getError(FeedbackMessages.operationFailed("get cart"), err)
              );
          });
  }
@@ -31,12 +31,12 @@
  // Get cartItem by filter
  function _getSingleCartByFilter(filter, callback) {
      return Cart.findOne(filter)
-         .populate('product', 'name')
-         .populate('user')
+         .populate("product", "name")
+         .populate("user")
          .then((cartItemFound) => {
              const isOk = cartItemFound ? true : false;
              const statusCode = isOk ? 200 : 404;
-             const message = isOk ? FeedbackMessages.itemsFound('Cart item') : FeedbackMessages.itemNotFound('Cart');
+             const message = isOk ? FeedbackMessages.itemsFound("Cart item") : FeedbackMessages.itemNotFound("Cart");
 
              return callback(
                  Api.getResponse(isOk, message, {
@@ -46,7 +46,7 @@
          })
          .catch(err => {
              return callback(
-                 Api.getError(FeedbackMessages.operationFailed('get cart item'), err)
+                 Api.getError(FeedbackMessages.operationFailed("get cart item"), err)
              );
          });
  }
@@ -67,7 +67,7 @@
 
                  return cartItem.save().then(createdCartItem => {
                      return callback(
-                         Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Cart item'), createdCartItem, 201)
+                         Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Cart item"), createdCartItem, 201)
                      );
                  }).catch(err => {
                      return callback(
@@ -98,7 +98,7 @@
              cartFound.save()
                  .then(createdCartItem => {
                      return callback(
-                         Api.getResponse(true, FeedbackMessages.operationSucceeded('added cart item'), createdCartItem, 201)
+                         Api.getResponse(true, FeedbackMessages.operationSucceeded("added cart item"), createdCartItem, 201)
                      );
                  }).catch(err => {
                      return callback(
@@ -206,7 +206,7 @@
          if (cartItemDeleted) {
              // No errors ~ Deleted the cartItem
              return callback(
-                 Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('cart item'), {
+                 Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully("cart item"), {
                      id: cartId,
                      cartItemName: cartItemDeleted.name
                  })
@@ -225,7 +225,7 @@
 
  module.exports.getCartTotal = (cartId, callback) => { //TODO: Debug
      Cart.findById(cartId)
-         .populate('items.product')
+         .populate("items.product")
          .then(cartItemFound => {
              if (!cartItemFound) {
                  return callback(

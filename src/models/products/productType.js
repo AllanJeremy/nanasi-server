@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const productTypeSchema = new mongoose.Schema({
     name: {
@@ -8,11 +8,11 @@ const productTypeSchema = new mongoose.Schema({
 
     image: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Image'
+        ref: "Image"
     }
 }, {
-    collection: 'productTypes'
+    collection: "productTypes"
 });
 
 // Exports
-module.exports = mongoose.model('ProductType', productTypeSchema);
+module.exports = mongoose.model("ProductType", productTypeSchema);

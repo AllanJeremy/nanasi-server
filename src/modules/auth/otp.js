@@ -1,21 +1,21 @@
 // Packages
-const moment = require('moment');
+const moment = require("moment");
 
 // Config
-const OtpConfig = require('../../config/otp');
+const OtpConfig = require("../../config/otp");
 
 // Models
-const User = require('../../models/users/user');
+const User = require("../../models/users/user");
 
 //Libraries - Can be used in multiple applications
-const Api = require('../../lib/api');
-const Utility = require('../../lib/utility');
-const Messaging = require('../../lib/messaging');
+const Api = require("../../lib/api");
+const Utility = require("../../lib/utility");
+const Messaging = require("../../lib/messaging");
 
 // Message templates
-const SmsTemplates = require('../../lang/smsTemplates');
-const FeedbackMessages = require('../../lang/feedbackMessages');
-const AuthMessages = require('../../lang/authMessages');
+const SmsTemplates = require("../../lang/smsTemplates");
+const FeedbackMessages = require("../../lang/feedbackMessages");
+const AuthMessages = require("../../lang/authMessages");
 
 // Generates and returns an otp
 function generateOtp() {
@@ -29,7 +29,7 @@ function generateOtp() {
 
 // Generates and returns otp expiration time
 function _generateOtpExpirationTime() {
-    const expiry = moment().add(OtpConfig.OTP_EXPIRY_TIME, 'seconds').unix();
+    const expiry = moment().add(OtpConfig.OTP_EXPIRY_TIME, "seconds").unix();
 
     return expiry;
 }
@@ -76,7 +76,7 @@ module.exports.sendOtp = (phone, otpType, callback) => {
                     }
                 };
 
-                //TODO: Check if OTP was actually sent on Africa's talking side
+                //TODO: Check if OTP was actually sent on Africa"s talking side
                 return callback(
                     Api.getResponse(true, AuthMessages.otpSendSuccessful, otpData)
                 );
@@ -94,7 +94,7 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
     const updateOptions = {
         new: true,
         runValidators: true,
-        set: 'phone'
+        set: "phone"
     };
 
     // 
@@ -123,7 +123,7 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
 
 // Verify otp ~ Returns true if OTP was valid & false if otp was invalid
 module.exports.verifyOtp = (phone, otpToVerify, otpType, callback) => {
-    const dataToCollect = '_id firstName lastName phone accountType isActive'; //TODO: Move into config as "publicly" accessible user data
+    const dataToCollect = "_id firstName lastName phone accountType isActive"; //TODO: Move into config as "publicly" accessible user data
 
     return User.findOne({
             phone: phone,

@@ -1,15 +1,15 @@
 //Config
-const UploadConfig = require('../../config/uploads');
+const UploadConfig = require("../../config/uploads");
 
 // Models
-const Product = require('../../models/products/product');
-const ProductVariant = require('../../models/products/variant');
+const Product = require("../../models/products/product");
+const ProductVariant = require("../../models/products/variant");
 
 // Lang files
-const FeedbackMessages = require('../../lang/feedbackMessages');
+const FeedbackMessages = require("../../lang/feedbackMessages");
 
 // Libraries
-const Api = require('../../lib/api');
+const Api = require("../../lib/api");
 
 /* 
     PRODUCT HELPERS
@@ -18,14 +18,14 @@ const Api = require('../../lib/api');
 function _getProductsByFilter(filter, callback) {
     filter = filter || {};
     return Product.find(filter)
-        .populate('store', '_id name')
-        .populate('images')
-        .populate('variants')
+        .populate("store", "_id name")
+        .populate("images")
+        .populate("variants")
         .then((productsFound) => {
             const productCount = productsFound.length;
             const isOk = (productCount > 0);
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFoundWithCount(productsFound, 'Products') : FeedbackMessages.itemNotFound('Products');
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(productsFound, "Products") : FeedbackMessages.itemNotFound("Products");
 
             return callback(
                 Api.getResponse(isOk, message, {
@@ -36,7 +36,7 @@ function _getProductsByFilter(filter, callback) {
         })
         .catch(err => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get products'), err)
+                Api.getError(FeedbackMessages.operationFailed("get products"), err)
             );
         });
 }
@@ -44,13 +44,13 @@ function _getProductsByFilter(filter, callback) {
 // Get product by filter
 function _getSingleProductByFilter(filter, callback) {
     return Product.findOne(filter)
-        .populate('store', '_id name')
-        .populate('images')
-        .populate('variants')
+        .populate("store", "_id name")
+        .populate("images")
+        .populate("variants")
         .then((productFound) => {
             const isOk = productFound ? true : false;
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFound('Product') : FeedbackMessages.itemNotFound('Product');
+            const message = isOk ? FeedbackMessages.itemsFound("Product") : FeedbackMessages.itemNotFound("Product");
 
             return callback(
                 Api.getResponse(isOk, message, {
@@ -60,7 +60,7 @@ function _getSingleProductByFilter(filter, callback) {
         })
         .catch(err => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get products'), err)
+                Api.getError(FeedbackMessages.operationFailed("get products"), err)
             );
         });
 }
@@ -74,7 +74,7 @@ module.exports.createProduct = (productData, callback) => {
 
     return newProduct.save().then(createdProduct => {
         return callback(
-            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Product'), createdProduct, 201)
+            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Product"), createdProduct, 201)
         );
     }).catch(err => {
         return callback(
@@ -141,7 +141,7 @@ module.exports.deleteProduct = (productId, callback) => {
         if (productDeleted) {
             // No errors ~ Deleted the product
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('product'), {
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully("product"), {
                     id: productId,
                     productName: productDeleted.name
                 })
@@ -197,7 +197,7 @@ module.exports.addProductImage = (productId, imageId, callback) => {
 // Delete product image
 module.exports.deleteProductImage = (productId, imageId, callback) => {
     Product.findById(productId)
-        .populate('images')
+        .populate("images")
         .then((productFound) => {
             if (!productFound) {
                 return callback(
@@ -255,12 +255,12 @@ module.exports.deleteProductImage = (productId, imageId, callback) => {
 function _getProductVariantsByFilter(filter, callback) {
     filter = filter || {};
     return ProductVariant.find(filter)
-        .populate('images')
+        .populate("images")
         .then((productVariantsFound) => {
             const productVariantCount = productVariantsFound.length;
             const isOk = (productVariantCount > 0);
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFoundWithCount(productVariantsFound, 'Product variants') : FeedbackMessages.itemNotFound('Product variants');
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(productVariantsFound, "Product variants") : FeedbackMessages.itemNotFound("Product variants");
 
             return callback(
                 Api.getResponse(isOk, message, {
@@ -271,7 +271,7 @@ function _getProductVariantsByFilter(filter, callback) {
         })
         .catch(err => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get product variants'), err)
+                Api.getError(FeedbackMessages.operationFailed("get product variants"), err)
             );
         });
 }
@@ -279,11 +279,11 @@ function _getProductVariantsByFilter(filter, callback) {
 // Get productVariant by filter
 function _getSingleProductVariantByFilter(filter, callback) {
     return ProductVariant.findOne(filter)
-        .populate('images')
+        .populate("images")
         .then((productVariantFound) => {
             const isOk = productVariantFound ? true : false;
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFound('Product variant') : FeedbackMessages.itemNotFound('Product variant');
+            const message = isOk ? FeedbackMessages.itemsFound("Product variant") : FeedbackMessages.itemNotFound("Product variant");
 
             return callback(
                 Api.getResponse(isOk, message, {
@@ -293,7 +293,7 @@ function _getSingleProductVariantByFilter(filter, callback) {
         })
         .catch(err => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get product variant'), err)
+                Api.getError(FeedbackMessages.operationFailed("get product variant"), err)
             );
         });
 }
@@ -322,11 +322,11 @@ module.exports.createProductVariant = (productVariantData, callback) => {
             // If the product was found
             if (productFound) {
                 return callback(
-                    Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Product variant'), createdProductVariant, 201)
+                    Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Product variant"), createdProductVariant, 201)
                 );
             } else { // Product not found
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound('Product'), null, 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound("Product"), null, 404)
                 );
             }
         });
@@ -379,7 +379,7 @@ module.exports.deleteProductVariant = (productVariantId, callback) => {
         if (productVariantDeleted) {
             // No errors ~ Deleted the productVariant
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('productVariant'), {
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully("productVariant"), {
                     id: productVariantId,
                     productVariantName: productVariantDeleted.name
                 })

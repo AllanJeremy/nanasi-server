@@ -1,15 +1,15 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const AccountTypes = require('../config/accountTypes');
-const User = require('../models/users/user');
+const AccountTypes = require("../config/accountTypes");
+const User = require("../models/users/user");
 
-const Api = require('../lib/api');
+const Api = require("../lib/api");
 
-const AuthMessages = require('../lang/authMessages');
+const AuthMessages = require("../lang/authMessages");
 
 function _getLoggedIn(req) {
     try {
-        const token = (req.headers.authorization.split(' '))[1];
+        const token = (req.headers.authorization.split(" "))[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         return decoded;

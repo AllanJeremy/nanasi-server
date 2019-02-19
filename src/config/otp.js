@@ -4,6 +4,6 @@ module.exports.OTP_LENGTH = 6;
 module.exports.OTP_EXPIRY_TIME = 60;
 
 module.exports.OtpTypes = {
-    REGISTER: 'registration',
-    LOGIN: 'login'
+    REGISTER: "registration",
+    LOGIN: "login"
 };

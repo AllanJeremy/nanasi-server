@@ -1,11 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-require('./productType');
+require("./productType");
 
 const categorySchema = new mongoose.Schema({
     productType: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'ProductType'
+        ref: "ProductType"
     },
 
     name: {
@@ -15,10 +15,10 @@ const categorySchema = new mongoose.Schema({
 
     image: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Image'
+        ref: "Image"
     }
 }, {
-    collection: 'categories'
+    collection: "categories"
 });
 
-module.exports = mongoose.model('Category', categorySchema);
+module.exports = mongoose.model("Category", categorySchema);

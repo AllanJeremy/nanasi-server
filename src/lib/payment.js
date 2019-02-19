@@ -2,18 +2,18 @@ const {
     AfricasTalking,
     APP_PRODUCT_NAME,
     NANASI_HOLDINGS_PRODUCT_NAME
-} = require('../config/africasTalking');
+} = require("../config/africasTalking");
 const Payments = AfricasTalking.PAYMENTS;
-const NanasiConfig = require('../config/nanasi');
+const NanasiConfig = require("../config/nanasi");
 
 // Checkout
 module.exports.checkout = (phone, amount, meta, currencyCode, callback) => {
-    currencyCode = currencyCode || 'KES';
+    currencyCode = currencyCode || "KES";
 
     const options = {
         productName: APP_PRODUCT_NAME,
         phoneNumber: phone,
-        providerChannel: 'Athena', //TODO: Remove in production
+        providerChannel: "Athena", //TODO: Remove in production
         currencyCode: currencyCode,
         amount: amount,
         metadata: meta
@@ -21,7 +21,7 @@ module.exports.checkout = (phone, amount, meta, currencyCode, callback) => {
 
     Payments.mobileCheckout(options)
         .then(response => {
-            console.log(response)
+            console.log(response);
             callback(null, response);
         }).catch(err => {
             console.log(err);
@@ -45,7 +45,7 @@ module.exports.sendNanasiRevenueFromCheckout = (cartItems, callback) => {
     const paymentOptions = {
         productName: APP_PRODUCT_NAME,
         targetProductCode: NANASI_HOLDINGS_PRODUCT_NAME,
-        currencyCode: 'KES', //TODO: Make this dynamic
+        currencyCode: "KES", //TODO: Make this dynamic
         amount: nanasiRevenue,
         metadata: {
             cartItems: cartItems,

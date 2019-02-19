@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
     // User that ordered the product
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: "User"
     },
 
     product: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product'
+        ref: "Product"
     },
 
     quantity: { // Number of these items ordered
@@ -40,9 +40,9 @@ const orderSchema = new mongoose.Schema({
 
     deliveryAddress: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Address'
+        ref: "Address"
     }
 });
 
 // Exports
-module.exports = mongoose.model('Order', orderSchema);
+module.exports = mongoose.model("Order", orderSchema);

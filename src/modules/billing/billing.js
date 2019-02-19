@@ -1,8 +1,8 @@
-const BillingInfo = require('../../models/billingInfo');
+const BillingInfo = require("../../models/billingInfo");
 
 // Libraries
-const Api = require('../../lib/api');
-const FeedbackMessages = require('../../lang/feedbackMessages');
+const Api = require("../../lib/api");
+const FeedbackMessages = require("../../lang/feedbackMessages");
 
 /* 
     HELPERS
@@ -32,7 +32,7 @@ function _getBillingInfo(filter, callback) {
             const billingInfoCount = billingInfoFound.length;
             const isOk = (billingInfoCount > 0);
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFoundWithCount(billingInfoFound, 'Billing information') : FeedbackMessages.itemNotFound('Billing information');
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(billingInfoFound, "Billing information") : FeedbackMessages.itemNotFound("Billing information");
 
             return callback(
                 Api.getResponse(isOk, message, billingInfoFound, statusCode)
@@ -65,7 +65,7 @@ function _getSingleBillingInfo(filter, callback) {
             return callback(
                 Api.getError(err.message, err)
             );
-        })
+        });
 }
 
 // Update billing information

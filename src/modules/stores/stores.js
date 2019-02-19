@@ -1,11 +1,11 @@
 // Models
-const Store = require('../../models/store');
+const Store = require("../../models/store");
 
 // Lang files
-const FeedbackMessages = require('../../lang/feedbackMessages');
+const FeedbackMessages = require("../../lang/feedbackMessages");
 
 // Libraries
-const Api = require('../../lib/api');
+const Api = require("../../lib/api");
 
 /* 
     HELPERS
@@ -16,14 +16,14 @@ function _getStoresByFilter(filter, callback) {
     return Store.find(filter, (err, storesFound) => {
         if (err) {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get stores'), err)
+                Api.getError(FeedbackMessages.operationFailed("get stores"), err)
             );
         }
 
         const storeCount = storesFound.length;
         const isOk = (storeCount > 0);
         const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(storesFound, 'Stores') : FeedbackMessages.itemNotFound('Stores');
+        const message = isOk ? FeedbackMessages.itemsFoundWithCount(storesFound, "Stores") : FeedbackMessages.itemNotFound("Stores");
 
         return callback(
             Api.getResponse(isOk, message, {
@@ -39,13 +39,13 @@ function _getSingleStoreByFilter(filter, callback) {
     return Store.findOne(filter, (err, storeFound) => {
         if (err) {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get store'), err)
+                Api.getError(FeedbackMessages.operationFailed("get store"), err)
             );
         }
 
         const isOk = storeFound ? true : false;
         const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFound('Store') : FeedbackMessages.itemNotFound('Store');
+        const message = isOk ? FeedbackMessages.itemsFound("Store") : FeedbackMessages.itemNotFound("Store");
 
         return callback(
             Api.getResponse(isOk, message, {
@@ -64,7 +64,7 @@ module.exports.createStore = (storeData, callback) => {
 
     return newStore.save().then(createdStore => {
         return callback(
-            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Store'), createdStore)
+            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Store"), createdStore)
         );
     }).catch(err => {
         const message = FeedbackMessages.operationFailed(`create store\nError message: ${err.message}`);
@@ -130,7 +130,7 @@ module.exports.deleteStore = (storeId, callback) => {
         if (storeDeleted) {
             // No errors ~ Deleted the store
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully('store'), {
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully("store"), {
                     id: storeId,
                     storeName: storeDeleted.name
                 })

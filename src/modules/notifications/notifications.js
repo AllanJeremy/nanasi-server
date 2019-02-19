@@ -1,7 +1,7 @@
-const Notification = require('../../models/notification');
+const Notification = require("../../models/notification");
 
-const Api = require('../../lib/api');
-const FeedbackMessages = require('../../lang/feedbackMessages');
+const Api = require("../../lib/api");
+const FeedbackMessages = require("../../lang/feedbackMessages");
 
 /* 
     HELPERS
@@ -11,12 +11,12 @@ const FeedbackMessages = require('../../lang/feedbackMessages');
 function _getNotificationsByFilter(filter) {
     filter = filter || {};
     return Notification.find(filter)
-        .populate('user', '_id firstName lastName')
+        .populate("user", "_id firstName lastName")
         .then((notificationsFound) => {
             const notificationCount = notificationsFound.length;
             const isOk = (notificationCount > 0);
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFoundWithCount(notificationsFound, 'Notifications') : FeedbackMessages.itemNotFound('Notifications');
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(notificationsFound, "Notifications") : FeedbackMessages.itemNotFound("Notifications");
 
             return callback(
                 Api.getResponse(isOk, message, {
@@ -27,7 +27,7 @@ function _getNotificationsByFilter(filter) {
         })
         .catch(err => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get notifications'), err)
+                Api.getError(FeedbackMessages.operationFailed("get notifications"), err)
             );
         });
 }
@@ -35,11 +35,11 @@ function _getNotificationsByFilter(filter) {
 // Get notification by filter
 function _getSingleNotificationByFilter(filter) {
     return Notification.findOne(filter)
-        .populate('user', '_id name firstName lastName')
+        .populate("user", "_id name firstName lastName")
         .then((NotificationFound) => {
             const isOk = NotificationFound ? true : false;
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFound('Notification') : FeedbackMessages.itemNotFound('Notification');
+            const message = isOk ? FeedbackMessages.itemsFound("Notification") : FeedbackMessages.itemNotFound("Notification");
 
             return callback(
                 Api.getResponse(isOk, message, {
@@ -49,7 +49,7 @@ function _getSingleNotificationByFilter(filter) {
         })
         .catch(err => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get notifications'), err)
+                Api.getError(FeedbackMessages.operationFailed("get notifications"), err)
             );
         });
 }

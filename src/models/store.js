@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-require('./image');
+require("./image");
 const storeSchema = new mongoose.Schema({
     merchant: {
         type: mongoose.Schema.Types.ObjectId,

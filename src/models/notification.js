@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const NotificationTypes = require('../config/notifications');
+const mongoose = require("mongoose");
+const NotificationTypes = require("../config/notifications");
 
 const notificationSchema = new mongoose.Schema({
     title: {
@@ -15,7 +15,7 @@ const notificationSchema = new mongoose.Schema({
 
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: "User"
     },
 
     type: { // What type of notification is this
@@ -31,4 +31,4 @@ const notificationSchema = new mongoose.Schema({
 });
 
 // Exports
-module.exports = mongoose.model('Notification',notificationSchema);
+module.exports = mongoose.model("Notification",notificationSchema);

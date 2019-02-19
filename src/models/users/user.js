@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const moment = require('moment');
+const mongoose = require("mongoose");
+const moment = require("moment");
 
-require('./address');
+require("./address");
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
     },
     address: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Address'
+        ref: "Address"
     },
     registrationConfirmed: {
         type: Boolean,
@@ -63,4 +63,4 @@ const userSchema = new mongoose.Schema({
 });
 
 // Exports
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

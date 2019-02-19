@@ -1,15 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Models referenced by this schema
-require('../../models/image');
-require('../../models/products/variant');
-require('../../models/products/category');
+require("../../models/image");
+require("../../models/products/variant");
+require("../../models/products/category");
 
 // Schema
 const productSchema = new mongoose.Schema({
     store: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Store'
+        ref: "Store"
     },
 
     name: {
@@ -33,22 +33,22 @@ const productSchema = new mongoose.Schema({
 
     images: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Image',
+        ref: "Image",
         default: []
     }],
 
     variants: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Variant'
+        ref: "Variant"
     }],
 
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
+        ref: "Category"
     },
 
     tags: [String]
 });
 
 // Exports
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model("Product", productSchema);

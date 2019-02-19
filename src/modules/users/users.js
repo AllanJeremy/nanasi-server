@@ -1,8 +1,8 @@
-const User = require('../../models/users/user');
-const Address = require('../../models/users/address');
+const User = require("../../models/users/user");
+const Address = require("../../models/users/address");
 
-const Api = require('../../lib/api');
-const FeedbackMessages = require('../../lang/feedbackMessages');
+const Api = require("../../lib/api");
+const FeedbackMessages = require("../../lang/feedbackMessages");
 
 /* 
     HELPERS
@@ -13,14 +13,14 @@ function _getUsersByFilter(filter, callback) {
     return User.find(filter, (err, usersFound) => {
         if (err) {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get users'), err)
+                Api.getError(FeedbackMessages.operationFailed("get users"), err)
             );
         }
 
         const userCount = usersFound.length;
         const isOk = (userCount > 0);
         const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFoundWithCount(usersFound, 'Users') : FeedbackMessages.itemNotFound('Users');
+        const message = isOk ? FeedbackMessages.itemsFoundWithCount(usersFound, "Users") : FeedbackMessages.itemNotFound("Users");
 
         return callback(
             Api.getResponse(isOk, message, {
@@ -36,12 +36,12 @@ function _getSingleUserByFilter(filter, callback) {
     return User.findOne(filter, (err, userFound) => {
         if (err) {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed('get user'), err)
+                Api.getError(FeedbackMessages.operationFailed("get user"), err)
             );
         }
         const isOk = userFound ? true : false;
         const statusCode = isOk ? 200 : 404;
-        const message = isOk ? FeedbackMessages.itemsFound('User') : FeedbackMessages.itemNotFound('User');
+        const message = isOk ? FeedbackMessages.itemsFound("User") : FeedbackMessages.itemNotFound("User");
 
         return callback(
             Api.getResponse(isOk, message, userFound, statusCode)
@@ -137,7 +137,7 @@ function _deleteAddress(userId, addressId, callback) {
                 address: undefined
             }, response => {
                 if (!response.ok) {
-                    return callback(response)
+                    return callback(response);
                 }
 
                 console.log(`Removed the address from user`);

@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-require('./products/product');
-require('./users/user');
+require("./products/product");
+require("./users/user");
 
 const cartSchema = new mongoose.Schema({
     items: [{
         product: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
+            ref: "Product",
             required: true
         },
         quantity: {
@@ -21,7 +21,7 @@ const cartSchema = new mongoose.Schema({
     }],
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: "User"
     },
     orderIsCompleted: { // Used to detect abandoned carts
         type: Boolean,
@@ -29,4 +29,4 @@ const cartSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Cart', cartSchema);
+module.exports = mongoose.model("Cart", cartSchema);

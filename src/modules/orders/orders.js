@@ -1,5 +1,5 @@
-const Order = require('../../models/orders/order');
-const Cart = require('../../modules/cart/cart');
+const Order = require("../../models/orders/order");
+const Cart = require("../../modules/cart/cart");
 
 /* 
     ORDER HELPERS
@@ -11,24 +11,24 @@ function _getOrdersByFilter(filter, callback) {
 
     return Order.find(filter)
         .populate({
-            path: 'product',
-            select: 'regularPrice salePrice',
+            path: "product",
+            select: "regularPrice salePrice",
             populate: {
-                path: 'store',
-                select: 'name _id'
+                path: "store",
+                select: "name _id"
             }
         })
         .then((err, ordersFound) => {
             if (err) {
                 return callback(
-                    Api.getError(FeedbackMessages.operationFailed('get orders'), err)
+                    Api.getError(FeedbackMessages.operationFailed("get orders"), err)
                 );
             }
 
             const orderCount = ordersFound.length;
             const isOk = (orderCount > 0);
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFoundWithCount(ordersFound, 'Orders') : FeedbackMessages.itemNotFound('Orders');
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(ordersFound, "Orders") : FeedbackMessages.itemNotFound("Orders");
 
             // Calculate the order total
             let orderTotal = 0;
@@ -58,23 +58,23 @@ function _getSingleOrderByFilter(filter, callback) {
 
     return Order.findOne(filter)
         .populate({
-            path: 'product',
-            select: 'regularPrice salePrice',
+            path: "product",
+            select: "regularPrice salePrice",
             populate: {
-                path: 'store',
-                select: 'name _id'
+                path: "store",
+                select: "name _id"
             }
         })
         .then((err, orderFound) => {
             if (err) {
                 return callback(
-                    Api.getError(FeedbackMessages.operationFailed('get order'), err)
+                    Api.getError(FeedbackMessages.operationFailed("get order"), err)
                 );
             }
 
             const isOk = orderFound ? true : false;
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFound('Order') : FeedbackMessages.itemNotFound('Order');
+            const message = isOk ? FeedbackMessages.itemsFound("Order") : FeedbackMessages.itemNotFound("Order");
 
             let productPrice = orderFound.product.salePrice || orderFound.product.regularPrice;
             let orderTotal = productPrice * orderFound.quantity;
@@ -116,7 +116,7 @@ function _updateOrder(orderId, updateData, callback) {
 */
 // Create order
 module.exports.createOrder = (cartId, callback) => {
-    // If cart item found is a completed cart, don't return it. Means order has already been created for it
+    // If cart item found is a completed cart, don"t return it. Means order has already been created for it
     Cart.find({
             _id: cartId,
             orderIsCompleted: false
@@ -148,7 +148,7 @@ module.exports.createOrder = (cartId, callback) => {
             Order.collection.insertMany(productsToAdd)
                 .then(createdOrder => {
                     return callback(
-                        Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully('Order'), createdOrder, 201)
+                        Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Order"), createdOrder, 201)
                     );
                 })
                 .catch(err => {

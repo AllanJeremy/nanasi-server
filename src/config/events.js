@@ -1,5 +1,5 @@
 // Websocket event names
 
 module.exports.events = {
-    NOTIFICATION_SENT: 'Notification sent'
+    NOTIFICATION_SENT: "Notification sent"
 };

@@ -1,16 +1,16 @@
-const mongoose = require('mongoose');
-const PaymentMethods = require('../config/paymentMethods');
+const mongoose = require("mongoose");
+const PaymentMethods = require("../config/paymentMethods");
 
-require('./users/address');
+require("./users/address");
 
 const billingInfoSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
     },
     address: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Address'
+        ref: "Address"
     },
     paymentMethod: {
         type: String,
@@ -23,4 +23,4 @@ const billingInfoSchema = new mongoose.Schema({
 });
 
 // Exports
-module.exports = mongoose.model('BillingInfo', billingInfoSchema);
+module.exports = mongoose.model("BillingInfo", billingInfoSchema);

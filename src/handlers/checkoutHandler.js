@@ -1,11 +1,11 @@
-const Store = require('../models/store');
-const notification = require('../modules/notifications/notifications');
+const Store = require("../models/store");
+const notification = require("../modules/notifications/notifications");
 
 function _acceptTransaction(notificationData) {
-    // Get Nanasi's cut
-    // Get store's cut
+    // Get Nanasi"s cut
+    // Get store"s cut
     // Send Nanasi cut to Nanasi app wallet
-    // Add store's cut to store balance
+    // Add store"s cut to store balance
     // Store transaction to the database
 
 }
@@ -25,4 +25,4 @@ module.exports.handleCheckout = (notificationData) => {
             _rejectTransaction();
         }
     });
-}
+};

@@ -1,19 +1,19 @@
-const mongoose = require('mongoose');
-const moment = require('moment');
+const mongoose = require("mongoose");
+const moment = require("moment");
 
 // Models referenced by this schema
-require('../products/product');
-require('../users/user');
+require("../products/product");
+require("../users/user");
 
 const reviewSchema = new mongoose.Schema({
     product: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: "Product",
         required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
         required: true
     },
     comment: {
@@ -26,4 +26,4 @@ const reviewSchema = new mongoose.Schema({
     }
 });
 
-module.exports = new mongoose.model('Review', reviewSchema);
+module.exports = new mongoose.model("Review", reviewSchema);

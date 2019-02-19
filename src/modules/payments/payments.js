@@ -1,9 +1,9 @@
-const cart = require('../cart/cart'); // Cart module
-const user = require('../users/users'); // User module
+const cart = require("../cart/cart"); // Cart module
+const user = require("../users/users"); // User module
 
-const PaymentLib = require('../../lib/payment'); // Payment library
-const Api = require('../../lib/api');
-const FeedbackMessages = require('../../lang/feedbackMessages');
+const PaymentLib = require("../../lib/payment"); // Payment library
+const Api = require("../../lib/api");
+const FeedbackMessages = require("../../lang/feedbackMessages");
 
 // Checkout
 module.exports.buyerCheckout = (cartId, callback) => {

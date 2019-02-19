@@ -56,8 +56,8 @@ module.exports.productBelongsToMerchant = (req, res, next) => {
         _id: productId,
         "store.merchant": merchantId
     }).populate({
-        path: 'store',
-        select: 'merchant'
+        path: "store",
+        select: "merchant"
     }).then((variantFound) => {
         if (!variantFound) {
             return _sendOwnershipAuthFailedResponse(res, OwnershipMessages.productDoesNotBelongToMerchant());
@@ -79,10 +79,10 @@ module.exports.productVariantBelongsToMerchant = (req, res, next) => {
         _id: variantId,
         "product.store.merchant": merchantId
     }).populate({
-        path: 'product',
+        path: "product",
         select: {
-            path: 'store',
-            select: 'merchant'
+            path: "store",
+            select: "merchant"
         }
     }).then((variantFound) => {
         if (!variantFound) {
@@ -104,10 +104,10 @@ module.exports.orderBelongsToMerchant = (req, res, next) => {
         _id: orderId,
         "product.store.merchant": merchantId
     }).populate({
-        path: 'product',
+        path: "product",
         select: {
-            path: 'store',
-            select: 'merchant'
+            path: "store",
+            select: "merchant"
         }
     }).then((orderFound) => {
         if (!orderFound) {

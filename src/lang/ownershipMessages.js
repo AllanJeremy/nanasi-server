@@ -7,43 +7,43 @@ function _entityDoesNotBelongToUser(entityName, userType) {
 }
 
 module.exports.storeDoesNotBelongToMerchant = () => {
-    return _entityDoesNotBelongToUser('store', 'merchant');
+    return _entityDoesNotBelongToUser("store", "merchant");
 };
 
 module.exports.productDoesNotBelongToMerchant = () => {
-    return _entityDoesNotBelongToUser('product', 'merchant');
+    return _entityDoesNotBelongToUser("product", "merchant");
 };
 
 module.exports.productVariantDoesNotBelongToMerchant = () => {
-    return _entityDoesNotBelongToUser('product variant', 'merchant');
+    return _entityDoesNotBelongToUser("product variant", "merchant");
 };
 
 module.exports.orderDoesNotBelongToMerchant = () => {
-    return _entityDoesNotBelongToUser('order', 'merchant');
+    return _entityDoesNotBelongToUser("order", "merchant");
 };
 
 module.exports.cartDoesNotBelongToBuyer = () => {
-    return _entityDoesNotBelongToUser('cart', 'buyer');
+    return _entityDoesNotBelongToUser("cart", "buyer");
 };
 
 module.exports.orderDoesNotBelongToBuyer = () => {
-    return _entityDoesNotBelongToUser('order', 'buyer');
+    return _entityDoesNotBelongToUser("order", "buyer");
 };
 
 module.exports.reviewDoesNotBelongToUser = () => {
-    return _entityDoesNotBelongToUser('review', 'user');
+    return _entityDoesNotBelongToUser("review", "user");
 };
 
 module.exports.reviewReplyDoesNotBelongToUser = () => {
-    return _entityDoesNotBelongToUser('review reply', 'user');
+    return _entityDoesNotBelongToUser("review reply", "user");
 };
 
 module.exports.accountDoesNotBelongToUser = () => {
-    return _entityDoesNotBelongToUser('account', 'user');
+    return _entityDoesNotBelongToUser("account", "user");
 };
 
 module.exports.billingInfoDoesNotBelongToUser = () => {
-    return _entityDoesNotBelongToUser('billing information', 'user');
+    return _entityDoesNotBelongToUser("billing information", "user");
 };
 
 module.exports.serverError = (errorMessage) => {

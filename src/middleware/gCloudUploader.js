@@ -1,14 +1,14 @@
-const UploadConfig = require('../config/uploads');
-const GCloudConfig = require('../config/gcloud');
+const UploadConfig = require("../config/uploads");
+const GCloudConfig = require("../config/gcloud");
 
-const Api = require('../lib/api');
-const FeedbackMessages = require('../lang/feedbackMessages');
+const Api = require("../lib/api");
+const FeedbackMessages = require("../lang/feedbackMessages");
 
 const STORAGE_URL = `https://storage.googleapis.com`;
 
 const {
     Storage
-} = require('@google-cloud/storage');
+} = require("@google-cloud/storage");
 
 
 const storage = new Storage({
@@ -17,9 +17,9 @@ const storage = new Storage({
 
 const bucket = storage.bucket(GCloudConfig.CLOUD_BUCKET);
 
-const Multer = require('multer');
+const Multer = require("multer");
 
-const ErrorMessages = require('../lang/errorMessages');
+const ErrorMessages = require("../lang/errorMessages");
 
 const uploadFilter = (req, file, callback) => {
     // Check if the uploaded file is of a valid MIME type ~ Proceed to upload if so
@@ -59,11 +59,11 @@ function sendUploadToGCS(req, res, next) {
         ));
     }
 
-    let dir = req.uploadData.directory || '';
+    let dir = req.uploadData.directory || "";
 
     // Set the directory if one has not yet been provided
     if (dir) {
-        dir = dir ? `${dir}/` : '';
+        dir = dir ? `${dir}/` : "";
     } else {
         console.debug(`No directory provided, uploading to root directory`);
     }
@@ -80,12 +80,12 @@ function sendUploadToGCS(req, res, next) {
         resumable: false
     });
 
-    stream.on('error', (err) => {
+    stream.on("error", (err) => {
         req.file.cloudStorageError = err;
         next(err);
     });
 
-    stream.on('finish', () => {
+    stream.on("finish", () => {
         req.file.cloudStorageObject = gcsname;
         file.makePublic().then(() => {
             req.file.cloudStoragePublicUrl = getPublicUrl(gcsname);
