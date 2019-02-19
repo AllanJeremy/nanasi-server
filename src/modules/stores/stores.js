@@ -13,13 +13,7 @@ const Api = require("../../lib/api");
 // Get multiple stores by filter
 function _getStoresByFilter(filter, callback) {
     filter = filter || {};
-    return Store.find(filter, (err, storesFound) => {
-        if (err) {
-            return callback(
-                Api.getError(FeedbackMessages.operationFailed("get stores"), err)
-            );
-        }
-
+    return Store.find(filter).then((storesFound) => {
         const storeCount = storesFound.length;
         const isOk = (storeCount > 0);
         const statusCode = isOk ? 200 : 404;
@@ -31,18 +25,16 @@ function _getStoresByFilter(filter, callback) {
                 stores: storesFound
             }, statusCode)
         );
+    }).catch(err => {
+        return callback(
+            Api.getError(err.message, err)
+        );
     });
 }
 
 // Get store by filter
 function _getSingleStoreByFilter(filter, callback) {
-    return Store.findOne(filter, (err, storeFound) => {
-        if (err) {
-            return callback(
-                Api.getError(FeedbackMessages.operationFailed("get store"), err)
-            );
-        }
-
+    return Store.findOne(filter).then((storeFound) => {
         const isOk = storeFound ? true : false;
         const statusCode = isOk ? 200 : 404;
         const message = isOk ? FeedbackMessages.itemsFound("Store") : FeedbackMessages.itemNotFound("Store");
@@ -51,6 +43,10 @@ function _getSingleStoreByFilter(filter, callback) {
             Api.getResponse(isOk, message, {
                 store: storeFound
             }, statusCode)
+        );
+    }).catch(err => {
+        return callback(
+            Api.getError(err.message, err)
         );
     });
 }
