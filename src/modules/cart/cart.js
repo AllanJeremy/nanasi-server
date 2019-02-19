@@ -125,7 +125,7 @@
 
              // Cart item found ~ Find item to remove
              cartFound.items = cartFound.items.filter(itemFound => {
-                 return (itemFound.product != productId);
+                 return (itemFound.product !== productId);
              });
 
              // Update cart ~ remove cart item
