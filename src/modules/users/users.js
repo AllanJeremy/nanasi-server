@@ -98,7 +98,7 @@ function _getSingleAddressByFilter(filter, callback) {
         .then(addressFound => {
             if (!addressFound) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Address`), undefined, 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Address`), null, 404)
                 );
             }
             // Address found, return it
@@ -134,7 +134,7 @@ function _deleteAddress(userId, addressId, callback) {
         .then(deletedAddress => {
             // Remove the address from the users table
             _updateUser(userId, {
-                address: undefined
+                address: null
             }, (response) => {
                 if (!response.ok) {
                     return callback(response);

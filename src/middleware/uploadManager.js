@@ -22,7 +22,7 @@ module.exports.getImageData = (req, res, next) => {
                 console.debug(`Image not found`);
                 const statusCode = 404;
                 return res.status(statusCode).json(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Image`), undefined, statusCode)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Image`), null, statusCode)
                 );
             }
 

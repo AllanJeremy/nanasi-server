@@ -21,7 +21,7 @@ function _getLoggedIn(req) {
 
 //Return auth not allowed message
 function _getTokenAuthFailedResponse(res) {
-    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), undefined, 401));
+    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), null, 401));
 }
 
 // Checks if any user type is logged in
@@ -48,7 +48,7 @@ module.exports.buyerLoggedIn = (req, res, next) => {
                     req.userData = userData;
                     next();
                 } else {
-                    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), undefined, 401));
+                    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), null, 401));
                 }
             }).catch(err => {
                 const response = Api.getError(err.message, err);
@@ -73,7 +73,7 @@ module.exports.merchantLoggedIn = (req, res, next) => {
                     req.userData = userData;
                     next();
                 } else {
-                    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), undefined, 401));
+                    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), null, 401));
                 }
             }).catch(err => {
                 const response = Api.getError(err.message, err);
@@ -98,7 +98,7 @@ module.exports.adminLoggedIn = (req, res, next) => {
                     req.userData = userData;
                     next();
                 } else {
-                    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), undefined, 401));
+                    return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), null, 401));
                 }
             }).catch(err => {
                 const response = Api.getError(err.message, err);

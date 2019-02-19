@@ -151,7 +151,7 @@ module.exports.verifyOtp = (phone, otpToVerify, otpType, callback) => {
                 );
             } else {
                 return callback(
-                    Api.getError(AuthMessages.otpFailedToVerify(), undefined, 403)
+                    Api.getError(AuthMessages.otpFailedToVerify(), null, 403)
                 );
             }
 

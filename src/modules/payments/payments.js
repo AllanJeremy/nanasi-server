@@ -27,7 +27,7 @@ module.exports.buyerCheckout = (cartId, callback) => {
             const userPhone = userResponse.data.user.phone;
             if (!userPhone) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.operationFailed(`complete payment. Phone number not found.`), undefined, 400)
+                    Api.getResponse(false, FeedbackMessages.operationFailed(`complete payment. Phone number not found.`), null, 400)
                 );
             }
 

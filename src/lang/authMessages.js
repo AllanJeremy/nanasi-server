@@ -1,6 +1,6 @@
 // When a login attempt fails
 module.exports.loginFailed = () => {
-    const message = `Login failed. Incorrect phone number or OTP`;
+    const message = "Login failed. Incorrect phone number or OTP";
 
     //TODO: Possibly translate
     return message;
@@ -8,7 +8,7 @@ module.exports.loginFailed = () => {
 
 // When a login attempt succeeds
 module.exports.loginSucceeded = () => {
-    const message = `Login succeeded`;
+    const message = "Login succeeded";
 
     //TODO: Possibly translate
     return message;
@@ -16,7 +16,7 @@ module.exports.loginSucceeded = () => {
 
 //Confirm registration succeeded
 module.exports.confirmRegistration = () => {
-    const message = `Successfully confirmed registration`;
+    const message = "Successfully confirmed registration";
 
     //TODO: Possibly translate
     return message;
@@ -26,7 +26,7 @@ module.exports.confirmRegistration = () => {
 */
 // OTP expired
 module.exports.otpExpired = () => {
-    const message = `The OTP you entered has expired`;
+    const message = "The OTP you entered has expired";
 
     //TODO: Probably translate
     return message;
@@ -34,7 +34,7 @@ module.exports.otpExpired = () => {
 
 // OTP Successfully verified
 module.exports.otpVerified = () => {
-    const message = `The OTP you entered has been verified`;
+    const message = "The OTP you entered has been verified";
 
     //TODO: Probably translate
     return message;
@@ -42,7 +42,7 @@ module.exports.otpVerified = () => {
 
 // OTP failed to verify
 module.exports.otpFailedToVerify = () => {
-    const message = `Failed to verify OTP`;
+    const message = "Failed to verify OTP";
 
     //TODO: Probably translate
     return message;
@@ -50,7 +50,7 @@ module.exports.otpFailedToVerify = () => {
 
 // Generic auth failed
 module.exports.tokenAuthFailed = () => {
-    const message = `Auth failed. Invalid token provided`;
+    const message = "Auth failed. Invalid token provided";
 
     //TODO: Probably translate
     return message;
@@ -58,7 +58,7 @@ module.exports.tokenAuthFailed = () => {
 
 // OTP sent
 module.exports.otpSendSuccessful = () => {
-    const message = `OTP sent.`;
+    const message = "OTP sent.";
 
     //TODO: Probably translate
     return message;
@@ -66,7 +66,7 @@ module.exports.otpSendSuccessful = () => {
 
 // Failed to send OTP
 module.exports.otpSendFailed = () => {
-    const message = `Sending OTP failed.`;
+    const message = "Sending OTP failed.";
 
     //TODO: Probably translate
     return message;

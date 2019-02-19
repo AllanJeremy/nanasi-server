@@ -15,7 +15,7 @@ function _sendOwnershipAuthFailedResponse(res, message) {
     const statusCode = 401; //401 - Unauthorized status code
 
     return res.status(statusCode).json(
-        Api.getResponse(false, message, undefined, statusCode)
+        Api.getResponse(false, message, null, statusCode)
     );
 }
 

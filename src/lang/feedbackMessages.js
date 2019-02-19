@@ -74,7 +74,7 @@ module.exports.itemDeletedSuccessfully = (itemName) => {
 
 // Failed to sign JWT
 module.exports.failedToSignJWT = () => {
-    const message = `Failed to sign JWT`;
+    const message = "Failed to sign JWT";
 
     //TODO: Probably translate
     return message;

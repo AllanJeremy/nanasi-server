@@ -13,7 +13,7 @@ function _getProductTypesByFilter(filter, callback) {
     filter = filter || {};
     return ProductType.find(filter)
         .populate("image")
-        .then(productTypesFound => {
+        .then((productTypesFound) => {
             const productTypeCount = productTypesFound.length;
             const isOk = productTypeCount > 0;
             const statusCode = isOk ? 200 : 404;
@@ -46,7 +46,7 @@ function _getProductTypesByFilter(filter, callback) {
 function _getSingleProductTypeByFilter(filter, callback) {
     return ProductType.findOne(filter)
         .populate("image")
-        .then(productTypeFound => {
+        .then((productTypeFound) => {
             const isOk = productTypeFound ? true : false;
             const statusCode = isOk ? 200 : 404;
             const message = isOk ?
@@ -76,7 +76,7 @@ function _getCategoriesByFilter(filter, callback) {
     return Category.find(filter)
         .populate("productType", "_id name")
         .populate("images")
-        .then(categoriesFound => {
+        .then((categoriesFound) => {
             const categoryCount = categoriesFound.length;
             const isOk = categoryCount > 0;
             const statusCode = isOk ? 200 : 404;
@@ -107,7 +107,7 @@ function _getSingleCategoryByFilter(filter, callback) {
     return Category.findOne(filter)
         .populate("productType", "_id name")
         .populate("images")
-        .then(categoryFound => {
+        .then((categoryFound) => {
             const isOk = categoryFound ? true : false;
             const statusCode = isOk ? 200 : 404;
             const message = isOk ?

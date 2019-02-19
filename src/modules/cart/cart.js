@@ -119,7 +119,7 @@
          .then(cartFound => {
              if (!cartFound) {
                  return callback(
-                     Api.getResponse(false, FeedbackMessages.itemNotFound(`Cart`), undefined, 404)
+                     Api.getResponse(false, FeedbackMessages.itemNotFound(`Cart`), null, 404)
                  );
              }
 

@@ -52,7 +52,7 @@ function _getSingleBillingInfo(filter, callback) {
         .then(billingInfoFound => {
             if (!billingInfoFound) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Billing information`), undefined, 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Billing information`), null, 404)
                 );
             }
 
@@ -74,7 +74,7 @@ function _updateBillingInfo(filter, updateData, callback) {
         .then(billingInfoFound => {
             if (!billingInfoFound) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Billing information`), undefined, 403)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Billing information`), null, 403)
                 );
             }
         })

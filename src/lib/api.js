@@ -3,7 +3,7 @@ module.exports.getResponse = (isOk, message, data, statusCode) => {
     response.ok = isOk;
     response.statusCode = statusCode || 200;
     response.message = message;
-    response.data = data || undefined;
+    response.data = data || null;
     return response;
 };
 

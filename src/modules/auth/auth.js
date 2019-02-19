@@ -109,7 +109,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
                     Api.getError(FeedbackMessages.itemNotFound("User to update"), null, 404)
                 );
             }
-            userFound.otp = undefined; // Remove the OTP ~  We are done with it for now
+            userFound.otp = null; // Remove the OTP ~  We are done with it for now
             userFound.registrationConfirmed = true; // Confirm registration
             userFound.isActive = true; //Activate account
 
@@ -133,7 +133,7 @@ module.exports.login = (phone, otpInput, callback) => {
     return Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.LOGIN, (response) => {
         // If the OTP was invalid ~ Reject Login
         if (!response.ok) {
-            return callback(Api.getResponse(false, AuthMessages.loginFailed(), undefined, 401));
+            return callback(Api.getResponse(false, AuthMessages.loginFailed(), null, 401));
         }
         // Otp verified
         const userData = response.data.user;
