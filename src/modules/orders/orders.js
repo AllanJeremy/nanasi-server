@@ -104,7 +104,7 @@ function _updateOrder(orderId, updateData, callback) {
                 Api.getError(FeedbackMessages.itemNotFound(`Order`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`update order`), err)
         );
@@ -151,13 +151,13 @@ module.exports.createOrder = (cartId, callback) => {
                         Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Order"), createdOrder, 201)
                     );
                 })
-                .catch(err => {
+                .catch((err) => {
                     return callback(
                         Api.getError(FeedbackMessages.operationFailed(`create order`), err)
                     );
                 });
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed(`find cart items`), err)
             );

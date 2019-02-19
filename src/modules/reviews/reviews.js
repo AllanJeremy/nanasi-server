@@ -24,7 +24,7 @@ function _getReviewsByFilter(filter, callback) {
                 }, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed(`get reviews`), err)
             );
@@ -43,7 +43,7 @@ function _getSingleReviewByFilter(filter, callback) {
                 Api.getResponse(isOk, message, reviewsFound, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed(`get reviews`), err)
             );
@@ -70,7 +70,7 @@ function _getReviewRepliesByFilter(filter, callback) {
                 }, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed(`get reviews`), err)
             );
@@ -89,7 +89,7 @@ function _getSingleReviewReplyByFilter(filter, callback) {
                 Api.getResponse(isOk, message, reviewsFound, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed(`get reviews`), err)
             );
@@ -105,7 +105,7 @@ module.exports.createReview = (userId, reviewData, callback) => {
         return callback(
             Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully(`Review`), reviewCreated)
         );
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`create review`), err)
         );
@@ -139,7 +139,7 @@ module.exports.updateReview = (reviewId, updateData, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Review`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`update review`), err)
         );
@@ -159,7 +159,7 @@ module.exports.deleteReview = (reviewId, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Review`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`delete review`), err)
         );
@@ -175,7 +175,7 @@ module.exports.createReviewReply = (userId, replyData, callback) => {
         return callback(
             Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully(`Review reply`), replyCreated)
         );
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`create review reply`), err)
         );
@@ -212,7 +212,7 @@ module.exports.updateReviewReply = (replyId, updateData, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Review reply`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`update review reply`), err)
         );
@@ -231,7 +231,7 @@ module.exports.deleteReviewReply = (replyId, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Review reply`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`delete review reply`), err)
         );

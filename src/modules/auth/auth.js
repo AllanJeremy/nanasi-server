@@ -80,7 +80,7 @@ module.exports.register = (userData, callback) => {
             });
 
         }
-    }).catch(err => {
+    }).catch((err) => {
         callback(Api.getError(err.message, err, 500));
     });
 };
@@ -122,7 +122,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
                     token: token
                 })
             );
-        }).catch(err => callback(Api.getError(err.message, err)));
+        }).catch((err) => callback(Api.getError(err.message, err)));
     });
 
 };

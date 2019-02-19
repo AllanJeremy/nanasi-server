@@ -35,7 +35,7 @@ function _getProductTypesByFilter(filter, callback) {
                 )
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get product types"), err)
             );
@@ -63,7 +63,7 @@ function _getSingleProductTypeByFilter(filter, callback) {
                 )
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get product type"), err)
             );
@@ -95,7 +95,7 @@ function _getCategoriesByFilter(filter, callback) {
                 )
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get categories"), err)
             );
@@ -124,7 +124,7 @@ function _getSingleCategoryByFilter(filter, callback) {
                 )
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get category"), err)
             );

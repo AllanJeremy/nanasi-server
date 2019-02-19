@@ -50,7 +50,7 @@ module.exports.buyerLoggedIn = (req, res, next) => {
                 } else {
                     return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), null, 401));
                 }
-            }).catch(err => {
+            }).catch((err) => {
                 const response = Api.getError(err.message, err);
                 return res.status(response.statusCode).json(response);
             });
@@ -75,7 +75,7 @@ module.exports.merchantLoggedIn = (req, res, next) => {
                 } else {
                     return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), null, 401));
                 }
-            }).catch(err => {
+            }).catch((err) => {
                 const response = Api.getError(err.message, err);
                 return res.status(response.statusCode).json(response);
             });
@@ -100,7 +100,7 @@ module.exports.adminLoggedIn = (req, res, next) => {
                 } else {
                     return res.status(401).json(Api.getError(AuthMessages.tokenAuthFailed(), null, 401));
                 }
-            }).catch(err => {
+            }).catch((err) => {
                 const response = Api.getError(err.message, err);
                 return res.status(response.statusCode).json(response);
             });

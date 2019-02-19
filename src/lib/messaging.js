@@ -32,7 +32,7 @@ module.exports.sendSms = (recipients, message, callback) => {
     sendMessage.then((response) => {
         console.log(response);
         return callback(response);
-    }).catch(err => {
+    }).catch((err) => {
         console.error(err);
         return err;
     });

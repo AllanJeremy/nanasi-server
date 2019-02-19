@@ -34,7 +34,7 @@ function _getProductsByFilter(filter, callback) {
                 }, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get products"), err)
             );
@@ -58,7 +58,7 @@ function _getSingleProductByFilter(filter, callback) {
                 }, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get products"), err)
             );
@@ -76,7 +76,7 @@ module.exports.createProduct = (productData, callback) => {
         return callback(
             Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Product"), createdProduct, 201)
         );
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`create product`), err)
         );
@@ -128,7 +128,7 @@ module.exports.updateProduct = (productId, updateData, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Product`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`update product`), err)
         );
@@ -151,7 +151,7 @@ module.exports.deleteProduct = (productId, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Product`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`delete product`), err)
         );
@@ -187,7 +187,7 @@ module.exports.addProductImage = (productId, imageId, callback) => {
                 Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`Product`), productFound)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );
@@ -240,7 +240,7 @@ module.exports.deleteProductImage = (productId, imageId, callback) => {
                 })
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );
@@ -269,7 +269,7 @@ function _getProductVariantsByFilter(filter, callback) {
                 }, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get product variants"), err)
             );
@@ -291,7 +291,7 @@ function _getSingleProductVariantByFilter(filter, callback) {
                 }, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get product variant"), err)
             );
@@ -330,7 +330,7 @@ module.exports.createProductVariant = (productVariantData, callback) => {
                 );
             }
         });
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`create product variant`), err)
         );
@@ -366,7 +366,7 @@ module.exports.updateProductVariant = (productVariantId, updateData, callback) =
                 Api.getError(FeedbackMessages.itemNotFound(`Product variant`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`update product variant`), err)
         );
@@ -389,7 +389,7 @@ module.exports.deleteProductVariant = (productVariantId, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Product variant`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`delete product variant`), err)
         );

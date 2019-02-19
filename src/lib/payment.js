@@ -23,7 +23,7 @@ module.exports.checkout = (phone, amount, meta, currencyCode, callback) => {
         .then((response) => {
             console.log(response);
             callback(null, response);
-        }).catch(err => {
+        }).catch((err) => {
             console.log(err);
             callback(err);
         });
@@ -57,7 +57,7 @@ module.exports.sendNanasiRevenueFromCheckout = (cartItems, callback) => {
             console.log(`Sent Nanasi revenue: ${nanasiRevenue} from ${cartItems}`);
             console.log(response);
             callback(null, response);
-        }).catch(err => {
+        }).catch((err) => {
             console.error(`Failed to send nanasi revenue`);
             console.log(err);
             callback(err);

@@ -57,7 +57,7 @@ function _updateUser(userId, updateData, callback) {
                 Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`user`), updatedUser)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );
@@ -85,7 +85,7 @@ function _addAddress(userId, addressInfo, callback) {
                 );
             });
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );
@@ -106,7 +106,7 @@ function _getSingleAddressByFilter(filter, callback) {
                 Api.getResponse(true, FeedbackMessages.itemsFound(`Address`), addressFound)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );
@@ -121,7 +121,7 @@ function _updateAddress(addressId, updateData, callback) {
                 Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`address`), updatedAddress)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );
@@ -148,7 +148,7 @@ function _deleteAddress(userId, addressId, callback) {
             });
 
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );

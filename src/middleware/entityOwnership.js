@@ -42,7 +42,7 @@ module.exports.storeBelongsToMerchant = (req, res, next) => {
 
         // Store belongs to merchant ~ we can move to next middleware
         next();
-    }).catch(err => {
+    }).catch((err) => {
         return _serverErrorInOwnershipAuth(res, err);
     });
 };
@@ -65,7 +65,7 @@ module.exports.productBelongsToMerchant = (req, res, next) => {
 
         // Product belongs to merchant ~ we can move to next middleware
         next();
-    }).catch(err => {
+    }).catch((err) => {
         return _serverErrorInOwnershipAuth(res, err);
     });
 };
@@ -91,7 +91,7 @@ module.exports.productVariantBelongsToMerchant = (req, res, next) => {
 
         // Store belongs to merchant ~ we can move to next middleware
         next();
-    }).catch(err => {
+    }).catch((err) => {
         return _serverErrorInOwnershipAuth(res, err);
     });
 };
@@ -116,7 +116,7 @@ module.exports.orderBelongsToMerchant = (req, res, next) => {
 
         // Store belongs to merchant ~ we can move to next middleware
         next();
-    }).catch(err => {
+    }).catch((err) => {
         return _serverErrorInOwnershipAuth(res, err);
     });
 };
@@ -147,7 +147,7 @@ module.exports.orderBelongsToBuyer = (req, res, next) => {
 
         // Store belongs to merchant ~ we can move to next middleware
         next();
-    }).catch(err => {
+    }).catch((err) => {
         return _serverErrorInOwnershipAuth(res, err);
     });
 };

@@ -18,7 +18,7 @@ function _addBillingInfo(userId, billingInfo, callback) {
         return callback(
             Api.getResponse(true, FeedbackMessages.operationSucceeded(`added billing information`), billingInfoAdded, 201)
         );
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(err.message, err)
         );
@@ -39,7 +39,7 @@ function _getBillingInfo(filter, callback) {
             );
 
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );
@@ -61,7 +61,7 @@ function _getSingleBillingInfo(filter, callback) {
                 Api.getResponse(true, FeedbackMessages.itemsFound(`Billing information`), billingInfoFound)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );
@@ -78,7 +78,7 @@ function _updateBillingInfo(filter, updateData, callback) {
                 );
             }
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );
@@ -93,7 +93,7 @@ function _deleteBillingInfo(filter, callback) {
                 Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully(`Billing information`), billingInfoDeleted)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(err.message, err)
             );

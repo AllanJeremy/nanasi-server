@@ -32,7 +32,7 @@ module.exports.getImageData = (req, res, next) => {
             req.uploadData.imageUrl = imageFound.imageUrl;
             next();
         })
-        .catch(err => {
+        .catch((err) => {
             return res.status(500).json(Api.getError(err.message, err));
         });
 };
@@ -51,7 +51,7 @@ module.exports.saveUploadedImageToDb = (req, res, next) => {
             req.uploadData.uploadedImage = uploadedImage;
             next();
         })
-        .catch(err => {
+        .catch((err) => {
             return res.status(500).json(
                 Api.getError(err.message, err)
             );

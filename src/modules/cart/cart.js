@@ -21,7 +21,7 @@
                  }, statusCode)
              );
          })
-         .catch(err => {
+         .catch((err) => {
              return callback(
                  Api.getError(FeedbackMessages.operationFailed("get cart"), err)
              );
@@ -44,7 +44,7 @@
                  }, statusCode)
              );
          })
-         .catch(err => {
+         .catch((err) => {
              return callback(
                  Api.getError(FeedbackMessages.operationFailed("get cart item"), err)
              );
@@ -69,7 +69,7 @@
                      return callback(
                          Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Cart item"), createdCartItem, 201)
                      );
-                 }).catch(err => {
+                 }).catch((err) => {
                      return callback(
                          Api.getError(FeedbackMessages.operationFailed(`create cart item`), err)
                      );
@@ -100,13 +100,13 @@
                      return callback(
                          Api.getResponse(true, FeedbackMessages.operationSucceeded("added cart item"), createdCartItem, 201)
                      );
-                 }).catch(err => {
+                 }).catch((err) => {
                      return callback(
                          Api.getError(FeedbackMessages.operationFailed(`add cart item`), err)
                      );
                  });
          })
-         .catch(err => {
+         .catch((err) => {
              return callback(
                  Api.getError(err.message, err)
              );
@@ -135,14 +135,14 @@
                          Api.getResponse(true, FeedbackMessages.operationSucceeded(`removed cart item`), updatedCart)
                      );
                  })
-                 .catch(err => {
+                 .catch((err) => {
                      return callback(
                          Api.getError(err.message, err)
                      );
                  });
 
          })
-         .catch(err => {
+         .catch((err) => {
              return callback(
                  Api.getError(err.message, err)
              );
@@ -188,7 +188,7 @@
                  Api.getError(FeedbackMessages.itemNotFound(`Cart item`), null, 404)
              );
          }
-     }).catch(err => {
+     }).catch((err) => {
          return callback(
              Api.getError(FeedbackMessages.operationFailed(`update cart item`), err)
          );
@@ -216,7 +216,7 @@
                  Api.getError(FeedbackMessages.itemNotFound(`Cart`), null, 404)
              );
          }
-     }).catch(err => {
+     }).catch((err) => {
          return callback(
              Api.getError(FeedbackMessages.operationFailed(`delete cart item`), err)
          );
@@ -251,7 +251,7 @@
                  })
              );
          })
-         .catch(err => {
+         .catch((err) => {
              return callback(
                  Api.getError(FeedbackMessages.operationFailed(`calculate cart total`), err)
              );

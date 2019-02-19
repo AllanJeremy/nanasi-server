@@ -25,7 +25,7 @@ function _getStoresByFilter(filter, callback) {
                 stores: storesFound
             }, statusCode)
         );
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(err.message, err)
         );
@@ -44,7 +44,7 @@ function _getSingleStoreByFilter(filter, callback) {
                 store: storeFound
             }, statusCode)
         );
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(err.message, err)
         );
@@ -62,7 +62,7 @@ module.exports.createStore = (storeData, callback) => {
         return callback(
             Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Store"), createdStore)
         );
-    }).catch(err => {
+    }).catch((err) => {
         const message = FeedbackMessages.operationFailed(`create store\nError message: ${err.message}`);
         return callback(
             Api.getError(message, err)
@@ -113,7 +113,7 @@ module.exports.updateStore = (storeId, updateData, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Store`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`update store`), err)
         );
@@ -136,7 +136,7 @@ module.exports.deleteStore = (storeId, callback) => {
                 Api.getError(FeedbackMessages.itemNotFound(`Store`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`delete store`), err)
         );

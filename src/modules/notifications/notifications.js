@@ -25,7 +25,7 @@ function _getNotificationsByFilter(filter) {
                 }, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get notifications"), err)
             );
@@ -47,7 +47,7 @@ function _getSingleNotificationByFilter(filter) {
                 }, statusCode)
             );
         })
-        .catch(err => {
+        .catch((err) => {
             return callback(
                 Api.getError(FeedbackMessages.operationFailed("get notifications"), err)
             );
@@ -71,7 +71,7 @@ function _setUserNotificationsReadStatus(userId, isRead) {
                 Api.getError(FeedbackMessages.itemNotFound(`Notifications`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`update notifications`), err)
         );
@@ -93,7 +93,7 @@ function _setSingleNotificationReadStatus(notificationId, isRead) {
                 Api.getError(FeedbackMessages.itemNotFound(`Notification`), null, 404)
             );
         }
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`update notification`), err)
         );
@@ -111,7 +111,7 @@ module.exports.createNotification = (notificationData, callback) => {
         return callback(
             Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully(`Notification`), reviewCreated)
         );
-    }).catch(err => {
+    }).catch((err) => {
         return callback(
             Api.getError(FeedbackMessages.operationFailed(`create notification`), err)
         );

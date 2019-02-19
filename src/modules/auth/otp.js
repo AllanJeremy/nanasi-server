@@ -81,7 +81,7 @@ module.exports.sendOtp = (phone, otpType, callback) => {
                     Api.getResponse(true, AuthMessages.otpSendSuccessful, otpData)
                 );
             });
-        }).catch(err => {
+        }).catch((err) => {
             return callback(
                 Api.getError(AuthMessages.otpSendFailed, err)
             );
@@ -112,7 +112,7 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
 
         console.debug(`Successfully added OTP to database`);
         return Api.getResponse(true, message);
-    }).catch(err => {
+    }).catch((err) => {
         console.debug(`An error occurred while you trying to add OTP to db: `);
         console.error(err);
         return Api.getError(err.message, err);
