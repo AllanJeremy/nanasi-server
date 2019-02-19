@@ -110,12 +110,12 @@ module.exports.updateStore = (storeId, updateData, callback) => {
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Store`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Store"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`update store`), err)
+            Api.getError(FeedbackMessages.operationFailed("update store"), err)
         );
     });
 };
@@ -133,12 +133,12 @@ module.exports.deleteStore = (storeId, callback) => {
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Store`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Store"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`delete store`), err)
+            Api.getError(FeedbackMessages.operationFailed("delete store"), err)
         );
     });
 };

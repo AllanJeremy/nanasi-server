@@ -16,7 +16,7 @@ function _addBillingInfo(userId, billingInfo, callback) {
 
     billingInfoInstance.save().then(billingInfoAdded => {
         return callback(
-            Api.getResponse(true, FeedbackMessages.operationSucceeded(`added billing information`), billingInfoAdded, 201)
+            Api.getResponse(true, FeedbackMessages.operationSucceeded("added billing information"), billingInfoAdded, 201)
         );
     }).catch((err) => {
         return callback(
@@ -52,13 +52,13 @@ function _getSingleBillingInfo(filter, callback) {
         .then(billingInfoFound => {
             if (!billingInfoFound) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Billing information`), null, 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound("Billing information"), null, 404)
                 );
             }
 
             // Billing information found, return it to the user
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemsFound(`Billing information`), billingInfoFound)
+                Api.getResponse(true, FeedbackMessages.itemsFound("Billing information"), billingInfoFound)
             );
         })
         .catch((err) => {
@@ -74,7 +74,7 @@ function _updateBillingInfo(filter, updateData, callback) {
         .then(billingInfoFound => {
             if (!billingInfoFound) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Billing information`), null, 403)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound("Billing information"), null, 403)
                 );
             }
         })
@@ -90,7 +90,7 @@ function _deleteBillingInfo(filter, callback) {
     BillingInfo.findOneAndDelete(filter)
         .then(billingInfoDeleted => {
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully(`Billing information`), billingInfoDeleted)
+                Api.getResponse(true, FeedbackMessages.itemDeletedSuccessfully("Billing information"), billingInfoDeleted)
             );
         })
         .catch((err) => {

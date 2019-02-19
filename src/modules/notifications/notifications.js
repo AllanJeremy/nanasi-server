@@ -64,16 +64,16 @@ function _setUserNotificationsReadStatus(userId, isRead) {
 
         if (notificationsFound) {
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`notifications`))
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("notifications"))
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Notifications`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Notifications"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`update notifications`), err)
+            Api.getError(FeedbackMessages.operationFailed("update notifications"), err)
         );
     });
 }
@@ -86,16 +86,16 @@ function _setSingleNotificationReadStatus(notificationId, isRead) {
 
         if (notificationFound) {
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`notification`))
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("notification"))
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Notification`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Notification"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`update notification`), err)
+            Api.getError(FeedbackMessages.operationFailed("update notification"), err)
         );
     });
 }
@@ -109,11 +109,11 @@ module.exports.createNotification = (notificationData, callback) => {
     notification.save().then(notificationCreated => {
         //TODO: Emit notification sent event
         return callback(
-            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully(`Notification`), reviewCreated)
+            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Notification"), reviewCreated)
         );
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`create notification`), err)
+            Api.getError(FeedbackMessages.operationFailed("create notification"), err)
         );
     });
 };

@@ -54,7 +54,7 @@ function _updateUser(userId, updateData, callback) {
     User.findByIdAndUpdate(userId, updateData)
         .then(updatedUser => {
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`user`), updatedUser)
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("user"), updatedUser)
             );
         })
         .catch((err) => {
@@ -81,7 +81,7 @@ function _addAddress(userId, addressInfo, callback) {
 
                 // Address successfully added to user table
                 return callback(
-                    Api.getResponse(true, FeedbackMessages.operationSucceeded(`added address`))
+                    Api.getResponse(true, FeedbackMessages.operationSucceeded("added address"))
                 );
             });
         })
@@ -98,12 +98,12 @@ function _getSingleAddressByFilter(filter, callback) {
         .then(addressFound => {
             if (!addressFound) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Address`), null, 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound("Address"), null, 404)
                 );
             }
             // Address found, return it
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemsFound(`Address`), addressFound)
+                Api.getResponse(true, FeedbackMessages.itemsFound("Address"), addressFound)
             );
         })
         .catch((err) => {
@@ -118,7 +118,7 @@ function _updateAddress(addressId, updateData, callback) {
     Address.findByIdAndUpdate(addressId, updateData)
         .then(updatedAddress => {
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`address`), updatedAddress)
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("address"), updatedAddress)
             );
         })
         .catch((err) => {
@@ -140,10 +140,10 @@ function _deleteAddress(userId, addressId, callback) {
                     return callback(response);
                 }
 
-                console.log(`Removed the address from user`);
+                console.log("Removed the address from user");
                 // Updated user, successfully removed the address  from the user collection
                 return callback(
-                    Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`address`), deletedAddress)
+                    Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("address"), deletedAddress)
                 );
             });
 

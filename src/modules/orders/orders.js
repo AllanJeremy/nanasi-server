@@ -95,18 +95,18 @@ function _updateOrder(orderId, updateData, callback) {
         if (orderFound) {
             // No errors ~ Updated the order
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`order`), {
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("order"), {
                     id: orderId,
                 })
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Order`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Order"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`update order`), err)
+            Api.getError(FeedbackMessages.operationFailed("update order"), err)
         );
     });
 }
@@ -124,7 +124,7 @@ module.exports.createOrder = (cartId, callback) => {
             // Cart items not found ~ Do not create order
             if (!cartItemFound) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Cart`), null, 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound("Cart"), null, 404)
                 );
             }
 
@@ -134,7 +134,7 @@ module.exports.createOrder = (cartId, callback) => {
             // Products not found in the cart provided
             if (cartProductsCount < 1) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Products in cart`), null, 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound("Products in cart"), null, 404)
                 );
             }
 
@@ -153,13 +153,13 @@ module.exports.createOrder = (cartId, callback) => {
                 })
                 .catch((err) => {
                     return callback(
-                        Api.getError(FeedbackMessages.operationFailed(`create order`), err)
+                        Api.getError(FeedbackMessages.operationFailed("create order"), err)
                     );
                 });
         })
         .catch((err) => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed(`find cart items`), err)
+                Api.getError(FeedbackMessages.operationFailed("find cart items"), err)
             );
         });
 };

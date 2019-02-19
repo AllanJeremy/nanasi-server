@@ -27,7 +27,7 @@ module.exports.buyerCheckout = (cartId, callback) => {
             const userPhone = userResponse.data.user.phone;
             if (!userPhone) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.operationFailed(`complete payment. Phone number not found.`), null, 400)
+                    Api.getResponse(false, FeedbackMessages.operationFailed("complete payment. Phone number not found."), null, 400)
                 );
             }
 
@@ -37,7 +37,7 @@ module.exports.buyerCheckout = (cartId, callback) => {
             }, null, (err, response) => {
                 if (err) {
                     return callback(
-                        Api.getError(FeedbackMessages.operationFailed(`Checkout failed`), err)
+                        Api.getError(FeedbackMessages.operationFailed("Checkout failed"), err)
                     );
                 }
 
@@ -46,7 +46,7 @@ module.exports.buyerCheckout = (cartId, callback) => {
 
                 // Checkout was successful
                 return callback(
-                    Api.getResponse(true, FeedbackMessages.operationSucceeded(`completed checkout.`), {
+                    Api.getResponse(true, FeedbackMessages.operationSucceeded("completed checkout."), {
                         total: cartTotal,
                         userId: userId,
                     })

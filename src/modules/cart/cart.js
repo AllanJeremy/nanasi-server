@@ -71,7 +71,7 @@
                      );
                  }).catch((err) => {
                      return callback(
-                         Api.getError(FeedbackMessages.operationFailed(`create cart item`), err)
+                         Api.getError(FeedbackMessages.operationFailed("create cart item"), err)
                      );
                  });
              }
@@ -102,7 +102,7 @@
                      );
                  }).catch((err) => {
                      return callback(
-                         Api.getError(FeedbackMessages.operationFailed(`add cart item`), err)
+                         Api.getError(FeedbackMessages.operationFailed("add cart item"), err)
                      );
                  });
          })
@@ -119,7 +119,7 @@
          .then(cartFound => {
              if (!cartFound) {
                  return callback(
-                     Api.getResponse(false, FeedbackMessages.itemNotFound(`Cart`), null, 404)
+                     Api.getResponse(false, FeedbackMessages.itemNotFound("Cart"), null, 404)
                  );
              }
 
@@ -132,7 +132,7 @@
              cartFound.items.save()
                  .then(updatedCart => {
                      return callback(
-                         Api.getResponse(true, FeedbackMessages.operationSucceeded(`removed cart item`), updatedCart)
+                         Api.getResponse(true, FeedbackMessages.operationSucceeded("removed cart item"), updatedCart)
                      );
                  })
                  .catch((err) => {
@@ -179,18 +179,18 @@
          if (cartItemFound) {
              // No errors ~ Updated the cartItem
              return callback(
-                 Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`cart item`), {
+                 Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("cart item"), {
                      id: cartItemId
                  })
              );
          } else {
              return callback(
-                 Api.getError(FeedbackMessages.itemNotFound(`Cart item`), null, 404)
+                 Api.getError(FeedbackMessages.itemNotFound("Cart item"), null, 404)
              );
          }
      }).catch((err) => {
          return callback(
-             Api.getError(FeedbackMessages.operationFailed(`update cart item`), err)
+             Api.getError(FeedbackMessages.operationFailed("update cart item"), err)
          );
      });
  };
@@ -213,12 +213,12 @@
              );
          } else {
              return callback(
-                 Api.getError(FeedbackMessages.itemNotFound(`Cart`), null, 404)
+                 Api.getError(FeedbackMessages.itemNotFound("Cart"), null, 404)
              );
          }
      }).catch((err) => {
          return callback(
-             Api.getError(FeedbackMessages.operationFailed(`delete cart item`), err)
+             Api.getError(FeedbackMessages.operationFailed("delete cart item"), err)
          );
      });
  };
@@ -229,7 +229,7 @@
          .then(cartItemFound => {
              if (!cartItemFound) {
                  return callback(
-                     Api.getError(FeedbackMessages.itemNotFound(`Cart item`), null, 404)
+                     Api.getError(FeedbackMessages.itemNotFound("Cart item"), null, 404)
                  );
              }
 
@@ -244,7 +244,7 @@
              //* Nanasi will still retain their revenue (8% of regular price)
 
              return callback(
-                 Api.getResponse(true, FeedbackMessages.operationSucceeded(`calculated cart total`), {
+                 Api.getResponse(true, FeedbackMessages.operationSucceeded("calculated cart total"), {
                      total: total,
                      userId: cartItemFound.user,
                      items: cartItemFound.items
@@ -253,7 +253,7 @@
          })
          .catch((err) => {
              return callback(
-                 Api.getError(FeedbackMessages.operationFailed(`calculate cart total`), err)
+                 Api.getError(FeedbackMessages.operationFailed("calculate cart total"), err)
              );
          });
  };

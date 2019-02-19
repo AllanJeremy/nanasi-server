@@ -67,10 +67,10 @@ module.exports.register = (userData, callback) => {
                 Otp.sendOtp(createdUser.phone, OtpConfig.OtpTypes.REGISTER, (otpResponse) => {
                     let otpData = otpResponse.data.otp;
                     if (!otpResponse.ok) {
-                        return callback(Api.getError(FeedbackMessages.operationFailed(`send otp`)));
+                        return callback(Api.getError(FeedbackMessages.operationFailed("send otp")));
                     } else { //OTP Sent successfully
                         // Add OTP data to the database
-                        console.debug(`Adding otp to DB`);
+                        console.debug("Adding otp to DB");
                         Otp.addUserOtpToDb(createdUser._id, otpData, (response) => {
                             return callback(Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("user"), createdUser, 201));
                         });

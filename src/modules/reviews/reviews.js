@@ -15,7 +15,7 @@ function _getReviewsByFilter(filter, callback) {
             const reviewCount = reviewsFound.length;
             const isOk = reviewCount > 0;
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFoundWithCount(reviewsFound, `review`) : FeedbackMessages.itemNotFound(`Review`);
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(reviewsFound, "review") : FeedbackMessages.itemNotFound("Review");
 
             return callback(
                 Api.getResponse(isOk, message, {
@@ -26,7 +26,7 @@ function _getReviewsByFilter(filter, callback) {
         })
         .catch((err) => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed(`get reviews`), err)
+                Api.getError(FeedbackMessages.operationFailed("get reviews"), err)
             );
         });
 }
@@ -37,7 +37,7 @@ function _getSingleReviewByFilter(filter, callback) {
         .populate("user", "firstName lastName")
         .then(reviewFound => {
             const statusCode = reviewFound ? 200 : 404;
-            const message = reviewFound ? FeedbackMessages.itemsFound(`Review`) : FeedbackMessages.itemNotFound(`Review`);
+            const message = reviewFound ? FeedbackMessages.itemsFound("Review") : FeedbackMessages.itemNotFound("Review");
 
             return callback(
                 Api.getResponse(isOk, message, reviewsFound, statusCode)
@@ -45,7 +45,7 @@ function _getSingleReviewByFilter(filter, callback) {
         })
         .catch((err) => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed(`get reviews`), err)
+                Api.getError(FeedbackMessages.operationFailed("get reviews"), err)
             );
         });
 }
@@ -61,7 +61,7 @@ function _getReviewRepliesByFilter(filter, callback) {
             const reviewCount = reviewsFound.length;
             const isOk = reviewCount > 0;
             const statusCode = isOk ? 200 : 404;
-            const message = isOk ? FeedbackMessages.itemsFoundWithCount(reviewsFound, `review`) : FeedbackMessages.itemNotFound(`Review`);
+            const message = isOk ? FeedbackMessages.itemsFoundWithCount(reviewsFound, "review") : FeedbackMessages.itemNotFound("Review");
 
             return callback(
                 Api.getResponse(isOk, message, {
@@ -72,7 +72,7 @@ function _getReviewRepliesByFilter(filter, callback) {
         })
         .catch((err) => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed(`get reviews`), err)
+                Api.getError(FeedbackMessages.operationFailed("get reviews"), err)
             );
         });
 }
@@ -83,7 +83,7 @@ function _getSingleReviewReplyByFilter(filter, callback) {
         .populate("user", "firstName lastName")
         .then(reviewFound => {
             const statusCode = reviewFound ? 200 : 404;
-            const message = reviewFound ? FeedbackMessages.itemsFound(`Review`) : FeedbackMessages.itemNotFound(`Review`);
+            const message = reviewFound ? FeedbackMessages.itemsFound("Review") : FeedbackMessages.itemNotFound("Review");
 
             return callback(
                 Api.getResponse(isOk, message, reviewsFound, statusCode)
@@ -91,7 +91,7 @@ function _getSingleReviewReplyByFilter(filter, callback) {
         })
         .catch((err) => {
             return callback(
-                Api.getError(FeedbackMessages.operationFailed(`get reviews`), err)
+                Api.getError(FeedbackMessages.operationFailed("get reviews"), err)
             );
         });
 }
@@ -103,11 +103,11 @@ module.exports.createReview = (userId, reviewData, callback) => {
 
     review.save().then(reviewCreated => {
         return callback(
-            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully(`Review`), reviewCreated)
+            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Review"), reviewCreated)
         );
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`create review`), err)
+            Api.getError(FeedbackMessages.operationFailed("create review"), err)
         );
     });
 };
@@ -132,16 +132,16 @@ module.exports.updateReview = (reviewId, updateData, callback) => {
 
         if (reviewFound) {
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`review`))
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("review"))
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Review`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Review"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`update review`), err)
+            Api.getError(FeedbackMessages.operationFailed("update review"), err)
         );
     });
 };
@@ -156,12 +156,12 @@ module.exports.deleteReview = (reviewId, callback) => {
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Review`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Review"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`delete review`), err)
+            Api.getError(FeedbackMessages.operationFailed("delete review"), err)
         );
     });
 };
@@ -173,11 +173,11 @@ module.exports.createReviewReply = (userId, replyData, callback) => {
 
     reviewReply.save().then(replyCreated => {
         return callback(
-            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully(`Review reply`), replyCreated)
+            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Review reply"), replyCreated)
         );
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`create review reply`), err)
+            Api.getError(FeedbackMessages.operationFailed("create review reply"), err)
         );
     });
 };
@@ -205,16 +205,16 @@ module.exports.updateReviewReply = (replyId, updateData, callback) => {
 
         if (replyFound) {
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`review reply`))
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("review reply"))
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Review reply`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Review reply"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`update review reply`), err)
+            Api.getError(FeedbackMessages.operationFailed("update review reply"), err)
         );
     });
 };
@@ -228,12 +228,12 @@ module.exports.deleteReviewReply = (replyId, callback) => {
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Review reply`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Review reply"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`delete review reply`), err)
+            Api.getError(FeedbackMessages.operationFailed("delete review reply"), err)
         );
     });
 };

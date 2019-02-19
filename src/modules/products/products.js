@@ -78,7 +78,7 @@ module.exports.createProduct = (productData, callback) => {
         );
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`create product`), err)
+            Api.getError(FeedbackMessages.operationFailed("create product"), err)
         );
     });
 };
@@ -125,12 +125,12 @@ module.exports.updateProduct = (productId, updateData, callback) => {
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Product`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Product"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`update product`), err)
+            Api.getError(FeedbackMessages.operationFailed("update product"), err)
         );
     });
 };
@@ -148,12 +148,12 @@ module.exports.deleteProduct = (productId, callback) => {
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Product`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Product"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`delete product`), err)
+            Api.getError(FeedbackMessages.operationFailed("delete product"), err)
         );
     });
 };
@@ -174,7 +174,7 @@ module.exports.addProductImage = (productId, imageId, callback) => {
         .then((productFound) => {
             if (!productFound) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Product`), 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound("Product"), 404)
                 );
             }
 
@@ -184,7 +184,7 @@ module.exports.addProductImage = (productId, imageId, callback) => {
 
             // Product found, return success response
             return callback(
-                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully(`Product`), productFound)
+                Api.getResponse(true, FeedbackMessages.itemUpdatedSuccessfully("Product"), productFound)
             );
         })
         .catch((err) => {
@@ -201,7 +201,7 @@ module.exports.deleteProductImage = (productId, imageId, callback) => {
         .then((productFound) => {
             if (!productFound) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Product`), 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound("Product"), 404)
                 );
             }
             //TODO: Delete image from google cloud ~ use middleware
@@ -225,7 +225,7 @@ module.exports.deleteProductImage = (productId, imageId, callback) => {
             // The image was not found in our product
             if (imageIndex === -1) {
                 return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound(`Product image`), 404)
+                    Api.getResponse(false, FeedbackMessages.itemNotFound("Product image"), 404)
                 );
             }
 
@@ -234,7 +234,7 @@ module.exports.deleteProductImage = (productId, imageId, callback) => {
 
             // Return the product with the deleted image
             return callback(
-                Api.getResponse(true, FeedbackMessages.operationSucceeded(`deleted the image`), {
+                Api.getResponse(true, FeedbackMessages.operationSucceeded("deleted the image"), {
                     product: productFound,
                     deletedImage: deletedImage
                 })
@@ -308,31 +308,29 @@ module.exports.createProductVariant = (productVariantData, callback) => {
     return newProductVariant.save().then(createdProductVariant => {
         // Save the variant to the product
         Product.findByIdAndUpdate(productVariantData.product, {
-            $push: {
-                variants: createdProductVariant
-            }
-        }, (err, productFound) => {
-            // If there was an error
-            if (err) {
+                $push: {
+                    variants: createdProductVariant
+                }
+            })
+            .then((productFound) => {
+                // If the product was found
+                if (productFound) {
+                    return callback(
+                        Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Product variant"), createdProductVariant, 201)
+                    );
+                } else { // Product not found
+                    return callback(
+                        Api.getResponse(false, FeedbackMessages.itemNotFound("Product"), null, 404)
+                    );
+                }
+            }).catch((err) => {
                 return callback(
-                    Api.getError(FeedbackMessages.operationFailed(`retrieve product to add variant to`), err, 500)
+                    Api.getError(FeedbackMessages.operationFailed(`retrieve product to add variant to.${err.message}`), err, 500)
                 );
-            }
-
-            // If the product was found
-            if (productFound) {
-                return callback(
-                    Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Product variant"), createdProductVariant, 201)
-                );
-            } else { // Product not found
-                return callback(
-                    Api.getResponse(false, FeedbackMessages.itemNotFound("Product"), null, 404)
-                );
-            }
-        });
+            });
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`create product variant`), err)
+            Api.getError(FeedbackMessages.operationFailed("create product variant"), err)
         );
     });
 };
@@ -363,12 +361,12 @@ module.exports.updateProductVariant = (productVariantId, updateData, callback) =
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Product variant`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Product variant"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`update product variant`), err)
+            Api.getError(FeedbackMessages.operationFailed("update product variant"), err)
         );
     });
 };
@@ -386,12 +384,12 @@ module.exports.deleteProductVariant = (productVariantId, callback) => {
             );
         } else {
             return callback(
-                Api.getError(FeedbackMessages.itemNotFound(`Product variant`), null, 404)
+                Api.getError(FeedbackMessages.itemNotFound("Product variant"), null, 404)
             );
         }
     }).catch((err) => {
         return callback(
-            Api.getError(FeedbackMessages.operationFailed(`delete product variant`), err)
+            Api.getError(FeedbackMessages.operationFailed("delete product variant"), err)
         );
     });
 };
