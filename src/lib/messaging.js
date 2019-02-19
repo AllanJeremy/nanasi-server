@@ -29,7 +29,7 @@ module.exports.sendSms = (recipients, message, callback) => {
 
     const sendMessage = Sms.send(options);
 
-    sendMessage.then(response => {
+    sendMessage.then((response) => {
         console.log(response);
         return callback(response);
     }).catch(err => {

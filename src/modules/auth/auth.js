@@ -88,7 +88,7 @@ module.exports.register = (userData, callback) => {
 // Confirm registered user
 module.exports.confirmRegistration = (phone, otpInput, callback) => {
     // Confirm the OTP
-    Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.REGISTER, response => {
+    Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.REGISTER, (response) => {
         // If the OTP was invalid ~ Reject Login
         if (!response.ok) {
             return callback(Api.getResponse(false, AuthMessages.otpFailedToVerify(), null, 401));
@@ -130,7 +130,7 @@ module.exports.confirmRegistration = (phone, otpInput, callback) => {
 // Login
 module.exports.login = (phone, otpInput, callback) => {
     // Verify the OTP then login
-    return Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.LOGIN, response => {
+    return Otp.verifyOtp(phone, otpInput, OtpConfig.OtpTypes.LOGIN, (response) => {
         // If the OTP was invalid ~ Reject Login
         if (!response.ok) {
             return callback(Api.getResponse(false, AuthMessages.loginFailed(), undefined, 401));

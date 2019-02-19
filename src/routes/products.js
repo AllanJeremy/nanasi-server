@@ -35,7 +35,7 @@ router.get("/variants/:productId", (req, res, next) => {
         productId: req.params.productId
     };
 
-    product.getProductVariants(filter, response => {
+    product.getProductVariants(filter, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -43,7 +43,7 @@ router.get("/variants/:productId", (req, res, next) => {
 // View single product variant
 //* Globally accessible
 router.get("/single-variant/:variantId", (req, res, next) => {
-    product.getProductVariantById(req.params.variantId, response => {
+    product.getProductVariantById(req.params.variantId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -51,7 +51,7 @@ router.get("/single-variant/:variantId", (req, res, next) => {
 // Update product variant
 //* Merchant accessible
 router.patch("/variants/:variantId", CheckAuth.merchantLoggedIn, Ownership.productVariantBelongsToMerchant, (req, res, next) => {
-    product.updateProductVariant(req.params.variantId, req.body.data, response => {
+    product.updateProductVariant(req.params.variantId, req.body.data, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -59,7 +59,7 @@ router.patch("/variants/:variantId", CheckAuth.merchantLoggedIn, Ownership.produ
 // Delete product variant
 //* Merchant accessible
 router.delete("/variants/:variantId", CheckAuth.merchantLoggedIn, Ownership.productVariantBelongsToMerchant, (req, res, next) => {
-    product.deleteProductVariant(req.params.variantId, response => {
+    product.deleteProductVariant(req.params.variantId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -68,7 +68,7 @@ router.delete("/variants/:variantId", CheckAuth.merchantLoggedIn, Ownership.prod
 // Create products
 //* Merchant accessible
 router.post("/", CheckAuth.merchantLoggedIn, Ownership.storeBelongsToMerchant, (req, res, next) => {
-    product.createProduct(req.body.data, response => {
+    product.createProduct(req.body.data, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -76,7 +76,7 @@ router.post("/", CheckAuth.merchantLoggedIn, Ownership.storeBelongsToMerchant, (
 // View multiple products
 //* Globally accessible
 router.get("/", (req, res, next) => {
-    product.getProducts(req.body.filters, response => {
+    product.getProducts(req.body.filters, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -84,7 +84,7 @@ router.get("/", (req, res, next) => {
 // Get products by category
 //* Globally accessible
 router.get("/category/:categoryId", (req, res, next) => {
-    product.getProductsByCategory(req.params.categoryId, response => {
+    product.getProductsByCategory(req.params.categoryId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -92,7 +92,7 @@ router.get("/category/:categoryId", (req, res, next) => {
 // View store products
 //* Globally accessible
 router.get("/store/:storeId", (req, res, next) => {
-    product.getStoreProducts(req.params.storeId, response => {
+    product.getStoreProducts(req.params.storeId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -100,7 +100,7 @@ router.get("/store/:storeId", (req, res, next) => {
 // View single product
 //* Globally accessible
 router.get("/:productId", (req, res, next) => {
-    product.getProductById(req.params.productId, response => {
+    product.getProductById(req.params.productId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -108,7 +108,7 @@ router.get("/:productId", (req, res, next) => {
 // Update product
 //* Merchant accessible
 router.patch("/:productId", CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, (req, res, next) => {
-    product.updateProduct(req.params.productId, response => {
+    product.updateProduct(req.params.productId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -117,7 +117,7 @@ router.patch("/:productId", CheckAuth.merchantLoggedIn, Ownership.productBelongs
 //* Merchant accessible
 router.delete("/:productId", CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, (req, res, next) => {
     console.log(`delete product`);
-    product.deleteProduct(req.params.productId, response => {
+    product.deleteProduct(req.params.productId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });

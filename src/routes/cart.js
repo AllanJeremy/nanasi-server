@@ -17,7 +17,7 @@ const Ownership = require("../middleware/entityOwnership");
 // Add items to cart
 //* Buyer accessible
 router.post("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
-    cart.addCartItems(req.userData.id, req.body.items, response => {
+    cart.addCartItems(req.userData.id, req.body.items, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -25,7 +25,7 @@ router.post("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
 // View cart items for the current user
 //* Buyer accessible
 router.get("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
-    cart.getUserCart(req.userData.id, response => {
+    cart.getUserCart(req.userData.id, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -34,7 +34,7 @@ router.get("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
 // Remove cart item ~ Remove item from cart
 //* Buyer accessible
 router.patch("/removeCartItem/:cartId", CheckAuth.buyerLoggedIn, Ownership.cartBelongsToBuyer, (req, res, next) => {
-    cart.removeCartItem(req.params.cartId, req.body.productId, response => {
+    cart.removeCartItem(req.params.cartId, req.body.productId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -42,7 +42,7 @@ router.patch("/removeCartItem/:cartId", CheckAuth.buyerLoggedIn, Ownership.cartB
 // Deletes the entire cart with the id of cart
 //* Buyer accessible
 router.delete("/:cartId", CheckAuth.buyerLoggedIn, Ownership.cartBelongsToBuyer, (req, res, next) => {
-    cart.deleteCart(req.params.cartId, response => {
+    cart.deleteCart(req.params.cartId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });

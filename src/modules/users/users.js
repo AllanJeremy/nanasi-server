@@ -74,7 +74,7 @@ function _addAddress(userId, addressInfo, callback) {
             //Add the address to the user table
             _updateUser(userId, {
                 address: addressAdded.id
-            }, response => {
+            }, (response) => {
                 if (!response.ok) {
                     return callback(response);
                 }
@@ -135,7 +135,7 @@ function _deleteAddress(userId, addressId, callback) {
             // Remove the address from the users table
             _updateUser(userId, {
                 address: undefined
-            }, response => {
+            }, (response) => {
                 if (!response.ok) {
                     return callback(response);
                 }

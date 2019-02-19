@@ -20,7 +20,7 @@ module.exports.checkout = (phone, amount, meta, currencyCode, callback) => {
     };
 
     Payments.mobileCheckout(options)
-        .then(response => {
+        .then((response) => {
             console.log(response);
             callback(null, response);
         }).catch(err => {
@@ -53,7 +53,7 @@ module.exports.sendNanasiRevenueFromCheckout = (cartItems, callback) => {
         }
     };
     Payments.walletTransfer(paymentOptions)
-        .then(response => {
+        .then((response) => {
             console.log(`Sent Nanasi revenue: ${nanasiRevenue} from ${cartItems}`);
             console.log(response);
             callback(null, response);

@@ -116,7 +116,7 @@ module.exports.addUserOtpToDb = (userId, otpData, callback) => {
         console.debug(`An error occurred while you trying to add OTP to db: `);
         console.error(err);
         return Api.getError(err.message, err);
-    }).then(response => {
+    }).then((response) => {
         return callback(response);
     });
 };

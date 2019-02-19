@@ -10,7 +10,7 @@ const Ownership = require("../middleware/entityOwnership");
 // Create store
 //* Merchant accessible
 router.post("/", CheckAuth.merchantLoggedIn, (req, res, next) => {
-    store.createStore(req.body.data, response => {
+    store.createStore(req.body.data, (response) => {
         return res.status(response.statusCode).json(response); //TODO: refactor this
     });
 });
@@ -18,7 +18,7 @@ router.post("/", CheckAuth.merchantLoggedIn, (req, res, next) => {
 // View multiple stores
 //* Globally accessible
 router.get("/", (req, res, next) => {
-    store.getStores(req.body.filters, response => {
+    store.getStores(req.body.filters, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -26,7 +26,7 @@ router.get("/", (req, res, next) => {
 // Get logged in merchant stores
 //* Globally accessible
 router.get("/merchant", CheckAuth.merchantLoggedIn, (req, res, next) => {
-    store.getMerchantStores(req.userData.id, response => {
+    store.getMerchantStores(req.userData.id, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -34,7 +34,7 @@ router.get("/merchant", CheckAuth.merchantLoggedIn, (req, res, next) => {
 // Get stores by product type
 //* Globally accessible
 router.get("/productType/:productTypeId", (req, res, next) => {
-    store.getStoresByProductType(req.params.productTypeId, response => {
+    store.getStoresByProductType(req.params.productTypeId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -42,7 +42,7 @@ router.get("/productType/:productTypeId", (req, res, next) => {
 // View single store
 //* Globally accessible
 router.get("/:storeId", (req, res, next) => {
-    store.getStoreById(req.params.storeId, response => {
+    store.getStoreById(req.params.storeId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -50,7 +50,7 @@ router.get("/:storeId", (req, res, next) => {
 // Update store
 //* Merchant accessible
 router.patch("/:storeId", CheckAuth.merchantLoggedIn, Ownership.storeBelongsToMerchant, (req, res, next) => { //TODO: Add db code
-    store.updateStore(req.params.storeId, req.body.data, response => {
+    store.updateStore(req.params.storeId, req.body.data, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
@@ -58,7 +58,7 @@ router.patch("/:storeId", CheckAuth.merchantLoggedIn, Ownership.storeBelongsToMe
 // Delete store
 //* Merchant accessible
 router.delete("/:storeId", CheckAuth.merchantLoggedIn, Ownership.storeBelongsToMerchant, (req, res, next) => { //TODO: Add db code
-    store.deleteStore(req.params.storeId, response => {
+    store.deleteStore(req.params.storeId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
