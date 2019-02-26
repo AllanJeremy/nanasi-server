@@ -50,6 +50,25 @@
              );
          });
  }
+
+ //  Create a new cart item
+ function _createNewCartItem(userId, itemsToAdd, callback) {
+     const cartItem = new Cart({
+         items: itemsToAdd,
+         user: userId
+     });
+
+     return cartItem.save().then(createdCartItem => {
+         return callback(
+             Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Cart item"), createdCartItem, 201)
+         );
+     }).catch((err) => {
+         return callback(
+             Api.getError(FeedbackMessages.operationFailed("create cart item"), err)
+         );
+     });
+ }
+
  // Add item to cart
  function _addCartItems(userId, itemsToAdd, callback) { // items = [{product: <id>, quantity: <qty>}]
      Cart.findOne({
@@ -58,29 +77,12 @@
          })
          .then(cartFound => {
              let cartItems = cartFound.items;
-             // Check if the item being added already exists in the cart
-             if (!carItemFound || (cartItems.length < 1)) { // Item does not exist ~ create it
-                 const cartItem = new Cart({
-                     items: itemsToAdd,
-                     user: userId
-                 });
-
-                 return cartItem.save().then(createdCartItem => {
-                     return callback(
-                         Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Cart item"), createdCartItem, 201)
-                     );
-                 }).catch((err) => {
-                     return callback(
-                         Api.getError(FeedbackMessages.operationFailed("create cart item"), err)
-                     );
-                 });
-             }
-
+             //TODO: Check if cart item was found
              // Cart item found
              let itemCartIndex; // index of the item in the cart
              let productId;
 
-
+             // TODO: Prevent duplicate items
              itemsToAdd.map(itemToAdd => {
                  productId = itemToAdd.productId; //* Remember to pass this in as productId and not product
                  itemCartIndex = cartItems.indexOf(productId);
@@ -107,9 +109,14 @@
                  });
          })
          .catch((err) => {
-             return callback(
-                 Api.getError(err.message, err)
-             );
+             if (err.errors) {
+                 return callback(
+                     Api.getError(err.message, err)
+                 );
+             }
+
+             // Create a new cart item if there were no actual errors ~ Somehow end up in catch block when a cart item cannot be found
+             _createNewCartItem(userId, itemsToAdd, callback);
          });
  }
 
@@ -143,6 +150,7 @@
 
          })
          .catch((err) => {
+             console.log(err);
              return callback(
                  Api.getError(err.message, err)
              );
