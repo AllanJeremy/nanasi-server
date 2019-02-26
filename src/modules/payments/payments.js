@@ -1,13 +1,17 @@
 const cart = require("../cart/cart"); // Cart module
 const user = require("../users/users"); // User module
 
+const {
+    AT_RESPONSES
+} = require("../../config/africasTalking");
+
 const PaymentLib = require("../../lib/payment"); // Payment library
 const Api = require("../../lib/api");
 const FeedbackMessages = require("../../lang/feedbackMessages");
 
 // Checkout
-module.exports.buyerCheckout = (cartId, callback) => {
-    cart.getCartTotal(cartId, (cartResponse) => {
+module.exports.buyerCheckout = (userId, callback) => {
+    cart.getCartTotal(userId, (cartResponse) => {
         // Something went wrong ~ we could not get the cart total
         if (!cartResponse.ok || !cartResponse.data.total) {
             return callback(cartResponse);
@@ -17,6 +21,7 @@ module.exports.buyerCheckout = (cartId, callback) => {
         const cartTotal = cartResponse.data.total;
         const userId = cartResponse.data.userId;
 
+        console.log(parseFloat(cartTotal));
         // Try getting the user before trying to make the payment
         user.getUserById(userId, (userResponse) => {
             // User could not be retrieved
@@ -24,7 +29,7 @@ module.exports.buyerCheckout = (cartId, callback) => {
                 return callback(userResponse);
             }
 
-            const userPhone = userResponse.data.user.phone;
+            const userPhone = userResponse.data.phone;
             if (!userPhone) {
                 return callback(
                     Api.getResponse(false, FeedbackMessages.operationFailed("complete payment. Phone number not found."), null, 400)
@@ -41,16 +46,31 @@ module.exports.buyerCheckout = (cartId, callback) => {
                     );
                 }
 
-                // Send Nanasi cut & retain merchant cut as the balance
-                PaymentLib.sendNanasiRevenueFromCheckout(cartResponse.items);
+                // If the checkout failed
+                if (response.status !== AT_RESPONSES.PAYMENTS.PENDING_CONFIRMATION) {
+                    return callback(
+                        Api.getResponse(false, response.description, response, 500)
+                    );
+                }
 
-                // Checkout was successful
-                return callback(
-                    Api.getResponse(true, FeedbackMessages.operationSucceeded("completed checkout."), {
-                        total: cartTotal,
-                        userId: userId,
-                    })
-                );
+                //* Checkout succeeded ~ Send nanasi revenue
+                // Send Nanasi cut & retain merchant cut as the balance
+                PaymentLib.sendNanasiRevenueFromCheckout(cartResponse.data.items, (err, response) => {
+                    if (err) {
+                        return callback(
+                            Api.getResponse(false, err.message, response, 500)
+                        );
+                    }
+
+                    // Checkout was successful
+                    return callback(
+                        Api.getResponse(true, FeedbackMessages.operationSucceeded("completed checkout.", response), {
+                            total: cartTotal,
+                            userId: userId,
+                        })
+                    );
+                });
+
             });
         });
     });

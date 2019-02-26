@@ -5,9 +5,9 @@ const CheckAuth = require("../middleware/checkAuth");
 const payment = require("../modules/payments/payments");
 
 // Checkout
-router.post("/checkout", (req, res, next) => {
+router.post("/checkout", CheckAuth.buyerLoggedIn, (req, res, next) => {
 
-    payment.buyerCheckout(req.body.cartId, (response) => {
+    payment.buyerCheckout(req.userData.id, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });

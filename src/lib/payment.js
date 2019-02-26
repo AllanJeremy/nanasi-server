@@ -24,7 +24,7 @@ module.exports.checkout = (phone, amount, meta, currencyCode, callback) => {
             console.log(response);
             callback(null, response);
         }).catch((err) => {
-            console.log(err);
+            console.error(err);
             callback(err);
         });
 };
@@ -37,8 +37,8 @@ module.exports.withdraw = () => {
 // Send nanasi cut & leave balance to merchant account
 module.exports.sendNanasiRevenueFromCheckout = (cartItems, callback) => {
     let nanasiRevenue = 0;
-    cartItems.map(product => {
-        nanasiRevenue = (product.regularPrice * product.quantity * NanasiConfig.rates.NANASI_PERCENTAGE);
+    cartItems.map(cartItem => {
+        nanasiRevenue = (cartItem.product.regularPrice * cartItem.quantity * NanasiConfig.rates.NANASI_PERCENTAGE);
     });
 
     // Send Nanasi revenue
@@ -55,11 +55,9 @@ module.exports.sendNanasiRevenueFromCheckout = (cartItems, callback) => {
     Payments.walletTransfer(paymentOptions)
         .then((response) => {
             console.log(`Sent Nanasi revenue: ${nanasiRevenue} from ${cartItems}`);
-            console.log(response);
             callback(null, response);
         }).catch((err) => {
             console.error(`Failed to send nanasi revenue`);
-            console.log(err);
-            callback(err);
+            callback(err, null);
         });
 };

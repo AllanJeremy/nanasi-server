@@ -201,7 +201,7 @@
      Cart.findOne({
              user: userId
          })
-         .populate("items.product")
+         .populate("items.product", "regularPrice salePrice")
          .then(cartItemsFound => {
              if (cartItemsFound.length === 0) {
                  return callback(
@@ -211,11 +211,11 @@
 
              // Calculating total cart price
              let total = 0;
-             //  cartItemsFound.items.map(product => {
-             //      let productPrice = product.salePrice || product.regularPrice;
+             cartItemsFound.items.map((cartItem) => {
+                 let productPrice = cartItem.product.salePrice || cartItem.product.regularPrice;
 
-             //      total += (product.quantity * productPrice);
-             //  });
+                 total += (cartItem.quantity * productPrice);
+             });
 
              //* Nanasi will still retain their revenue (8% of regular price)
 
