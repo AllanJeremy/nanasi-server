@@ -32,7 +32,7 @@
  function _getSingleCartByFilter(filter, callback) {
      return Cart.findOne(filter)
          .populate("product", "name")
-         .populate("user")
+         .populate("user", "firstName lastName accountType")
          .then((cartItemFound) => {
              const isOk = cartItemFound ? true : false;
              const statusCode = isOk ? 200 : 404;
@@ -40,7 +40,7 @@
 
              return callback(
                  Api.getResponse(isOk, message, {
-                     cartItem: cartItemFound
+                     cart: cartItemFound
                  }, statusCode)
              );
          })
@@ -145,16 +145,9 @@
 
  // View cart items for the current user
  module.exports.getUserCart = (userId, callback) => {
-     return _getCartsByFilter({
+     return _getSingleCartByFilter({
          user: userId,
          orderIsCompleted: false
-     }, callback);
- };
-
- // Get single cart item
- module.exports.getCartItem = (cartItemId, callback) => {
-     return _getSingleCartByFilter({
-         _id: cartItemId
      }, callback);
  };
 
@@ -204,11 +197,13 @@
      });
  };
 
- module.exports.getCartTotal = (cartId, callback) => { //TODO: Debug
-     Cart.findById(cartId)
+ module.exports.getCartTotal = (userId, callback) => { //TODO: Debug
+     Cart.findOne({
+             user: userId
+         })
          .populate("items.product")
-         .then(cartItemFound => {
-             if (!cartItemFound) {
+         .then(cartItemsFound => {
+             if (cartItemsFound.length === 0) {
                  return callback(
                      Api.getError(FeedbackMessages.itemNotFound("Cart item"), null, 404)
                  );
@@ -216,25 +211,25 @@
 
              // Calculating total cart price
              let total = 0;
-             cartItemFound.items.map(product => {
-                 let productPrice = product.salePrice || product.regularPrice;
+             //  cartItemsFound.items.map(product => {
+             //      let productPrice = product.salePrice || product.regularPrice;
 
-                 total += (product.quantity * productPrice);
-             });
+             //      total += (product.quantity * productPrice);
+             //  });
 
              //* Nanasi will still retain their revenue (8% of regular price)
 
              return callback(
                  Api.getResponse(true, FeedbackMessages.operationSucceeded("calculated cart total"), {
                      total: total,
-                     userId: cartItemFound.user,
-                     items: cartItemFound.items
+                     userId: cartItemsFound.user,
+                     items: cartItemsFound.items
                  })
              );
          })
          .catch((err) => {
              return callback(
-                 Api.getError(FeedbackMessages.operationFailed("calculate cart total"), err)
+                 Api.getError(err.message, err)
              );
          });
  };
