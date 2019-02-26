@@ -135,43 +135,6 @@
          });
  }
 
- // Delete single cart item
- function _removeSingleCartItem(cartId, productId, callback) {
-     Cart.findById(cartId)
-         .then(cartFound => {
-             if (!cartFound) {
-                 return callback(
-                     Api.getResponse(false, FeedbackMessages.itemNotFound("Cart"), null, 404)
-                 );
-             }
-
-             // Cart item found ~ Find item to remove
-             cartFound.items = cartFound.items.filter(itemFound => {
-                 return (itemFound.product !== productId);
-             });
-
-             // Update cart ~ remove cart item
-             cartFound.items.save()
-                 .then(updatedCart => {
-                     return callback(
-                         Api.getResponse(true, FeedbackMessages.operationSucceeded("removed cart item"), updatedCart)
-                     );
-                 })
-                 .catch((err) => {
-                     return callback(
-                         Api.getError(err.message, err)
-                     );
-                 });
-
-         })
-         .catch((err) => {
-             console.log(err);
-             return callback(
-                 Api.getError(err.message, err)
-             );
-         });
- }
-
  /* 
      EXPORTS
  */
@@ -219,11 +182,6 @@
  };
 
  // Delete single cart item
- module.exports.removeCartItem = (cartId, productId, callback) => {
-     return _removeSingleCartItem(cartId, productId, callback);
- };
-
- // Delete entire cart
  module.exports.deleteCart = (cartId, callback) => {
      return Cart.findByIdAndDelete(cartId).then((cartItemDeleted) => {
          if (cartItemDeleted) {
