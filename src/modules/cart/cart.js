@@ -69,6 +69,24 @@
      });
  }
 
+ // Checks if there is a product by that id in a list of cart items ~ returns true if it does, false if not
+ function _productExistsInCart(productId, cartItems) { //* Prevents duplicate cart items
+     let productExists = false;
+     let itemIndex;
+     cartItems.map((currItem, index) => {
+         productExists = (currItem.product._id == productId);
+         if (productExists) { // Return true, don't bother checking
+             itemIndex = index;
+             return productExists;
+         }
+     });
+
+     return {
+         exists: productExists,
+         index: itemIndex
+     };
+ }
+
  // Add item to cart
  function _addCartItems(userId, itemsToAdd, callback) { // items = [{product: <id>, quantity: <qty>}]
      Cart.findOne({
@@ -77,19 +95,16 @@
          })
          .then(cartFound => {
              let cartItems = cartFound.items;
-             //TODO: Check if cart item was found
-             // Cart item found
-             let itemCartIndex; // index of the item in the cart
-             let productId;
 
-             // TODO: Prevent duplicate items
-             itemsToAdd.map(itemToAdd => {
-                 productId = itemToAdd.productId; //* Remember to pass this in as productId and not product
-                 itemCartIndex = cartItems.indexOf(productId);
+             //TODO: Check if cart item was found
+             let productInCart;
+
+             itemsToAdd.map((itemToAdd) => {
+                 productInCart = _productExistsInCart(itemToAdd.product, cartItems);
 
                  // This specific item already exists in the cart found ~ update quantity
-                 if (itemCartIndex !== -1) {
-                     cartFound.items[itemCartIndex].quantity = itemToAdd.quantity;
+                 if (productInCart.exists) {
+                     cartFound.items[productInCart.index].quantity = itemToAdd.quantity;
                  } else { // Item does not exist in cart, add it
                      // Product id
                      cartFound.items.push(itemToAdd);
