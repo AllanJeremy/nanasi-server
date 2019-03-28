@@ -199,7 +199,8 @@
 
  module.exports.getCartTotal = (userId, callback) => { //TODO: Debug
      Cart.findOne({
-             user: userId
+             user: userId,
+             orderIsCompleted: false
          })
          .populate("items.product", "regularPrice salePrice")
          .then(cartItemsFound => {
@@ -230,6 +231,35 @@
          .catch((err) => {
              return callback(
                  Api.getError(err.message, err)
+             );
+         });
+ };
+
+ // Clear buyer cart ~ we use this when we complete a checkout
+ module.exports.clearUserCart = (userId, callback) => {
+     //TODO: Move cart contents into a separate collection
+     Cart.findOneAndUpdate({
+             user: userId,
+             orderIsCompleted: false
+         })
+         .then((cartFound) => {
+             // Check if cart was found
+             if (cartFound) {
+                 // No errors ~ Updated the cart
+                 return callback(
+                     Api.getResponse(true, FeedbackMessages.operationSucceeded("cleared cart"), {
+                         id: cartFound.id
+                     })
+                 );
+             } else {
+                 return callback(
+                     Api.getError(FeedbackMessages.itemNotFound("cart"), null, 404)
+                 );
+             }
+         })
+         .catch((err) => {
+             return callback(
+                 Api.getError(FeedbackMessages.operationFailed("clear cart"), err)
              );
          });
  };

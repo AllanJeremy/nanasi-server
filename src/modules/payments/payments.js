@@ -53,24 +53,31 @@ module.exports.buyerCheckout = (userId, callback) => {
                     );
                 }
 
-                //* Checkout succeeded ~ Send nanasi revenue
-                // Send Nanasi cut & retain merchant cut as the balance
-                PaymentLib.sendNanasiRevenueFromCheckout(cartResponse.data.items, (err, response) => {
-                    if (err) {
-                        return callback(
-                            Api.getResponse(false, err.message, response, 500)
-                        );
+                //* Checkout succeeded ~ Clear cart & Send nanasi revenue
+                /* cart.clearUserCart(userId, (response) => {
+                    if (!response.ok) {
+                        return callback(response);
                     }
 
-                    // Checkout was successful
-                    return callback(
-                        Api.getResponse(true, FeedbackMessages.operationSucceeded("completed checkout.", response), {
-                            total: cartTotal,
-                            userId: userId,
-                        })
-                    );
-                });
-
+                    // User cart successfully cleared 
+                    //TODO: Re-enable this
+                    // Send Nanasi cut & retain merchant cut as the balance
+                    PaymentLib.sendNanasiRevenueFromCheckout(cartResponse.data.items, (err, response) => {
+                        if (err) {
+                            return callback(
+                                Api.getError(err, err.message)
+                            );
+                        }
+    
+                        // Checkout was successful
+                        return callback(
+                            Api.getResponse(true, FeedbackMessages.operationSucceeded("completed checkout.", response), {
+                                total: cartTotal,
+                                userId: userId,
+                            })
+                        );
+                    });
+                }); */
             });
         });
     });

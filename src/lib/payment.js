@@ -1,8 +1,8 @@
 const {
     AfricasTalking,
-    APP_PRODUCT_NAME,
-    NANASI_HOLDINGS_PRODUCT_NAME
+    PAYMENT_PRODUCTS
 } = require("../config/africasTalking");
+
 const Payments = AfricasTalking.PAYMENTS;
 const NanasiConfig = require("../config/nanasi");
 
@@ -11,7 +11,7 @@ module.exports.checkout = (phone, amount, meta, currencyCode, callback) => {
     currencyCode = currencyCode || "KES";
 
     const options = {
-        productName: APP_PRODUCT_NAME,
+        productName: PAYMENT_PRODUCTS.APP,
         phoneNumber: phone,
         providerChannel: "Athena", //TODO: Remove in production
         currencyCode: currencyCode,
