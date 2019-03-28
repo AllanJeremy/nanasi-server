@@ -29,6 +29,10 @@ const cartSchema = new mongoose.Schema({
     orderIsCompleted: { // Used to detect abandoned carts
         type: Boolean,
         default: false
+    },
+    isAbandoned: {
+        type: Boolean,
+        default: false
     }
 });
 
