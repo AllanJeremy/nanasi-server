@@ -8,6 +8,7 @@ const Order = require("../models/orders/order");
 const Cart = require("../models/cart");
 const Review = require("../models/reviews/review");
 const ReviewReply = require("../models/reviews/reply");
+const Notification = require("../models/notification");
 
 
 // Returns a JSON response - used when ownership authorization failed, takes the request response as the first parameter, along with a message
@@ -185,4 +186,24 @@ module.exports.billingInfoBelongsToUser = (req, res, next) => {
     const userId = req.userData.id;
 
     next();
+};
+
+// Notification belongs to user
+module.exports.notificationBelongsToUser = (req, res, next) => {
+    const userId = req.userData.id;
+    const notificationId = req.params.notificationId;
+
+    Notification.find({
+        _id: notificationId,
+        user: userId
+    }).then((notificationFound) => {
+        if (!notificationFound) {
+            return _sendOwnershipAuthFailedResponse(res, OwnershipMessages.notificationDoesNotBelongToUser());
+        }
+
+        // Store belongs to merchant ~ we can move to next middleware
+        next();
+    }).catch((err) => {
+        return _serverErrorInOwnershipAuth(res, err);
+    });
 };

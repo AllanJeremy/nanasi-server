@@ -6,6 +6,10 @@ function _entityDoesNotBelongToUser(entityName, userType) {
     return message;
 }
 
+module.exports.notificationDoesNotBelongToUser = () => {
+    return _entityDoesNotBelongToUser("notification", "user");
+};
+
 module.exports.storeDoesNotBelongToMerchant = () => {
     return _entityDoesNotBelongToUser("store", "merchant");
 };
