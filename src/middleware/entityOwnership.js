@@ -125,11 +125,20 @@ module.exports.orderBelongsToMerchant = (req, res, next) => {
     BUYER OWNERSHIP
 */
 // Cart belongs to buyer
-module.exports.cartBelongsToBuyer = (req, res, next) => {
+module.exports.cartBelongsToBuyer = (req, res, next) => { //TOOD: Add implementation
     const buyerId = req.userData.id;
     const cartId = req.params.cartId;
 
-    console.log(`Merchant id: ${buyerId} and Variant id: ${cartId}`);
+    console.log(`Buyer id: ${buyerId} and Cart id: ${cartId}`);
+    next();
+};
+
+// Cart item belongs to buyer
+module.exports.cartItemBelongsToBuyer = (req, res, next) => { //TODO: Add implementation
+    const buyerId = req.userData.id;
+    const cartItemId = req.params.cartItemId;
+
+    console.log(`Buyer id: ${buyerId} and Cart item id: ${cartItemId}`);
     next();
 };
 
