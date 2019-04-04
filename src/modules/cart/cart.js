@@ -237,11 +237,16 @@
 
  // Clear buyer cart ~ we use this when we complete a checkout
  module.exports.clearUserCart = (userId, callback) => {
+
+     const updateData = {
+         orderIsCompleted: true
+     };
+
      //TODO: Move cart contents into a separate collection
      Cart.findOneAndUpdate({
              user: userId,
              orderIsCompleted: false
-         })
+         }, updateData)
          .then((cartFound) => {
              // Check if cart was found
              if (cartFound) {
