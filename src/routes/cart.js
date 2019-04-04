@@ -31,9 +31,16 @@ router.get("/", CheckAuth.buyerLoggedIn, (req, res, next) => {
 });
 
 // Remove cart item ~ Remove item from cart
+router.delete("/removeCartItem/:cartItemId", CheckAuth.buyerLoggedIn, Ownership.cartItemBelongsToBuyer, (req, res, next) => {
+    cart.deleteSingleCartItem(req.userData.id, req.params.cartItemId, (response) => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// Delete the entire buyer cart
 //* Buyer accessible
-router.delete("/:cartItemId", CheckAuth.buyerLoggedIn, Ownership.cartBelongsToBuyer, (req, res, next) => {
-    cart.deleteCart(req.params.cartItemId, (response) => {
+router.delete("/:cartId", CheckAuth.buyerLoggedIn, Ownership.cartBelongsToBuyer, (req, res, next) => {
+    cart.deleteCart(req.params.cartId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });

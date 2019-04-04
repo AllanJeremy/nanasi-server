@@ -269,6 +269,38 @@
          });
  };
 
+ // Delete a single cart item
+ module.exports.deleteSingleCartItem = (userId, cartItemId, callback) => {
+     Cart.findOne({
+             user: userId,
+             orderIsCompleted: false
+         })
+         .then((cartFound) => {
+             if (!cartFound) { // If no cart was found, return 404
+                 return callback(
+                     Api.getError(FeedbackMessages.itemNotFound("cart"), null, 404)
+                 );
+             }
+
+             // Cart was found, update it
+             cartFound.items = cartFound.items.filter((itemFound) => {
+                 // Return the array without the cartItem that we have removed
+                 return (itemFound._id === cartItemId)
+             });
+
+             cartFound.save(); // Update the cart
+             return callback(
+                 Api.getResponse(true, FeedbackMessages.operationSucceeded("removed cart item"), null, 201)
+             );
+         })
+         .catch((err) => {
+             return callback(
+                 Api.getError(FeedbackMessages.operationFailed("clear cart"), err)
+             );
+         });
+
+ };
+
  /* 
     ABANDONED CARTS
  */
