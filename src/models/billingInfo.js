@@ -18,7 +18,9 @@ const billingInfoSchema = new mongoose.Schema({
     },
     details: {
         type: Object,
-        default: {}
+        default: {
+            hello: "test"
+        }
     }
 });
 
