@@ -285,7 +285,7 @@
              // Cart was found, update it
              cartFound.items = cartFound.items.filter((itemFound) => {
                  // Return the array without the cartItem that we have removed
-                 return (itemFound._id === cartItemId)
+                 return (itemFound._id === cartItemId);
              });
 
              cartFound.save(); // Update the cart
