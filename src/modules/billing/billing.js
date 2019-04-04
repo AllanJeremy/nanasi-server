@@ -28,7 +28,7 @@ function _addBillingInfo(userId, billingInfo, callback) {
 // Get multiple billing information
 function _getBillingInfo(filter, callback) {
     BillingInfo.find(filter)
-        .then(billingInfoFound => {
+        .then((billingInfoFound) => {
             const billingInfoCount = billingInfoFound.length;
             const isOk = (billingInfoCount > 0);
             const statusCode = isOk ? 200 : 404;
@@ -112,7 +112,7 @@ module.exports.addBillingInfo = (userId, billingInfo, callback) => {
 module.exports.updateBillingInfo = (billingId, updateData, callback) => {
     _updateBillingInfo({
         _id: billingId
-    }, callback);
+    }, updateData, callback);
 };
 
 // Get user billing information
