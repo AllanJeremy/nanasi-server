@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const moment = require("moment");
 
 // Models referenced by this schema
 require("../reviews/review");
@@ -22,7 +21,7 @@ const reviewReplySchema = new mongoose.Schema({
     },
     dateUpdated: {
         type: Date,
-        default: moment().unix()
+        default: Date.now()
     }
 });
 

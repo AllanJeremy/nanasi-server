@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const moment = require("moment");
 
 require("./address");
 
@@ -31,7 +30,7 @@ const userSchema = new mongoose.Schema({
 
     createdOn: {
         type: Date,
-        default: moment().unix()
+        default: Date.now()
     },
 
     failedAttempts: Number,

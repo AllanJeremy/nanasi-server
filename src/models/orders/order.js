@@ -35,7 +35,7 @@ const orderSchema = new mongoose.Schema({
 
     dateOrdered: {
         type: Date,
-        default: Date.now() //TODO: Use moment
+        default: Date.now()
     },
 
     deliveryAddress: {
