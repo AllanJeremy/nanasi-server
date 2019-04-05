@@ -8,9 +8,8 @@ const Ownership = require("../middleware/entityOwnership");
 /* NOTIFICATION ENDPOINTS */
 // Create notification
 //* Logged in user accessible
-router.post("/", CheckAuth.userLoggedIn, (req, res, next) => {
-    req.body.data.user = req.userData.id;
-    notification.createNotification(req.body.data, (response) => {
+router.post("/", CheckAuth.userLoggedIn, (req, res, next) => { //TODO: Delete this once done testing notifications
+    notification.sendUserNotification(req.userData.id, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });

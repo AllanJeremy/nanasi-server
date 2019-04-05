@@ -103,7 +103,7 @@ function _setSingleNotificationReadStatus(notificationId, isRead) {
     EXPORTS
 */
 // Create notification
-module.exports.createNotification = (notificationData, callback) => {
+const createNotification = (notificationData, callback) => {
     const notification = new Notification(notificationData);
 
     notification.save().then(notificationCreated => {
@@ -138,4 +138,14 @@ module.exports.markNotificationAsUnread = (notificationId, callback) => {
 // Mark all current user notifications as read
 module.exports.markUserNotificationsAsRead = (userId) => {
     return _setUserNotificationsReadStatus(userId, true);
+};
+
+/* 
+    INTERNALLY USED FUNCTIONS. NOT EXPOSED TO API
+*/
+module.exports.sendUserNotification = (userId, notificationData, callback) => {
+    notificationData = notificationData || {};
+    notificationData.user = userId;
+
+    return createNotification(notificationData, callback);
 };
