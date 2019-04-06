@@ -9,7 +9,7 @@ const Ownership = require("../middleware/entityOwnership");
 // Create order
 //* Buyer accessible
 router.post("/", CheckAuth.buyerLoggedIn, (req, res, next) => { //TODO: Add db code
-    order.createOrder(req.body.cartId, (response) => {
+    order.createOrder(req.userData.id, req.body.deliveryAddress, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });

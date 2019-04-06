@@ -1,5 +1,13 @@
+const Api = require("../../lib/api");
+const FeedbackMessages = require("../../lang/feedbackMessages");
+
 const Order = require("../../models/orders/order");
-const Cart = require("../../modules/cart/cart");
+const Cart = require("../../models/cart");
+
+const NotificationConfig = require("../../config/notifications");
+const notification = require("../../modules/notifications/notifications");
+
+const NotificationMessages = require("../../lang/notificationMessages");
 
 /* 
     ORDER HELPERS
@@ -111,16 +119,82 @@ function _updateOrder(orderId, updateData, callback) {
     });
 }
 
+// Send order received notification to merchant
+function sendOrderReceivedNotification(merchantId, productName, productQuantity) {
+    const notificationData = {
+        title: NotificationMessages.titleOrderReceived,
+        message: NotificationMessages.orderReceivedMerchantNotification,
+        type: NotificationConfig.IMPORTANT
+    };
+
+    return notification.sendUserNotification(merchantId, notificationData);
+}
+
+// Get order data
+function getOrderData(userId, deliveryAddress, productsToAdd) { //TODO: Get delivery address
+    // Add userId to order data ~ Each order will have the appropriate userId now
+    let orderData = productsToAdd.map((cartProduct) => {
+        cartProduct.user = cartItemFound.user;
+
+        //! Send notification to the buyers 
+        sendOrderReceivedNotification(cartProduct.store.merchant, cartProduct.name, cartProduct.quantity); //*TODO: Test
+
+        // Order data ~ 
+        return {
+            user: userId,
+            product: cartProduct.id,
+            quantity: cartProduct.quantity,
+            deliveryAddress: deliveryAddress
+        };
+    });
+
+    return orderData;
+}
+
+// Adds multiple orders
+function _addOrder(orderData, callback) {
+    // If no order data was found ~ don't bother running query
+    if (orderData.length === 0) { //? Optimization
+        return callback(
+            Api.getResponse(false, FeedbackMessages.itemNotFound("order data"), null, 404)
+        );
+    }
+
+    // Order data found ~ create order
+    Order.insertMany(orderData)
+        .then((ordersAdded) => {
+            return callback(
+                Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Order"), createdOrder, 201)
+            );
+        }).catch((err) => {
+            return callback(
+                Api.getError(FeedbackMessages.operationFailed("create order"), err)
+            );
+        });
+}
+
 /* 
     EXPORTS
 */
 // Create order
-module.exports.createOrder = (cartId, callback) => {
+module.exports.createOrder = (userId, deliveryAddress, callback) => {
+
+    const orderPopulate = {
+        path: "items",
+        select: {
+            path: "product",
+            select: {
+                path: "store",
+                select: "merchant"
+            }
+        }
+    };
+
     // If cart item found is a completed cart, don"t return it. Means order has already been created for it
-    Cart.find({
-            _id: cartId,
+    Cart.findOne({
+            user: userId,
             orderIsCompleted: false
-        }).then(cartItemFound => {
+        }).populate(orderPopulate).then(cartItemFound => {
             // Cart items not found ~ Do not create order
             if (!cartItemFound) {
                 return callback(
@@ -129,33 +203,15 @@ module.exports.createOrder = (cartId, callback) => {
             }
 
             let productsToAdd = cartItemFound.items;
-            const cartProductsCount = productsToAdd.length; //Number of products in this product
-
             // Products not found in the cart provided
-            if (cartProductsCount < 1) {
+            if (productsToAdd.length === 0 || !productsToAdd) {
                 return callback(
                     Api.getResponse(false, FeedbackMessages.itemNotFound("Products in cart"), null, 404)
                 );
             }
 
-            // Add userId to order data ~ Each order will have the appropriate userId now
-            productsToAdd = productsToAdd.map((product) => {
-                product.user = cartItemFound.user;
-                return product;
-            });
-
-            // Products found ~ Create order
-            Order.collection.insertMany(productsToAdd)
-                .then(createdOrder => {
-                    return callback(
-                        Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Order"), createdOrder, 201)
-                    );
-                })
-                .catch((err) => {
-                    return callback(
-                        Api.getError(FeedbackMessages.operationFailed("create order"), err)
-                    );
-                });
+            const orderData = getOrderData(userId, deliveryAddress, productsToAdd);
+            return _addOrder(orderData, callback);
         })
         .catch((err) => {
             return callback(
