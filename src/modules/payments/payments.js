@@ -9,6 +9,8 @@ const PaymentLib = require("../../lib/payment"); // Payment library
 const Api = require("../../lib/api");
 const FeedbackMessages = require("../../lang/feedbackMessages");
 
+const order = require("../orders/orders");
+
 //
 function clearCartAndSendNanasiRevenue(userId, cartResponse) {
     //* Checkout succeeded ~ Clear cart & Send nanasi revenue
@@ -26,13 +28,20 @@ function clearCartAndSendNanasiRevenue(userId, cartResponse) {
                 );
             }
 
-            // Checkout was successful
-            return callback(
-                Api.getResponse(true, FeedbackMessages.operationSucceeded("completed checkout.", response), {
-                    total: cartTotal,
-                    userId: userId,
-                })
-            );
+            // Checkout was successful - create order
+            order.createOrder(cartResponse.id, (response) => {
+                return Api.getResponse(
+                    true,
+                    FeedbackMessages.operationSucceeded(
+                        "completed checkout.",
+                        response
+                    ), {
+                        total: cartTotal,
+                        userId: userId,
+                        order: response
+                    }
+                );
+            });
         });
     });
 }
