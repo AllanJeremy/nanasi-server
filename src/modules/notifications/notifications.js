@@ -103,18 +103,14 @@ function _setSingleNotificationReadStatus(notificationId, isRead) {
     EXPORTS
 */
 // Create notification
-const createNotification = (notificationData, callback) => {
+const createNotification = (notificationData) => {
     const notification = new Notification(notificationData);
 
     notification.save().then(notificationCreated => {
         //TODO: Emit notification sent event
-        return callback(
-            Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Notification"), reviewCreated)
-        );
+        return Api.getResponse(true, FeedbackMessages.itemCreatedSuccessfully("Notification"), notificationCreated);
     }).catch((err) => {
-        return callback(
-            Api.getError(FeedbackMessages.operationFailed("create notification"), err)
-        );
+        return Api.getError(FeedbackMessages.operationFailed("create notification"), err);
     });
 };
 
@@ -143,9 +139,9 @@ module.exports.markUserNotificationsAsRead = (userId) => {
 /* 
     INTERNALLY USED FUNCTIONS. NOT EXPOSED TO API
 */
-module.exports.sendUserNotification = (userId, notificationData, callback) => {
+module.exports.sendUserNotification = (userId, notificationData) => {
     notificationData = notificationData || {};
     notificationData.user = userId;
 
-    return createNotification(notificationData, callback);
+    return createNotification(notificationData);
 };
