@@ -6,14 +6,6 @@ const CheckAuth = require("../middleware/checkAuth");
 const Ownership = require("../middleware/entityOwnership");
 
 /* NOTIFICATION ENDPOINTS */
-// Create notification
-//* Logged in user accessible
-router.post("/", CheckAuth.userLoggedIn, (req, res, next) => { //TODO: Delete this once done testing notifications
-    notification.sendUserNotification(req.userData.id, (response) => {
-        return res.status(response.statusCode).json(response);
-    });
-});
-
 // View user notifications for the currently logged in user
 //* Logged in user accessible
 router.get("/", CheckAuth.userLoggedIn, (req, res, next) => {
