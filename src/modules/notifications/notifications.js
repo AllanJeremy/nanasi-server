@@ -8,7 +8,7 @@ const FeedbackMessages = require("../../lang/feedbackMessages");
 */
 //Get notifications by filter
 // Get multiple notifications by filter
-function _getNotificationsByFilter(filter) {
+function _getNotificationsByFilter(filter, callback) {
     filter = filter || {};
     return Notification.find(filter)
         .populate("user", "_id firstName lastName")
