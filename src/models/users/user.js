@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const OtpConfig = require("../../config/otp");
 
 require("./address");
 
@@ -41,7 +42,10 @@ const userSchema = new mongoose.Schema({
     otp: {
         password: String,
         otpType: String,
-        expiry: Date
+        expiry: {
+            type: Date,
+            default: (Date.now() + OtpConfig.OTP_EXPIRY_TIME)
+        }
     },
     address: {
         type: mongoose.Schema.Types.ObjectId,
