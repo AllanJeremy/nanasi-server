@@ -108,7 +108,7 @@ router.get("/:productId", (req, res, next) => {
 // Update product
 //* Merchant accessible
 router.patch("/:productId", CheckAuth.merchantLoggedIn, Ownership.productBelongsToMerchant, (req, res, next) => {
-    product.updateProduct(req.params.productId, (response) => {
+    product.updateProduct(req.params.productId, req.body.data, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
