@@ -27,8 +27,7 @@ function _getOrdersByFilter(filter, callback) {
         //     select: "name id"
         // })
         .then(ordersFound => {
-            const orderCount = ordersFound.length;
-            if (orderCount < 1) {
+            if (ordersFound.length < 1) {
                 return callback(
                     Api.getError(
                         FeedbackMessages.operationFailed("get orders. No orders found"),
@@ -38,17 +37,10 @@ function _getOrdersByFilter(filter, callback) {
                 );
             }
 
-
-            const isOk = orderCount > 0;
-            const statusCode = isOk ? 200 : 404;
-            const message = isOk ?
-                FeedbackMessages.itemsFoundWithCount(ordersFound, "Orders") :
-                FeedbackMessages.itemNotFound("Orders");
-
             // Calculate the order total
             let orderTotal = 0;
             let productPrice = 0;
-            ordersFound.map(order => {
+            let finalOrders = ordersFound.map(order => {
                 if (!order.product) return;
 
                 productPrice = order.product.salePrice || order.product.regularPrice;
@@ -57,15 +49,22 @@ function _getOrdersByFilter(filter, callback) {
                 }
 
                 productPrice = 0;
+                return order;
+            }).filter(val => val);
 
-            });
-
+            // Response variables
+            const orderCount = finalOrders.length;
+            const isOk = orderCount > 0;
+            const statusCode = isOk ? 200 : 404;
+            const message = isOk ?
+                FeedbackMessages.itemsFoundWithCount(finalOrders, "Orders") :
+                FeedbackMessages.itemNotFound("Orders");
             return callback(
                 Api.getResponse(
                     isOk,
                     message, {
                         count: orderCount,
-                        orders: ordersFound,
+                        orders: finalOrders,
                         total: orderTotal
                     },
                     statusCode
