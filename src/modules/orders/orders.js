@@ -20,7 +20,7 @@ function _getOrdersByFilter(filter, callback) {
         Order.find(filter)
         .populate({
             path: "product",
-            select: "regularPrice salePrice"
+            select: "name images regularPrice salePrice"
         })
         // .populate({
         //     path: "product.store",
@@ -85,14 +85,14 @@ function _getSingleOrderByFilter(filter, callback) {
         Order.findOne(filter)
         .populate({
             path: "product",
-            select: "regularPrice salePrice"
+            select: "name images regularPrice salePrice"
         })
         // .populate({
         //     path: "product.store",
         //     select: "name id"
         // })
-        .then((err, orderFound) => {
-            if (err) {
+        .then((orderFound) => {
+            if (!orderFound) {
                 return callback(
                     Api.getError(FeedbackMessages.operationFailed("get order"), err)
                 );
