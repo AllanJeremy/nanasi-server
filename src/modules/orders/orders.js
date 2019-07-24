@@ -1,6 +1,7 @@
 const Api = require("../../lib/api");
 const FeedbackMessages = require("../../lang/feedbackMessages");
 
+const Product = require("../../models/products/product");
 const Order = require("../../models/orders/order");
 const Cart = require("../../models/cart");
 
@@ -8,10 +9,112 @@ const NotificationConfig = require("../../config/notifications");
 const notification = require("../../modules/notifications/notifications");
 
 const NotificationMessages = require("../../lang/notificationMessages");
+const NanasiConfig = require("../../config/nanasi");
 
 /* 
     ORDER HELPERS
 */
+function _getOrderDetails(ordersFound){
+    let orderTotal = 0;
+    let profit = 0;
+
+    let finalOrders = ordersFound.map(order => {
+        if (!order.product) return;
+
+        let productPrice = order.product.salePrice || order.product.regularPrice;
+        if (productPrice) {// Calculate the order total
+            orderTotal += productPrice * order.quantity;
+        }
+
+        let productCost = order.product.cost;
+        if(productCost){
+            profit += _getProductProfit(productPrice,productCost,order.quantity);
+        }
+
+        productPrice = 0;
+        return order.toObject();
+    }).filter(val => val);
+
+    // Set the values on the parent object
+    finalOrders.profit = profit;
+    finalOrders.total = orderTotal;
+
+    return finalOrders;
+
+}
+
+// Get orders belonging to a particular store
+//! Extremely inefficient, should be able to filter orders through single query
+function _filterStoreOrders(ordersFound,storeId){
+    return ordersFound.filter((order)=>{
+        let product = order.product;
+        if(!order.product) return false;
+        if(!product.store) return false;
+
+        let orderStoreId = order.product.store._id || order.product.store;
+        orderStoreId = orderStoreId.toString();
+        return orderStoreId === storeId;
+    });
+}
+
+// Get sales belonging to a particular store
+function _getStoreOrders(storeId,callback,onlyFulfilled){//? Highly inefficient ~ filtering should happen in database not server
+    onlyFulfilled = onlyFulfilled || true;
+    let filter = {
+        // product: "5c5a1795fd8e01000538a5d4",
+        
+    };
+
+    if(onlyFulfilled){
+        filter.isFulfilled = true;
+    }
+
+    let productPopulate = {
+        path: "product",
+        select: "name cost regularPrice salePrice store"
+    };
+
+    Order.find(filter)
+    .populate(productPopulate)
+    .then((ordersFound)=>{
+        if (ordersFound.length < 1) {
+            return callback(
+                Api.getError(
+                    FeedbackMessages.operationFailed("get orders. No orders found"),
+                    ordersFound,
+                    404
+                )
+            );
+        }
+        ordersFound = _filterStoreOrders(ordersFound,storeId);
+        let finalOrders = _getOrderDetails(ordersFound);
+        
+        callback(finalOrders);
+    }).catch(err => {
+        return callback(Api.getError(err.message, err));
+    });
+}
+
+// Get sales belonging to a certain store
+function _getStoreSales(storeId,callback){
+    _getStoreOrders(storeId,(finalOrders)=>{
+        const isOk = finalOrders.length > 0;
+        const statusCode = isOk ? 200 : 404;
+        const message = isOk ?
+            FeedbackMessages.itemsFoundWithCount(finalOrders, "Sales") :
+            FeedbackMessages.itemNotFound("Sales");
+
+        const responseData = {
+            count: finalOrders.length,
+            total: finalOrders.total,
+            profit: finalOrders.profit
+        };
+            
+        const apiResponse = Api.getResponse(isOk,message,responseData,statusCode);
+        return callback(apiResponse);
+    });
+}
+
 // Get multiple orders by filter
 function _getOrdersByFilter(filter, callback) {
     filter = filter || {};
@@ -20,12 +123,12 @@ function _getOrdersByFilter(filter, callback) {
         Order.find(filter)
         .populate({
             path: "product",
-            select: "name images regularPrice salePrice"
+            select: "id name images regularPrice salePrice",
+            populate: {
+                path: "store",
+                select: "name id"
+            }
         })
-        // .populate({
-        //     path: "product.store",
-        //     select: "name id"
-        // })
         .then(ordersFound => {
             if (ordersFound.length < 1) {
                 return callback(
@@ -37,20 +140,7 @@ function _getOrdersByFilter(filter, callback) {
                 );
             }
 
-            // Calculate the order total
-            let orderTotal = 0;
-            let productPrice = 0;
-            let finalOrders = ordersFound.map(order => {
-                if (!order.product) return;
-
-                productPrice = order.product.salePrice || order.product.regularPrice;
-                if (productPrice) {
-                    orderTotal += productPrice * order.quantity;
-                }
-
-                productPrice = 0;
-                return order;
-            }).filter(val => val);
+            let finalOrders = _getOrderDetails(ordersFound);
 
             // Response variables
             const orderCount = finalOrders.length;
@@ -59,16 +149,15 @@ function _getOrdersByFilter(filter, callback) {
             const message = isOk ?
                 FeedbackMessages.itemsFoundWithCount(finalOrders, "Orders") :
                 FeedbackMessages.itemNotFound("Orders");
+
+            let responseData = {
+                count: orderCount,
+                orders: finalOrders,
+                total: finalOrders.total
+            };
+
             return callback(
-                Api.getResponse(
-                    isOk,
-                    message, {
-                        count: orderCount,
-                        orders: finalOrders,
-                        total: orderTotal
-                    },
-                    statusCode
-                )
+                Api.getResponse(isOk, message, responseData, statusCode)
             );
         })
         .catch(err => {
@@ -85,12 +174,12 @@ function _getSingleOrderByFilter(filter, callback) {
         Order.findOne(filter)
         .populate({
             path: "product",
-            select: "name images regularPrice salePrice"
+            select: "name images regularPrice salePrice",
+            populate: {
+                path: "store",
+                select: "name id"
+            }
         })
-        // .populate({
-        //     path: "product.store",
-        //     select: "name id"
-        // })
         .then((orderFound) => {
             if (!orderFound) {
                 return callback(
@@ -120,6 +209,16 @@ function _getSingleOrderByFilter(filter, callback) {
             );
         })
     );
+}
+
+function _getProductProfit(price,cost,quantity){
+    quantity = quantity || 1;
+    let total = price * quantity;
+    let totalCost = cost * quantity;
+    let nanasiCut = total * (NanasiConfig.rates.NANASI_PERCENTAGE/100);
+    let profit = total - (nanasiCut + totalCost);
+
+    return profit;
 }
 
 // Update order
@@ -187,6 +286,7 @@ function getOrderData(userId, deliveryAddress, productsToAdd) {
 
     return orderData;
 }
+
 
 // Adds multiple orders
 function _addOrder(orderData, callback) {
@@ -294,27 +394,33 @@ module.exports.getBuyerOrders = (buyerId, callback) => {
 
 // View store orders ~ Get relationships
 module.exports.getStoreOrders = (storeId, callback) => {
-    return _getOrdersByFilter({
-            "product.store.id": storeId,
-            isFulfilled: false
-        },
-        callback
-    );
+    return _getStoreOrders(storeId,(finalOrders)=>{
+        const orderCount = finalOrders.length;
+        const isOk = orderCount > 0;
+        const statusCode = isOk ? 200 : 404;
+        const message = isOk ?
+            FeedbackMessages.itemsFoundWithCount(finalOrders, "Orders") :
+            FeedbackMessages.itemNotFound("Orders");
+
+        const responseData = {
+            count: orderCount,
+            orders: finalOrders
+        };
+
+        const apiResponse = Api.getResponse(isOk,message,responseData,statusCode);
+        return callback(apiResponse);
+    },false);
 };
 
 // View store orders ~ Get relationships
-module.exports.getStoreSales = (storeId, callback) => {
-    return _getOrdersByFilter({
-            "product.store.id": storeId,
-            isFulfilled: true
-        },
-        callback
-    );
+//? Remove merchantId ~ using as a hack to fetch all merchant orders then filter by store
+module.exports.getStoreSummary = (storeId, callback) => {
+    return _getStoreSales(storeId,callback);
 };
 
 module.exports.getProductOrders = (productId, callback) => {
     return _getOrdersByFilter({
-            "product.id": productId
+            product:productId
         },
         callback
     );

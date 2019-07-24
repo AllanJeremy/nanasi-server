@@ -22,18 +22,25 @@ router.get("/", CheckAuth.buyerLoggedIn, Ownership.orderBelongsToBuyer, (req, re
     });
 });
 
-// Get store orders
 //* Merchant accessible
-router.get("/store/:storeId", CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => {
-    order.getStoreOrders(req.params.storeId, (response) => {
+// Get store summary
+router.get("/store/summary/:storeId",CheckAuth.merchantLoggedIn,Ownership.orderBelongsToMerchant,(req,res)=>{
+    order.getStoreSummary(req.params.storeId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
 
 // Get store sales
-//* Merchant accessible
-router.get("/storeSales/:storeId", CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => {
+router.get("/store/sales/:storeId", CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => {
     order.getStoreSales(req.params.storeId, (response) => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
+// Get store orders
+//* Merchant accessible
+router.get("/store/:storeId", CheckAuth.merchantLoggedIn, Ownership.orderBelongsToMerchant, (req, res, next) => {
+    order.getStoreOrders(req.params.storeId, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
