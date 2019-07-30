@@ -59,10 +59,9 @@ function _filterStoreOrders(ordersFound,storeId){
 
 // Get sales belonging to a particular store
 function _getStoreOrders(storeId,callback,onlyFulfilled){//? Highly inefficient ~ filtering should happen in database not server
-    onlyFulfilled = onlyFulfilled || true;
+    onlyFulfilled = (onlyFulfilled!== false) ? true : false;
     let filter = {
         // product: "5c5a1795fd8e01000538a5d4",
-        
     };
 
     if(onlyFulfilled){
