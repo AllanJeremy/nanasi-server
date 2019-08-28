@@ -74,7 +74,7 @@ function _getStoreOrders(storeId,callback,onlyFulfilled){//? Highly inefficient 
     };
     let userPopulate = {
         path: "user",
-        select: "firstName lastName phone email"
+        select: "firstName lastName"
     };
 
     Order.find(filter)
