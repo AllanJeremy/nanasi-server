@@ -70,11 +70,16 @@ function _getStoreOrders(storeId,callback,onlyFulfilled){//? Highly inefficient 
 
     let productPopulate = {
         path: "product",
-        select: "name cost regularPrice salePrice store"
+        select: "name cost regularPrice salePrice store user"
+    };
+    let userPopulate = {
+        path: "user",
+        select: "firstName lastName phone email"
     };
 
     Order.find(filter)
     .populate(productPopulate)
+    .populate(userPopulate)
     .then((ordersFound)=>{
         if (ordersFound.length < 1) {
             return callback(
@@ -168,17 +173,24 @@ function _getOrdersByFilter(filter, callback) {
 // Get order by filter
 function _getSingleOrderByFilter(filter, callback) {
     //TODO: Check if the order belongs to the user that requested it
+    const productPopulate = {
+        path: "product",
+        select: "name images regularPrice salePrice user"
+    };
+    const userPopulate = {
+        path: "user",
+        select: "firstName lastName phone email"
+    };
+    const storePopulate = {
+        path: "store",
+        select: "name id"
+    };
 
     return (
         Order.findOne(filter)
-        .populate({
-            path: "product",
-            select: "name images regularPrice salePrice",
-            populate: {
-                path: "store",
-                select: "name id"
-            }
-        })
+        .populate(productPopulate)
+        .populate(storePopulate)
+        .populate(userPopulate)
         .then((orderFound) => {
             if (!orderFound) {
                 return callback(
