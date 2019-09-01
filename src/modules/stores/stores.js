@@ -13,7 +13,11 @@ const Api = require("../../lib/api");
 // Get multiple stores by filter
 function _getStoresByFilter(filter, callback) {
     filter = filter || {};
-    return Store.find(filter).then((storesFound) => {
+    const StorePopulate = {
+        path: "productType",
+        select: "name image"
+    };
+    return Store.find(filter).populate(StorePopulate).then((storesFound) => {
         const storeCount = storesFound.length;
         const isOk = (storeCount > 0);
         const statusCode = isOk ? 200 : 404;
@@ -34,7 +38,12 @@ function _getStoresByFilter(filter, callback) {
 
 // Get store by filter
 function _getSingleStoreByFilter(filter, callback) {
-    return Store.findOne(filter).then((storeFound) => {
+    const StorePopulate = {
+        path: "productType",
+        select: "name image"
+    };
+
+    return Store.findOne(filter).populate(StorePopulate).then((storeFound) => {
         const isOk = storeFound ? true : false;
         const statusCode = isOk ? 200 : 404;
         const message = isOk ? FeedbackMessages.itemsFound("Store") : FeedbackMessages.itemNotFound("Store");
