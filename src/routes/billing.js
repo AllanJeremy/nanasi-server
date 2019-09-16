@@ -16,7 +16,7 @@ router.post("/", CheckAuth.userLoggedIn, (req, res, next) => {
 // Update billing information
 //* Logged in user accessible
 router.patch("/:billingId", CheckAuth.userLoggedIn, Ownership.billingInfoBelongsToUser, (req, res, next) => {
-    billing.updateBillingInfo(req.userData.id, req.body.data, (response) => {
+    billing.updateBillingInfo(req.params.billingId, req.body.data, (response) => {
         return res.status(response.statusCode).json(response);
     });
 });
