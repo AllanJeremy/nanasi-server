@@ -22,7 +22,7 @@ module.exports.handleCheckout = (notificationData) => {
         if (storeFound) { //* Notification matches a valid store. Accept transaction
             _acceptTransaction(notificationData);
         } else { //* Notification does not match a valid store. Reject transaction
-            _rejectTransaction();
+            _rejectTransaction(notificationData);
         }
     });
 };
