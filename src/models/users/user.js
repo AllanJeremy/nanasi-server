@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const OtpConfig = require("../../config/otp");
 
-require("./address");
-
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
@@ -46,10 +44,6 @@ const userSchema = new mongoose.Schema({
             type: Date,
             default: (Date.now() + OtpConfig.OTP_EXPIRY_TIME)
         }
-    },
-    address: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Address"
     },
     registrationConfirmed: {
         type: Boolean,

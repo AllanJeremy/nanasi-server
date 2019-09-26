@@ -16,6 +16,15 @@ router.post("/address", CheckAuth.userLoggedIn, (req, res, next) => {
     });
 });
 
+// Get current user address
+//* Logged in user accessible
+router.get("/address", CheckAuth.userLoggedIn, (req, res, next) => {
+    console.log("Get user address");
+    user.getUserAddresses(req.userData.id, (response) => {
+        return res.status(response.statusCode).json(response);
+    });
+});
+
 // Get single address
 //* Logged in user accessible
 router.get("/address/:addressId", CheckAuth.userLoggedIn, (req, res, next) => {
