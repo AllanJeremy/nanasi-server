@@ -15,7 +15,7 @@ function _getStoresByFilter(filter, callback) {
     filter = filter || {};
     const StorePopulate = {
         path: "productType",
-        select: "name image"
+        select: "name image merchant"
     };
     return Store.find(filter).populate(StorePopulate).then((storesFound) => {
         const storeCount = storesFound.length;
