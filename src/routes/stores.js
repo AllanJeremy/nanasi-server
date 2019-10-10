@@ -10,6 +10,9 @@ const Ownership = require("../middleware/entityOwnership");
 // Create store
 //* Merchant accessible
 router.post("/", CheckAuth.merchantLoggedIn, (req, res, next) => {
+    req.body.data = req.body.data || {};
+    req.body.data.merchant = req.userData.id;
+
     store.createStore(req.body.data, (response) => {
         return res.status(response.statusCode).json(response); //TODO: refactor this
     });
